@@ -1,6 +1,7 @@
 package com.projeto.oficina.compatibilidade;
 
 import java.util.List;
+<<<<<<< HEAD
 import java.util.Map;
 
 public class PlacaMae {
@@ -36,6 +37,14 @@ public class PlacaMae {
         this.interfaces_armazenamento = interfaces_armazenamento;
     }
 
+=======
+
+public class PlacaMae {
+    private String modelo;
+    private String soquete;
+    private String ram_suportada;
+    private List<String> processadores_compativeis;
+>>>>>>> 87ea526fe2591ec426152c378be484796860f804
     private boolean gpu_integrada;
 
 
@@ -47,12 +56,21 @@ public class PlacaMae {
         this.modelo = modelo;
     }
 
+<<<<<<< HEAD
     public String getSoquetePlacaMae() {
         return soquetePlacaMae;
     }
 
     public void setSoquete(String soquetePlacaMae) {
         this.soquetePlacaMae = soquetePlacaMae;
+=======
+    public String getSoquete() {
+        return soquete;
+    }
+
+    public void setSoquete(String soquete) {
+        this.soquete = soquete;
+>>>>>>> 87ea526fe2591ec426152c378be484796860f804
     }
 
     public String getRam_suportada() {

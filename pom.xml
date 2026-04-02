@@ -5,7 +5,11 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
+<<<<<<< HEAD
 		<version>3.5.3</version>
+=======
+		<version>3.5.4</version>
+>>>>>>> 87ea526fe2591ec426152c378be484796860f804
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.projeto</groupId>
@@ -13,7 +17,11 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>oficina</name>
+<<<<<<< HEAD
 	<description>Sistema para oficina de hardwares </description>
+=======
+	<description>Demo project for Spring Boot</description>
+>>>>>>> 87ea526fe2591ec426152c378be484796860f804
 	<url/>
 	<licenses>
 		<license/>
@@ -45,12 +53,15 @@
 		</dependency>
 
 		<dependency>
+<<<<<<< HEAD
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
+=======
+>>>>>>> 87ea526fe2591ec426152c378be484796860f804
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>

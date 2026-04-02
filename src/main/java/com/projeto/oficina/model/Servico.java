@@ -14,7 +14,11 @@ public class Servico {
 
 
     @ManyToOne
+<<<<<<< HEAD
     @JoinColumn(name = "idCliente", referencedColumnName = "idCliente")
+=======
+    @JoinColumn(name = "id_cliente", referencedColumnName = "id_cliente")
+>>>>>>> 87ea526fe2591ec426152c378be484796860f804
     private Cliente cliente;
 
     @ManyToOne

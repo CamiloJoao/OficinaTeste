@@ -1,6 +1,7 @@
 package com.projeto.oficina.compatibilidade;
 
 public class MemoriaRam {
+<<<<<<< HEAD
     private int id_memoriaRam;
     private String modelo;
    
@@ -23,6 +24,11 @@ public class MemoriaRam {
         this.id_memoriaRam = id_memoriaRam;
     }
 
+=======
+    private String tipo;
+    private int frequencia_mhz;
+
+>>>>>>> 87ea526fe2591ec426152c378be484796860f804
 
     public String getTipo() {
         return tipo;
