@@ -3,9 +3,9 @@ server:
 
 spring:
     datasource:
-        url: jdbc:postgresql://localhost:5432/oficinateste
+        url: jdbc:postgresql://localhost:5432/oficina
         username: postgres
-        password: root
+        password: roots
         driver-class-name: org.postgresql.Driver
         initialize: true
 

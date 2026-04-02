@@ -1,5 +1,6 @@
 package com.projeto.oficina;
 
+import org.hibernate.boot.model.source.spi.SizeSource;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -8,6 +9,7 @@ import com.projeto.oficina.compatibilidade.CompatibilidadeRegras;
 import com.projeto.oficina.compatibilidade.PlacaMae;
 import com.projeto.oficina.compatibilidade.Processador;
 import com.projeto.oficina.compatibilidade.MemoriaRam;
+import com.projeto.oficina.compatibilidade.Armazenamento;
 
 @SpringBootApplication
 public class OficinaApplication {
@@ -24,18 +26,20 @@ public class OficinaApplication {
 		var compatibilidade = compatService.carregarCompatibilidade();
 
 		// Pega uma peça de cada lista (apenas para teste)
-		PlacaMae placa = compatibilidade.getPlacas_mae().get(1);
-		Processador processador = compatibilidade.getProcessadores().get(0);
-		MemoriaRam ram = compatibilidade.getMemorias_ram().get(0);
+		PlacaMae placa = compatibilidade.getPlaca_mae().get(1);
+		Processador processador = compatibilidade.getProcessador().get(1);
+		MemoriaRam ram = compatibilidade.getMemoria_ram().get(1);
+		Armazenamento armazenamento = compatibilidade.getArmazenamento().get(1);
 
 		// Testa compatibilidade
-		boolean resultado = compatRegras.isCompativel(placa, processador, ram);
+		boolean resultado = compatRegras.isCompativel(placa, processador, ram, armazenamento);
 
 		// Exibe o resultado
 		System.out.println("Compatibilidade entre peças:");
 		System.out.println("Placa-mãe: " + placa.getModelo());
 		System.out.println("Processador: " + processador.getModelo());
 		System.out.println("Memória RAM: " + ram.getTipo());
+		System.out.println("Armazenamento: " + armazenamento.getTipo() + " -- Modelo: " + armazenamento.getModelo());
 		System.out.println("Resultado: " + (resultado ? "Compatível " : "Incompatível "));
 	}
 }

@@ -1,10 +1,19 @@
 package com.projeto.oficina.compatibilidade;
 
 public class Processador {
-    private String modelo;
-    private String soquete;
-    private boolean possui_video_integrado;
 
+    private int id_processador;
+    private String modelo;
+    private String soqueteProcessador;
+    private boolean video_integrado;
+
+     public int getId_processador() {
+        return id_processador;
+    }
+
+    public void setId_processador(int id_processador) {
+        this.id_processador = id_processador;
+    }
 
     public String getModelo() {
         return modelo;
@@ -14,20 +23,20 @@ public class Processador {
         this.modelo = modelo;
     }
 
-    public String getSoquete() {
-        return soquete;
+    public String getSoqueteProcessador() {
+        return soqueteProcessador;
     }
 
-    public void setSoquete(String soquete) {
-        this.soquete = soquete;
+    public void setSoqueteProcessador(String soqueteProcessador) {
+        this.soqueteProcessador = soqueteProcessador;
     }
 
-    public boolean isPossui_video_integrado() {
-        return possui_video_integrado;
+    public boolean isvideo_integrado() {
+        return video_integrado;
     }
     
-    public void setPossui_video_integrado(boolean possui_video_integrado) {
-        this.possui_video_integrado = possui_video_integrado;
+    public void setvideo_integrado(boolean video_integrado) {
+        this.video_integrado = video_integrado;
     }
 
     

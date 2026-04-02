@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body> 
+    <div th:fragment="menu" class="menu">
+        <h2>Oficina</h2>
+        
+        
+           <a href="/"
+                th:classappend="${pagina == 'painelgeral'} ? 'ativo'">
+                Painel Geral
+            </a>
+
+            <a href="/gerenciarclientes"
+                th:classappend="${pagina == 'gerenciarclientes'} ? 'ativo'">
+                Gerenciar Cliente
+            </a>
+
+            <a href="/manutencao"
+            th:classappend="${pagina == 'manutencao'} ? 'ativo'">
+            Manutenção
+            </a>
+
+            <a href="/montagem"
+                th:classappend="${pagina == 'montagem'} ? 'ativo'">
+                Montagem
+            </a>
+
+            <a href="/statusdeservico"
+                th:classappend="${pagina == 'statusdeservico'} ? 'ativo'">
+                Status de Serviço
+            </a>
+            
+        <hr>
+
+        <a href="/gerenciarusuarios"
+                th:classappend="${pagina == 'gerenciarusuarios'} ? 'ativo'">
+                Gerenciar Usuários
+            </a>
+
+        <a href="/logout">Sair</a>
+    </div>
+    
+</body>
+</html>

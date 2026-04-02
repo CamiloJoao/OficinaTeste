@@ -1,42 +1,70 @@
 {
-    "placas_mae": [
+    "placa_mae": [
         {
+            "id_placamae": 1,
             "modelo": "ASUS B450M",
-            "soquete": "AM4",
+            "soquetePlacaMae": "AM4",
             "ram_suportada": "DDR4",
+            "interfaces_armazenamento": {"SATA": 4, "M.2": 1},
             "processadores_compativeis": ["Ryzen 5 3600", "Ryzen 7 3700X"],
-            "gpu_integrada": false
+            "video_integrado": false
         },
         {
+            "id_placamae": 2,
             "modelo": "GIGABYTE Z690 AORUS",
-            "soquete": "LGA1700",
+            "soquetePlacaMae": "LGA1700",
             "ram_suportada": "DDR5",
+            "interfaces_armazenamento": {"SATA": 4},
             "processadores_compativeis": ["i5-12600K", "i7-12700K"],
-            "gpu_integrada": true
+            "video_integrado": true
         }
     ],
 
-    "processadores": [
+    "processador": [
         {
+            "id_processador": 1,
             "modelo": "Ryzen 5 3600",
-            "soquete": "AM4",
-            "possui_video_integrado": false
+            "soqueteProcessador": "AM4",
+            "video_integrado": false
         },
         {
+            "id_processador": 2,
             "modelo": "i5-12600K",
-            "soquete": "LGA1700",
-            "possui_video_integrado": true
+            "soqueteProcessador": "LGA1700",
+            "video_integrado": true
         }
     ],
 
-    "memorias_ram": [
+    "memoria_ram": [
         {
+            "id_memoriaRam": 1,
+            "modelo": "HyperX Fury Memoria DDR4 8GB",
             "tipo": "DDR4",
             "frequencia_mhz": 3200
         },
         {
+            "id_memoriaRam": 2,
+            "modelo": "Kingston FURY Beast DDR5 16GB",
             "tipo": "DDR5",
             "frequencia_mhz": 5600
+        }
+    ],
+
+    "armazenamento": [
+        {
+            "id_armazenamento": 1,
+            "modelo": "HD Seagate Barracuda 1TB",
+            "tipo": "HD",
+            "interfaceConexao": "SATA",
+            "capacidadeGB": 1000
+        },
+
+        { 
+            "id_armazenamento": 2,
+            "modelo": "SSD Samsung 980 PRO 2TB",
+            "tipo": "SSD",
+            "interfaceConexao": "M.2",
+            "capacidadeGB": "2000"
         }
     ]
 }

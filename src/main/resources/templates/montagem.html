@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="conteudo">
+
+    <h1>Montagem</h1>
+
+    <form action="/montagem" method="post">
+
+        <label>Placa Mãe:</label>
+        <select name="placaMae">
+            <option th:each="p : ${placaMae}"
+                    th:value="${p.id_placamae}"
+                    th:text="${p.modelo}">
+            </option>
+        </select>
+
+        <label>Processador:</label>
+        <select name="processador">
+            <option th:each="proc : ${processador}"
+                    th:value="${proc.id_processador}"
+                    th:text="${proc.modelo}">
+            </option>
+        </select>
+
+        <label>Memória Ram:</label>
+        <select name="memoriaRam">
+            <option th:each="ram : ${memoriaRam}"
+                    th:value="${ram.id_memoriaRam}"
+                    th:text="${ram.modelo}">
+            </option>
+        </select>
+
+        <label>Armazenamento:</label>
+        <select name="armazenamento">
+            <option th:each="arm : ${armazenamento}"
+                    th:value="${arm.id_armazenamento}"
+                    th:text="${arm.modelo}">
+            </option>
+        </select>
+
+        <button type="submit">Checar</button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

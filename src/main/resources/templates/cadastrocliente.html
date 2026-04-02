@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="conteudo">
+
+    <h1>Cadastrar Novo Cliente</h1>
+
+    <!-- ✅ MENSAGEM DE SUCESSO -->
+    <div th:if="${mensagem}">
+        <p th:text="${mensagem}" style="color: green;"></p>
+    </div>
+
+    <form th:action="@{/gerenciarclientes/salvar}" method="post">
+
+        <label>Nome:</label>
+        <input type="text" name="nomeCliente" required>
+
+        <br><br>
+
+        <label>Telefone:</label>
+        <input type="text" name="telefone" required>
+
+        <br><br>
+
+        <label>Email:</label>
+        <input type="email" name="emailCliente" required>
+
+        <br><br>
+
+        <button type="submit">Cadastrar</button>
+
+        <a href="/gerenciarclientes">
+            <button type="button">Cancelar</button>
+        </a>
+
+    </form>
+
+</div>
+
+</body>
+</html>
