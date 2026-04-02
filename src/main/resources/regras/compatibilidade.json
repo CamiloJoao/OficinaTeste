@@ -1,5 +1,5 @@
 {
-<<<<<<< HEAD
+
     "placa_mae": [
         {
             "id_placamae": 1,
@@ -40,45 +40,12 @@
         {
             "id_memoriaRam": 1,
             "modelo": "HyperX Fury Memoria DDR4 8GB",
-=======
-    "placas_mae": [
-        {
-            "modelo": "ASUS B450M",
-            "soquete": "AM4",
-            "ram_suportada": "DDR4",
-            "processadores_compativeis": ["Ryzen 5 3600", "Ryzen 7 3700X"],
-            "gpu_integrada": false
-        },
-        {
-            "modelo": "GIGABYTE Z690 AORUS",
-            "soquete": "LGA1700",
-            "ram_suportada": "DDR5",
-            "processadores_compativeis": ["i5-12600K", "i7-12700K"],
-            "gpu_integrada": true
-        }
-    ],
 
-    "processadores": [
-        {
-            "modelo": "Ryzen 5 3600",
-            "soquete": "AM4",
-            "possui_video_integrado": false
-        },
-        {
-            "modelo": "i5-12600K",
-            "soquete": "LGA1700",
-            "possui_video_integrado": true
-        }
-    ],
-
-    "memorias_ram": [
-        {
->>>>>>> 87ea526fe2591ec426152c378be484796860f804
             "tipo": "DDR4",
             "frequencia_mhz": 3200
         },
         {
-<<<<<<< HEAD
+
             "id_memoriaRam": 2,
             "modelo": "Kingston FURY Beast DDR5 16GB",
             "tipo": "DDR5",
@@ -102,10 +69,6 @@
             "interfaceConexao": "M.2",
             "capacidadeGB": "2000"
         }
-=======
-            "tipo": "DDR5",
-            "frequencia_mhz": 5600
-        }
->>>>>>> 87ea526fe2591ec426152c378be484796860f804
+
     ]
 }

@@ -3,15 +3,11 @@ server:
 
 spring:
     datasource:
-<<<<<<< HEAD
+
         url: jdbc:postgresql://localhost:5432/oficina
         username: postgres
         password: roots
-=======
-        url: jdbc:postgresql://localhost:5432/oficinateste
-        username: postgres
-        password: root
->>>>>>> 87ea526fe2591ec426152c378be484796860f804
+
         driver-class-name: org.postgresql.Driver
         initialize: true
 
