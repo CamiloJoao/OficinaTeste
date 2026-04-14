@@ -1,8 +1,12 @@
 package com.projeto.oficina.model;
 
-import com.projeto.oficina.enums.TipoServico;
-import com.projeto.oficina.enums.StatusServico;
 import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.projeto.oficina.enums.StatusServico;
+import com.projeto.oficina.enums.TipoServico;
 
 @Entity
 @Table(name = "servico")
@@ -10,85 +14,127 @@ public class Servico {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_servico;
-
+    private Integer idServico;
 
     @ManyToOne
-
-    @JoinColumn(name = "idCliente", referencedColumnName = "idCliente")
-
+    @JoinColumn(name = "id_cliente")
     private Cliente cliente;
-
-    @ManyToOne
-    @JoinColumn(name = "id_peca", referencedColumnName = "id_peca")
-    private Peca peca;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_servico")
-    private TipoServico tipo_servico; 
+    private TipoServico tipoServico;
 
-    private String descricao_problema;
-    private int orcamento_inicial;
-    private int orcamento_final;
+    @Column(name = "descricao_problema")
+    private String descricaoProblema;
+
+    @Column(name = "pecas_cadastradas")
+    private String pecasCadastradas;
+
+    @Column(name = "orcamento_inicial")
+    private Double orcamentoInicial;
+
+    @Column(name = "orcamento_final")
+    private Double orcamentoFinal;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
     private StatusServico status;
 
-    public int getId_servico() {
-        return id_servico;
+    @Column(name = "data_prevista_conclusao")
+    private LocalDate dataPrevistaConclusao;
+
+    @OneToMany(mappedBy = "servico", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ServicoPeca> pecas = new ArrayList<>();
+
+    public List<ServicoPeca> getPecas() {
+        return pecas;
     }
 
-    public void setId_servico(int id_servico) {
-        this.id_servico = id_servico;
+    public void setPecas(List<ServicoPeca> pecas) {
+        this.pecas = pecas;
     }
 
-    public TipoServico getTipo_servico() {
-        return tipo_servico;
+    public void adicionarPeca(ServicoPeca peca) {
+        pecas.add(peca);
+        peca.setServico(this);
     }
 
-    public void setTipo_servico(TipoServico tipo_servico) {
-        this.tipo_servico = tipo_servico;
+    public void removerPeca(ServicoPeca peca) {
+        pecas.remove(peca);
+        peca.setServico(null);
     }
 
-    public String getDescricao_problema() {
-        return descricao_problema;
+    public Integer getIdServico() {
+        return idServico;
     }
 
-    public void setDescricao_problema(String descricao_problema) {
-        this.descricao_problema = descricao_problema;
+    public void setIdServico(Integer idServico) {
+        this.idServico = idServico;
     }
 
-    public int getOrcamento_inicial() {
-        return orcamento_inicial;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setOrcamento_inicial(int orcamento_inicial) {
-        this.orcamento_inicial = orcamento_inicial;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
-    public int getOrcamento_final() {
-        return orcamento_final;
+    public TipoServico getTipoServico() {
+        return tipoServico;
     }
 
-    public void setOrcamento_final(int orcamento_final) {
-        this.orcamento_final = orcamento_final;
+    public void setTipoServico(TipoServico tipoServico) {
+        this.tipoServico = tipoServico;
+    }
+
+    public String getDescricaoProblema() {
+        return descricaoProblema;
+    }
+
+    public void setDescricaoProblema(String descricaoProblema) {
+        this.descricaoProblema = descricaoProblema;
+    }
+
+    public String getPecasCadastradas() {
+        return pecasCadastradas;
+    }
+
+    public void setPecasCadastradas(String pecasCadastradas) {
+        this.pecasCadastradas = pecasCadastradas;
+    }
+
+    public Double getOrcamentoInicial() {
+        return orcamentoInicial;
+    }
+
+    public void setOrcamentoInicial(Double orcamentoInicial) {
+        this.orcamentoInicial = orcamentoInicial;
+    }
+
+     public Double getOrcamentoFinal() {
+        return orcamentoFinal;
+    }
+
+    public void setOrcamentoFinal(Double orcamentoFinal) {
+        this.orcamentoFinal = orcamentoFinal;
     }
 
     public StatusServico getStatus() {
         return status;
     }
-    
+
     public void setStatus(StatusServico status) {
         this.status = status;
     }
 
+    public LocalDate getDataPrevistaConclusao() {
+        return dataPrevistaConclusao;
+    }
+
+    public void setDataPrevistaConclusao(LocalDate dataPrevistaConclusao) {
+        this.dataPrevistaConclusao = dataPrevistaConclusao;
+    }
+
     
-
-
-
-
-
-
-
 }
+

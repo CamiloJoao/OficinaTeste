@@ -8,6 +8,7 @@ public class Armazenamento {
     private String tipo; //hd ou ssd
     private String interfaceConexao; //Sata ou M.2
     private int capacidadeGB;
+    private Double preco;
 
 
     public int getId_armazenamento() {
@@ -40,6 +41,14 @@ public class Armazenamento {
     }
     public void setCapacidadeGB(int capacidadeGB) {
         this.capacidadeGB = capacidadeGB;
+    }
+
+    public Double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(Double preco) {
+        this.preco = preco;
     }
 
 }

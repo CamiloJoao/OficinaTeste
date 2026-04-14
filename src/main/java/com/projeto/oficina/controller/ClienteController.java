@@ -15,23 +15,42 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
-    // 🔹 Tela principal (gerenciar clientes)
+    //  Tela principal (gerenciar clientes)
     @GetMapping
-    public String listarClientes(@RequestParam(required = false) String nome, Model model) {
+    public String listarClientes(
+        @RequestParam(required = false) String nome,
+        @RequestParam(defaultValue = "false") boolean mostrarTodos,
+        Model model) {
 
         List<Cliente> clientes;
 
+         // VALIDAÇÃO
+        if (nome != null) {
+            nome = nome.trim();
+
+            // vazio ou inválido (números/símbolos)
+            if (nome.isEmpty() || !nome.matches("^[a-zA-ZÀ-ÿ\\s]+$")) {
+                model.addAttribute("erroBusca", "Digite um nome válido.");
+                model.addAttribute("clientes", List.of());
+                model.addAttribute("pagina", "gerenciarclientes");
+                return "layout";
+            }
+        }
+
         if (nome != null && !nome.isEmpty()) {
             clientes = clienteService.buscarPorNome(nome);
+            mostrarTodos = true; //  busca mostra todos
         } else {
             clientes = clienteService.listarTodos();
         }
 
         model.addAttribute("clientes", clientes);
+        model.addAttribute("mostrarTodos", mostrarTodos);
         model.addAttribute("pagina", "gerenciarclientes");
 
         return "layout";
     }
+
 
     // Adicionar novo cadastro de cliente
     @GetMapping("/cadastrar")
@@ -41,21 +60,32 @@ public class ClienteController {
         return "layout";
     }
 
-    // 🔹 Salvar novo cliente
-    @PostMapping("/salvar")
-    public String salvarCliente(Cliente cliente) {
-        clienteService.salvar(cliente);
-        return "redirect:/gerenciarclientes";
+    // Salvar novo cliente
+   @PostMapping("/salvar")
+    public String salvarCliente(Cliente cliente, Model model) {
+
+        try {
+            clienteService.salvar(cliente);
+
+            model.addAttribute("mensagem", "Cliente cadastrado com sucesso!");
+            model.addAttribute("pagina", "cadastrocliente");
+            return "layout";
+
+        } catch (Exception e) {
+            model.addAttribute("erro", "Email já cadastrado.");
+            model.addAttribute("pagina", "cadastrocliente");
+            return "layout";
+        }
     }
 
-    // 🔹 Excluir cliente
+    // Excluir cliente
     @GetMapping("/excluir/{id}")
     public String excluir(@PathVariable int id) {
         clienteService.excluir(id);
         return "redirect:/gerenciarclientes";
     }
 
-    // 🔹 Buscar cliente para edição
+    // Buscar cliente para edição
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable int id, Model model) {
 
@@ -67,7 +97,7 @@ public class ClienteController {
         return "layout";
     }
 
-    // 🔹 Atualizar cliente
+    // Atualizar cliente
     @PostMapping("/atualizar")
     public String atualizar(Cliente cliente) {
         clienteService.salvar(cliente);

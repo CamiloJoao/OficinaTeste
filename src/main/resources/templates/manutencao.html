@@ -6,6 +6,58 @@
 
     <h1>Manutenção</h1>
 
+    <h3>Cadastrar manutenção:</h3>
+
+    <!-- MENSAGEM DE ERRO -->
+    <div th:if="${erro != null}" style="color: red; margin-bottom: 15px;">
+        <p th:text="${erro}"></p>
+    </div>
+
+
+    <form th:action="@{/manutencao/salvar}" method="post">
+
+        <!-- CLIENTE -->
+        <label>E-mail do Cliente:</label>
+        <input type="email" name="emailCliente" required><br><br>
+
+        <!-- STATUS FIXO -->
+        <label>Status da OS:</label><br>
+        <p>Em Andamento</p><br>
+
+        <!-- PROBLEMA -->
+        <label>Problema:</label><br>
+        <select name="problemaSelecionado" required>
+            <option value="">Selecione</option>
+            <option>Computador não liga</option>
+            <option>Reiniciando constantemente</option>
+            <option>Computador desliga sozinho</option>
+            <option>Sem sinal no monitor</option>
+            <option>Computador lento</option>
+            <option>Tela azul frequente</option>
+        </select><br><br>
+
+        <!-- DESCRIÇÃO OPCIONAL -->
+        <label>Descrição adicional:</label><br>
+        <input type="text" name="descricao" placeholder="Detalhes adicionais (opcional)"><br><br>
+
+        <!-- DATA -->
+        <label>Data de conclusão prevista:</label><br>
+        <input type="date" name="dataPrevista" required><br><br>
+
+        <!-- ORÇAMENTO -->
+        <label>Orçamento inicial:</label><br>
+        <input type="number" step="0.01" name="orcamento" required><br><br>
+
+        <!-- BOTÃO -->
+        <button type="submit">Cadastrar manutenção</button>
+
+    </form>
+
+      <!--MENSAGEM DE SUCESSO -->
+    <div th:if="${sucesso}">
+        <p th:text="${sucesso}" style="color: green;"></p>
+    </div>
+
 
 </div>
 

@@ -14,7 +14,7 @@ public class CompatibilidadeService {
     private CompatibilidadeData data;
 
     // =========================
-    // 🔹 CARREGAR JSON UMA VEZ
+    // CARREGAR JSON UMA VEZ
     // =========================
     @PostConstruct
     public void init() {
@@ -34,14 +34,14 @@ public class CompatibilidadeService {
     }
 
     // =========================
-    // 🔹 RETORNAR DADOS
+    // RETORNAR DADOS
     // =========================
     public CompatibilidadeData carregarCompatibilidade() {
         return data;
     }
 
     // =========================
-    // 🔹 MÉTODO GENÉRICO
+    // MÉTODO GENÉRICO
     // =========================
     public <T> T buscarPorId(List<T> lista, Predicate<T> filtro) {
         return lista.stream()

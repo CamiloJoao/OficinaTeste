@@ -6,14 +6,30 @@
 
     <h1>Gerenciar Clientes</h1>
 
-    <!-- 🔍 BUSCA + BOTÃO -->
+    <!--BUSCA + BOTÃO -->
     <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
 
         <!-- FORM DE BUSCA -->
         <form th:action="@{/gerenciarclientes}" method="get">
             <input type="text" name="nome" placeholder="Buscar cliente pelo nome">
             <button type="submit">Buscar</button>
+
+        <!--LIMPAR BUSCA-->    
+           <a th:if="${erroBusca == null 
+                    and clientes != null 
+                    and #lists.isEmpty(clientes) 
+                    and param.nome != null 
+                    and param.nome != ''}"
+                th:href="@{/gerenciarclientes}">
+                <button type="button">Voltar</button>
+            </a>
+            
         </form>
+
+        <!--USUÁRIO DIGITOU ALGO INESPERADO NO CAMPO BUSCA-->
+        <div th:if="${erroBusca != null}" style="color: rgb(0, 0, 0); margin-left: 5px;">
+            <p th:text="${erroBusca}"></p>
+        </div>
 
         <!-- BOTÃO CADASTRAR -->
         <a href="/gerenciarclientes/cadastrar">
@@ -22,46 +38,91 @@
 
     </div>
 
-    <!-- 📋 TABELA DE CLIENTES -->
-    <table border="1" width="100%" cellspacing="0" cellpadding="8">
 
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Telefone</th>
-                <th>Email</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
+    <!--TABELA DE CLIENTES -->
+    <div th:if="${clientes != null and !#lists.isEmpty(clientes)}">
 
-        <tbody>
-            <tr th:each="cliente : ${clientes}">
-                <td th:text="${cliente.idCliente}"></td>
-                <td th:text="${cliente.nomeCliente}"></td>
-                <td th:text="${cliente.telefone}"></td>
-                <td th:text="${cliente.emailCliente}"></td>
+        <p>Clientes cadastrados</p>
 
-                <td>
-                    <!-- ✏️ EDITAR -->
-                    <a th:href="@{'/gerenciarclientes/editar/' + ${cliente.idCliente}}">
-                        <button>Editar</button>
-                    </a>
+        <table border="1" width="100%" cellspacing="0" cellpadding="8">
 
-                    <!-- ❌ EXCLUIR -->
-                    <a th:href="@{'/gerenciarclientes/excluir/' + ${cliente.idCliente}}"
-                       onclick="return confirm('Tem certeza que deseja excluir este cliente?')">
-                        <button>Excluir</button>
-                    </a>
-                </td>
-            </tr>
-        </tbody>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>Email</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
 
-    </table>
+            <tbody>
+                <tr th:each="cliente, stat : ${clientes}"
+                    th:if="${stat.index < 5 or mostrarTodos}">
 
-    <!-- 📭 CASO NÃO TENHA RESULTADO -->
-    <div th:if="${#lists.isEmpty(clientes)}">
-        <p>Nenhum cliente encontrado.</p>
+                    <td th:text="${cliente.idCliente}"></td>
+                    <td th:text="${cliente.nomeCliente}"></td>
+                    <td th:text="${cliente.telefone}"></td>
+                    <td th:text="${cliente.emailCliente}"></td>
+
+                    <td>
+                        <a th:href="@{'/gerenciarclientes/editar/' + ${cliente.idCliente}}">
+                            <button>Editar</button>
+                        </a>
+
+                        <a th:href="@{'/gerenciarclientes/excluir/' + ${cliente.idCliente}}"
+                        onclick="return confirm('Tem certeza que deseja excluir este cliente?')">
+                            <button>Excluir</button>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+
+       <!--BOTÕES VER MAIS / VER MENOS -->
+    <div style="margin-top: 15px;">
+
+       <!-- VER MAIS -->
+        <div th:if="${clientes.size() > 5 
+                    and !mostrarTodos 
+                    and (param.nome == null or param.nome == '')}">
+            
+            <a th:href="@{/gerenciarclientes(mostrarTodos=true)}">
+                <button>Ver mais</button>
+            </a>
+
+        </div>
+
+        <!-- VER MENOS -->
+        <div th:if="${mostrarTodos 
+                    and clientes.size() > 5 
+                    and (param.nome == null or param.nome == '')}">
+            
+            <a th:href="@{/gerenciarclientes}">
+                <button>Ver menos</button>
+            </a>
+
+        </div>
+
+    </div> 
+
+    </div>
+
+    <!--SEM RESULTADO NA BUSCA -->
+    <div th:if="${erroBusca == null 
+        and clientes != null 
+        and #lists.isEmpty(clientes) 
+        and param.nome != null 
+        and param.nome != ''}">
+        <p>Nenhum cliente cadastrado com este nome.</p>
+    </div>
+
+    <!--SEM CLIENTES CADASTRADOS -->
+    <div th:if="${clientes != null 
+            and #lists.isEmpty(clientes) 
+            and (param.nome == null or param.nome == '')}">
+        <p>Nenhum cliente cadastrado.</p>
     </div>
 
 </div>

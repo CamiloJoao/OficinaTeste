@@ -6,6 +6,38 @@
 
     <h1>Status de Serviço</h1>
 
+    <form action="/statusdeservico/buscar" method="get">
+        <input type="email" name="emailCliente" placeholder="Digite o e-mail" required>
+        <button type="submit">Buscar</button>
+    </form>
+
+    <table th:if="${servicos != null}">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Tipo</th>
+                <th>Status</th>
+                <th>Orçamento</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="s : ${servicos}">
+                <td th:text="${s.idServico}"></td>
+                <td th:text="${s.cliente.nomeCliente}"></td>
+                <td th:text="${s.tipoServico}"></td>
+                <td th:text="${s.status}"></td>
+                <td th:text="${s.orcamentoFinal}"></td>
+                <td>
+                    <a th:href="@{'/statusdeservico/detalhes/' + ${s.idServico}}">
+                        Ver detalhes
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
 
 </div>
 

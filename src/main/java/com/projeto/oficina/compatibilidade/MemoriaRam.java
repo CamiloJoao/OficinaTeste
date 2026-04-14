@@ -4,9 +4,9 @@ public class MemoriaRam {
 
     private int id_memoriaRam;
     private String modelo;
-   
     private String tipo;
     private int frequencia_mhz;
+    private Double preco;
 
     public String getModelo() {
         return modelo;
@@ -38,6 +38,14 @@ public class MemoriaRam {
     
     public void setFrequencia_mhz(int frequencia_mhz) {
         this.frequencia_mhz = frequencia_mhz;
+    }
+
+    public Double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(Double preco) {
+        this.preco = preco;
     }
 
     

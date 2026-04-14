@@ -7,6 +7,7 @@ public class Processador {
     private String modelo;
     private String soqueteProcessador;
     private boolean video_integrado;
+    private Double preco;
 
      public int getId_processador() {
         return id_processador;
@@ -41,6 +42,14 @@ public class Processador {
     public void setvideo_integrado(boolean video_integrado) {
         this.video_integrado = video_integrado;
 
+    }
+    
+    public Double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(Double preco) {
+        this.preco = preco;
     }
 
     

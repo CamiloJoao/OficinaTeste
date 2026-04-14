@@ -6,43 +6,124 @@
 
     <h1>Montagem</h1>
 
-    <form action="/montagem" method="post">
+   
+    <!-- FORM PRINCIPAL (VERIFICAR) -->
+    
+    <form action="/montagem/verificar" method="post">
 
+        <!-- CLIENTE -->
+        <label>E-mail do Cliente:</label>
+        <input type="email" name="emailCliente" required>
+
+
+        <!-- ERRO CLIENTE -->
+        <div th:if="${erro != null}" style="color:red;">
+            <p th:text="${erro}"></p>
+        </div>
+
+        <hr>
+
+        <h3>Lista de componentes:</h3>
+
+        <!-- PEÇAS -->
         <label>Placa Mãe:</label>
-        <select name="placaMae">
+        <select name="placaMae" required>
+            <option value="">Selecione</option>
             <option th:each="p : ${placaMae}"
                     th:value="${p.id_placamae}"
-                    th:text="${p.modelo}">
+                    th:text="${p.modelo}"
+                    th:selected="${p.id_placamae == idPlacaMae}">
             </option>
         </select>
 
         <label>Processador:</label>
-        <select name="processador">
-            <option th:each="proc : ${processador}"
-                    th:value="${proc.id_processador}"
-                    th:text="${proc.modelo}">
+        <select name="processador" required>
+            <option value="">Selecione</option>
+            <option th:each="p : ${processador}"
+                    th:value="${p.id_processador}"
+                    th:text="${p.modelo}"
+                    th:selected="${p.id_processador == idProcessador}">
             </option>
         </select>
 
-        <label>Memória Ram:</label>
-        <select name="memoriaRam">
-            <option th:each="ram : ${memoriaRam}"
-                    th:value="${ram.id_memoriaRam}"
-                    th:text="${ram.modelo}">
+        <label>Memória RAM:</label>
+        <select name="memoriaRam" required>
+            <option value="">Selecione</option>
+            <option th:each="p : ${memoriaRam}"
+                    th:value="${p.id_memoriaRam}"
+                    th:text="${p.modelo}"
+                    th:selected="${p.id_memoriaRam == idRam}">
             </option>
         </select>
 
         <label>Armazenamento:</label>
-        <select name="armazenamento">
-            <option th:each="arm : ${armazenamento}"
-                    th:value="${arm.id_armazenamento}"
-                    th:text="${arm.modelo}">
+        <select name="armazenamento" required>
+            <option value="">Selecione</option>
+            <option th:each="p : ${armazenamento}"
+                    th:value="${p.id_armazenamento}"
+                    th:text="${p.modelo}"
+                    th:selected="${p.id_armazenamento == idArmazenamento}">
             </option>
         </select>
 
-        <button type="submit">Checar</button>
+        <hr>
+
+        <!-- DATA -->
+        <label>Data de conclusão prevista:</label>
+        <input type="date" name="dataPrevista" required th:value="${dataPrevista}">
+
+        <!-- ORÇAMENTO -->
+        <label>Orçamento inicial:</label>
+        <input type="number" step="0.01" name="orcamento" required th:value="${orcamento}">
+
+        <br><br>
+
+        <button type="submit">Verificar Compatibilidade</button>
 
     </form>
+
+    
+    <!-- ERRO DE COMPATIBILIDADE -->
+    
+    <div th:if="${erroCompatibilidade != null}" style="color:red;">
+        <p th:text="${erroCompatibilidade}"></p>
+    </div>
+
+    
+    <!--  COMPATÍVEL → CONFIRMAR -->
+    
+    <div th:if="${compativel}">
+
+        <p style="color: green;">Peças compatíveis</p>
+
+        <form action="/montagem/salvar" method="post">
+
+            <input type="hidden" name="idPlacaMae" th:value="${idPlacaMae}">
+            <input type="hidden" name="idProcessador" th:value="${idProcessador}">
+            <input type="hidden" name="idRam" th:value="${idRam}">
+            <input type="hidden" name="idArmazenamento" th:value="${idArmazenamento}">
+
+            <input type="hidden" name="emailCliente" th:value="${emailCliente}">
+            <input type="hidden" name="dataPrevista" th:value="${dataPrevista}">
+            <input type="hidden" name="orcamento" th:value="${orcamento}">
+
+            <button type="submit">Confirmar Montagem</button>
+
+        </form>
+
+    </div>
+
+    
+    <!-- SUCESSO -->
+    
+    <div th:if="${param.sucesso}">
+        <p style="color: green;">Montagem cadastrada com sucesso!</p>
+    </div>
+
+     <hr>
+
+        
+
 
 </div>
 

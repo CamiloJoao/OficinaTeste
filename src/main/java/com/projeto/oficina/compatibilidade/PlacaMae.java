@@ -12,6 +12,7 @@ public class PlacaMae {
     private List<String> processadores_compativeis;
     private Map<String, Integer> interfaces_armazenamento;
     private Boolean video_integrado;
+    private Double preco;
 
     public Boolean getVideo_integrado() {
         return video_integrado;
@@ -80,6 +81,14 @@ public class PlacaMae {
 
     public void setGpu_integrada(boolean gpu_integrada) {
         this.gpu_integrada = gpu_integrada;
+    }
+
+    public Double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(Double preco) {
+        this.preco = preco;
     }
 
 }

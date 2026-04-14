@@ -6,14 +6,19 @@
 
     <h1>Cadastrar Novo Cliente</h1>
 
-    <!-- ✅ MENSAGEM DE SUCESSO -->
+    <!--MENSAGEM DE SUCESSO -->
     <div th:if="${mensagem}">
         <p th:text="${mensagem}" style="color: green;"></p>
     </div>
 
+    <!-- ERRO -->
+    <div th:if="${erro}" style="color: red;">
+        <p th:text="${erro}"></p>
+    </div>
+
     <form th:action="@{/gerenciarclientes/salvar}" method="post">
 
-        <label>Nome:</label>
+        <label>Nome completo:</label>
         <input type="text" name="nomeCliente" required>
 
         <br><br>

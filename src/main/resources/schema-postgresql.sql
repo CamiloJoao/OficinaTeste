@@ -6,8 +6,8 @@ CREATE TYPE tipo_peca_enum AS ENUM ('placa_mae', 'cpu', 'memoria_ram', 'gpu', 'h
 CREATE TABLE cliente (
     id_cliente SERIAL PRIMARY KEY,
     nome_cliente VARCHAR(100) NOT NULL,
-    telefone_cliente VARCHAR(20), 
-    email_cliente VARCHAR(100)
+    telefone_cliente VARCHAR(20) UNIQUE,
+    email_cliente VARCHAR(100) NOT NULL UNIQUE
 );
 
 CREATE TABLE usuario (
@@ -15,7 +15,7 @@ CREATE TABLE usuario (
     nome_usuario VARCHAR(45) NOT NULL,
     email_usuario VARCHAR(45) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
-    tipo_usuario tipo_peca_enum NOT NULL
+    tipo_usuario tipo_usuario_enum NOT NULL
 );
 
 CREATE TABLE peca (
@@ -31,8 +31,20 @@ CREATE TABLE servico (
     id_cliente INT NOT NULL REFERENCES cliente(id_cliente),
     tipo_servico tipo_servico_enum NOT NULL,
     descricao_problema TEXT, 
-    orcamento_inicial INT,
-    orcamento_final INT, 
+    pecas_cadastradas TEXT,
+    orcamento_inicial DECIMAL(10,2),
+    orcamento_final DECIMAL(10,2), 
     status status_enum NOT NULL,
-    id_peca INT REFERENCES peca(id_peca)
-)
+    data_prevista_conclusao DATE
+);
+
+CREATE TABLE servico_peca (
+    id SERIAL PRIMARY KEY,
+    id_servico INT REFERENCES servico(id_servico),
+    nome_peca VARCHAR(100),
+    valor DECIMAL(10,2)
+    id_referencia INT,
+    tipo VARCHAR(50)
+);
+
+

@@ -13,10 +13,11 @@ public class Cliente {
 
     @Column(name = "nome_cliente")
     private String nomeCliente;
-    private String telefone;
-    @Column(name = "email_cliente")
-    private String emailCliente;
 
+    private String telefone;
+    
+   @Column(name = "email_cliente", unique = true, nullable = false)
+    private String emailCliente;
 
     public int getIdCliente() {
         return idCliente;

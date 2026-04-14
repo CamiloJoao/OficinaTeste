@@ -14,12 +14,17 @@ public class ClienteService {
     @Autowired
     private ClienteRepository repository;
 
+    public Cliente buscarPorEmail(String email) {
+    return repository.findByEmailCliente(email);
+    }
+    
+
     public List<Cliente> listarTodos() {
         return repository.findAll();
     }
 
     public List<Cliente> buscarPorNome(String nome) {
-        return repository.findByNomeClienteContainingIgnoreCase(nome);
+        return repository.findByNomeClienteIgnoreCase(nome);
     }
 
     public void salvar(Cliente cliente) {
@@ -33,4 +38,5 @@ public class ClienteService {
     public Cliente buscarPorId(Integer id) {
         return repository.findById(id).orElse(null);
     }
+
 }
