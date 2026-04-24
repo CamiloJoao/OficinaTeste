@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="conteudo">
+
+    <h2 style="margin-bottom:20px;">
+        Serviços -
+        <span th:text="${tipoSelecionado}"></span>
+    </h2>
+    <div class="conteud centralizado">
+        <div class="descricaoBox">
+            <!-- BOTÕES DE FILTRO -->
+            <div style="margin-bottom:20px;">
+                <a href="/painel/prazos?tipo=prioritario" class="badge vermelho">Prioritários</a>
+                <a href="/painel/prazos?tipo=proximo" class="badge amarelo">Próximos</a>
+                <a href="/painel/prazos?tipo=normal" class="badge verde">No prazo</a>
+            </div>
+
+            <!-- TABELA -->
+            <div class="boxtable">
+
+                <table>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Tipo</th>
+                        <th>Data prevista de conclusão</th>
+                        <th>Status</th>
+                        <th>Ação</th>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(servicos)}">
+                        <td colspan="5">Nenhum serviço encontrado</td>
+                    </tr>
+
+                    <tr th:each="s : ${servicos}">
+                        <td th:text="${s.cliente.nomeCliente}"></td>
+                        <td th:text="${s.tipoServico}"></td>
+
+                        <!-- FORMATAR DATA -->
+                        <td th:text="${#temporals.format(s.dataPrevistaConclusao, 'dd/MM/yyyy')}"></td>
+
+                        <td th:text="${s.status}"></td>
+
+                        <td>
+                            <a th:href="@{'/statusdeservico/detalhes/' + ${s.idServico}}">
+                                Ver detalhes
+                            </a>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>    
+    </div>    
+
+</div>
+
+</body>
+</html>    

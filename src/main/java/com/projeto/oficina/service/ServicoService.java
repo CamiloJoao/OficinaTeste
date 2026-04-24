@@ -46,4 +46,12 @@ public class ServicoService {
         return servicoRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Serviço não encontrado"));
     }
+
+    public List<Servico> listarTodos() {
+    return servicoRepository.findAll();
+    }
+
+    public List<Servico> buscarUltimos() {
+        return servicoRepository.findTop5ByOrderByIdServicoDesc();
+    }
 }

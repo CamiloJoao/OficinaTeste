@@ -25,11 +25,11 @@ public class ClienteController {
         List<Cliente> clientes;
 
          // VALIDAÇÃO
-        if (nome != null) {
+       if (nome != null) {
             nome = nome.trim();
 
-            // vazio ou inválido (números/símbolos)
-            if (nome.isEmpty() || !nome.matches("^[a-zA-ZÀ-ÿ\\s]+$")) {
+            //vazio ou invalido
+            if (!nome.isEmpty() && !nome.matches("^[a-zA-ZÀ-ÿ\\s]+$")) {
                 model.addAttribute("erroBusca", "Digite um nome válido.");
                 model.addAttribute("clientes", List.of());
                 model.addAttribute("pagina", "gerenciarclientes");

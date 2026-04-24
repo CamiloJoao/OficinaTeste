@@ -8,120 +8,138 @@
 
    
     <!-- FORM PRINCIPAL (VERIFICAR) -->
-    
-    <form action="/montagem/verificar" method="post">
+    <div class="conteudo centralizado">
+        <div class="descricaoBox">
 
-        <!-- CLIENTE -->
-        <label>E-mail do Cliente:</label>
-        <input type="email" name="emailCliente" required>
+            <h3>Cadastrar montagem:</h3>
+            
+            <form action="/montagem/verificar" method="post">
+
+                <!-- CLIENTE -->
+                <div class="form-group">
+                    <label>Digite o E-mail do Cliente:</label>
+                    <input type="email" name="emailCliente" placeholder="Digite o e-mail do cliente" required>
+                </div>     
 
 
-        <!-- ERRO CLIENTE -->
-        <div th:if="${erro != null}" style="color:red;">
-            <p th:text="${erro}"></p>
-        </div>
+                <!-- ERRO CLIENTE -->
+                <div th:if="${erro != null}" style="color:red;">
+                    <p th:text="${erro}"></p>
+                </div>
 
-        <hr>
+                <hr>
 
-        <h3>Lista de componentes:</h3>
+                <h3>Lista de componentes:</h3>
 
-        <!-- PEÇAS -->
-        <label>Placa Mãe:</label>
-        <select name="placaMae" required>
-            <option value="">Selecione</option>
-            <option th:each="p : ${placaMae}"
-                    th:value="${p.id_placamae}"
-                    th:text="${p.modelo}"
-                    th:selected="${p.id_placamae == idPlacaMae}">
-            </option>
-        </select>
+                <!-- PEÇAS -->
+                <label>Placa Mãe:</label>
+                <select name="placaMae" required>
+                    <option value="">Selecione</option>
+                    <option th:each="p : ${placaMae}"
+                            th:value="${p.id_placamae}"
+                            th:text="${p.modelo}"
+                            th:selected="${p.id_placamae == idPlacaMae}">
+                    </option>
+                </select>
 
-        <label>Processador:</label>
-        <select name="processador" required>
-            <option value="">Selecione</option>
-            <option th:each="p : ${processador}"
-                    th:value="${p.id_processador}"
-                    th:text="${p.modelo}"
-                    th:selected="${p.id_processador == idProcessador}">
-            </option>
-        </select>
+                <br><br>
 
-        <label>Memória RAM:</label>
-        <select name="memoriaRam" required>
-            <option value="">Selecione</option>
-            <option th:each="p : ${memoriaRam}"
-                    th:value="${p.id_memoriaRam}"
-                    th:text="${p.modelo}"
-                    th:selected="${p.id_memoriaRam == idRam}">
-            </option>
-        </select>
+                <label>Processador:</label>
+                <select name="processador" required>
+                    <option value="">Selecione</option>
+                    <option th:each="p : ${processador}"
+                            th:value="${p.id_processador}"
+                            th:text="${p.modelo}"
+                            th:selected="${p.id_processador == idProcessador}">
+                    </option>
+                </select>
 
-        <label>Armazenamento:</label>
-        <select name="armazenamento" required>
-            <option value="">Selecione</option>
-            <option th:each="p : ${armazenamento}"
-                    th:value="${p.id_armazenamento}"
-                    th:text="${p.modelo}"
-                    th:selected="${p.id_armazenamento == idArmazenamento}">
-            </option>
-        </select>
+                <br><br>
 
-        <hr>
+                <label>Memória RAM:</label>
+                <select name="memoriaRam" required>
+                    <option value="">Selecione</option>
+                    <option th:each="p : ${memoriaRam}"
+                            th:value="${p.id_memoriaRam}"
+                            th:text="${p.modelo}"
+                            th:selected="${p.id_memoriaRam == idRam}">
+                    </option>
+                </select>
 
-        <!-- DATA -->
-        <label>Data de conclusão prevista:</label>
-        <input type="date" name="dataPrevista" required th:value="${dataPrevista}">
+                <br><br>
 
-        <!-- ORÇAMENTO -->
-        <label>Orçamento inicial:</label>
-        <input type="number" step="0.01" name="orcamento" required th:value="${orcamento}">
+                <label>Armazenamento:</label>
+                <select name="armazenamento" required>
+                    <option value="">Selecione</option>
+                    <option th:each="p : ${armazenamento}"
+                            th:value="${p.id_armazenamento}"
+                            th:text="${p.modelo}"
+                            th:selected="${p.id_armazenamento == idArmazenamento}">
+                    </option>
+                </select>
 
-        <br><br>
+                <hr>
 
-        <button type="submit">Verificar Compatibilidade</button>
+                <!-- DATA -->
+                <div class="form-group">
+                    <label>Data de conclusão prevista:</label>
+                    <input type="date" name="dataPrevista" required th:value="${dataPrevista}">
+                </div> 
+                <br><br>
 
-    </form>
+                <!-- ORÇAMENTO -->
+                <div class="form-group">
+                    <label>Orçamento inicial:</label>
+                    <input type="number" step="0.01" name="orcamento" placeholder="Digite o orçamento inicial" required th:value="${orcamento}">
+                </div>
 
-    
-    <!-- ERRO DE COMPATIBILIDADE -->
-    
-    <div th:if="${erroCompatibilidade != null}" style="color:red;">
-        <p th:text="${erroCompatibilidade}"></p>
-    </div>
+                <br><br>
 
-    
-    <!--  COMPATÍVEL → CONFIRMAR -->
-    
-    <div th:if="${compativel}">
+                <button type="submit">Verificar Compatibilidade</button>
 
-        <p style="color: green;">Peças compatíveis</p>
+            </form>
 
-        <form action="/montagem/salvar" method="post">
+            
+            <!-- ERRO DE COMPATIBILIDADE -->
+            
+            <div th:if="${erroCompatibilidade != null}" style="color:red;">
+                <p th:text="${erroCompatibilidade}"></p>
+            </div>
 
-            <input type="hidden" name="idPlacaMae" th:value="${idPlacaMae}">
-            <input type="hidden" name="idProcessador" th:value="${idProcessador}">
-            <input type="hidden" name="idRam" th:value="${idRam}">
-            <input type="hidden" name="idArmazenamento" th:value="${idArmazenamento}">
+            
+            <!--  COMPATÍVEL → CONFIRMAR -->
+            
+            <div th:if="${compativel}">
 
-            <input type="hidden" name="emailCliente" th:value="${emailCliente}">
-            <input type="hidden" name="dataPrevista" th:value="${dataPrevista}">
-            <input type="hidden" name="orcamento" th:value="${orcamento}">
+                <p style="color: green;">Peças compatíveis</p>
 
-            <button type="submit">Confirmar Montagem</button>
+                <form action="/montagem/salvar" method="post">
 
-        </form>
+                    <input type="hidden" name="idPlacaMae" th:value="${idPlacaMae}">
+                    <input type="hidden" name="idProcessador" th:value="${idProcessador}">
+                    <input type="hidden" name="idRam" th:value="${idRam}">
+                    <input type="hidden" name="idArmazenamento" th:value="${idArmazenamento}">
 
-    </div>
+                    <input type="hidden" name="emailCliente" th:value="${emailCliente}">
+                    <input type="hidden" name="dataPrevista" th:value="${dataPrevista}">
+                    <input type="hidden" name="orcamento" th:value="${orcamento}">
 
-    
-    <!-- SUCESSO -->
-    
-    <div th:if="${param.sucesso}">
-        <p style="color: green;">Montagem cadastrada com sucesso!</p>
-    </div>
+                    <button type="submit">Confirmar Montagem</button>
 
-     <hr>
+                </form>
 
+            </div>
+
+            
+            <!-- SUCESSO -->
+            
+            <div th:if="${param.sucesso}">
+                <p style="color: green;">Montagem cadastrada com sucesso!</p>
+            </div>
+
+            <hr>
+        </div>    
+    </div>    
         
 
 

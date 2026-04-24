@@ -5,160 +5,159 @@
 <div th:fragment="conteudo">
 
     <h1>Detalhes do serviço</h1>
+    <div class="conteudo centralizado">
+        <div class="descricaoBox" >
 
-    <div style="border:1px solid #ccc; padding:20px; border-radius:10px;">
+            <p><b>Cliente:</b> 
+                <span th:text="${servico.cliente.nomeCliente}"></span>
+            </p>
 
-        <p><b>Cliente:</b> 
-            <span th:text="${servico.cliente.nomeCliente}"></span>
-        </p>
+            <p><b>Tipo de serviço:</b> Manutenção</p>
 
-        <p><b>Tipo de serviço:</b> Manutenção</p>
+            <p><b>Descrição do problema:</b>
+                <span th:text="${servico.descricaoProblema}"></span>
+            </p>
 
-        <p><b>Descrição do problema:</b>
-            <span th:text="${servico.descricaoProblema}"></span>
-        </p>
+            <p><b>Orçamento inicial:</b>
+                R$ <span th:text="${servico.orcamentoInicial}"></span>
+            </p>
 
-        <p><b>Orçamento inicial:</b>
-            R$ <span th:text="${servico.orcamentoInicial}"></span>
-        </p>
+            <!--PEÇAS EXTRAS -->
+            <p><b>Peças acrescentadas:</b></p>
 
-        <!--PEÇAS EXTRAS -->
-        <p><b>Peças acrescentadas:</b></p>
-
-        <!-- SE NÃO TEM -->
-        <div th:if="${#lists.isEmpty(pecasExtras)}">
-            Nenhuma peça acrescentada - R$ 0.00
-        </div>
-
-        <!-- SE TEM -->
-        <div th:if="${!#lists.isEmpty(pecasExtras)}">
-
-            <ul>
-                <li th:each="p : ${pecasExtras}">
-                    <span th:text="${p.nomePeca}"></span> - 
-                    R$ <span th:text="${p.valor}"></span>
-                </li>
-            </ul>
-
-        </div>
-
-        <p><b>Orçamento final:</b>
-            R$ <span th:text="${servico.orcamentoFinal}"></span>
-        </p>
-
-    </div>
-
-    <br>
-
-   <!--ADICIONAR PEÇA EXTRA -->
-    <div style="border:1px solid #ccc; padding:20px; border-radius:10px;">
-
-        <h3>Adicionar peça extra</h3>
-
-        <form action="/statusdeservico/adicionar-peca-json" method="post">
-
-            <input type="hidden" name="idServico" th:value="${servico.idServico}">
-
-            <!--TIPO DA PEÇA -->
-            <label>Tipo da peça:</label>
-            <select id="tipo" name="tipo" required>
-                <option value="">Selecione</option>
-                <option value="placa_mae">Placa-mãe</option>
-                <option value="processador">Processador</option>
-                <option value="memoria_ram">Memória RAM</option>
-                <option value="armazenamento">Armazenamento</option>
-            </select>
-
-            <br><br>
-
-            <div id="containerPeca" style="display: none";>
-                <label>Escolher peça:</label>
-                <select id="peca" name="idReferencia" required>
-                    
-                    <option value="">Selecione</option>
-
-                    <!-- PLACA MÃE -->
-                    <option th:each="p : ${placaMae}"
-                            th:value="${p.id_placamae}"
-                            th:text="${p.modelo}"
-                            th:attr="data-tipo='placa_mae'">
-                    </option>
-
-                    <!-- PROCESSADOR -->
-                    <option th:each="p : ${processador}"
-                            th:value="${p.id_processador}"
-                            th:text="${p.modelo}"
-                            th:attr="data-tipo='processador'">
-                    </option>
-
-                    <!-- RAM -->
-                    <option th:each="m : ${memoriaRam}"
-                            th:value="${m.id_memoriaRam}"
-                            th:text="${m.modelo}"
-                            th:attr="data-tipo='memoria_ram'">
-                    </option>
-
-                    <!-- ARMAZENAMENTO -->
-                    <option th:each="a : ${armazenamento}"
-                            th:value="${a.id_armazenamento}"
-                            th:text="${a.modelo}"
-                            th:attr="data-tipo='armazenamento'">
-                    </option>
-                
-                </select>
+            <!-- SE NÃO TEM -->
+            <div th:if="${#lists.isEmpty(pecasExtras)}">
+                Nenhuma peça acrescentada - R$ 0.00
             </div>
+
+            <!-- SE TEM -->
+            <div th:if="${!#lists.isEmpty(pecasExtras)}">
+
+                <ul>
+                    <li th:each="p : ${pecasExtras}">
+                        <span th:text="${p.nomePeca}"></span> - 
+                        R$ <span th:text="${p.valor}"></span>
+                    </li>
+                </ul>
+
+            </div>
+
+            <p><b>Orçamento final:</b>
+                R$ <span th:text="${servico.orcamentoFinal}"></span>
+            </p>
+
+            <hr>
+
+            <br>
+
+             <!--ADICIONAR PEÇA EXTRA -->
+        
+
+            <h3>Adicionar peça extra</h3>
+
+            <form action="/statusdeservico/adicionar-peca-json" method="post">
+
+                <input type="hidden" name="idServico" th:value="${servico.idServico}">
+
+                <!--TIPO DA PEÇA -->
+                <label>Tipo da peça:</label>
+                <select id="tipo" name="tipo" required>
+                    <option value="">Selecione</option>
+                    <option value="placa_mae">Placa-mãe</option>
+                    <option value="processador">Processador</option>
+                    <option value="memoria_ram">Memória RAM</option>
+                    <option value="armazenamento">Armazenamento</option>
+                </select>
+
+                <br><br>
+
+                <div id="containerPeca" style="display: none";>
+                    <label>Escolher peça:</label>
+                    <select id="peca" name="idReferencia" required>
+                        
+                        <option value="">Selecione</option>
+
+                        <!-- PLACA MÃE -->
+                        <option th:each="p : ${placaMae}"
+                                th:value="${p.id_placamae}"
+                                th:text="${p.modelo}"
+                                th:attr="data-tipo='placa_mae'">
+                        </option>
+
+                        <!-- PROCESSADOR -->
+                        <option th:each="p : ${processador}"
+                                th:value="${p.id_processador}"
+                                th:text="${p.modelo}"
+                                th:attr="data-tipo='processador'">
+                        </option>
+
+                        <!-- RAM -->
+                        <option th:each="m : ${memoriaRam}"
+                                th:value="${m.id_memoriaRam}"
+                                th:text="${m.modelo}"
+                                th:attr="data-tipo='memoria_ram'">
+                        </option>
+
+                        <!-- ARMAZENAMENTO -->
+                        <option th:each="a : ${armazenamento}"
+                                th:value="${a.id_armazenamento}"
+                                th:text="${a.modelo}"
+                                th:attr="data-tipo='armazenamento'">
+                        </option>
+                    
+                    </select>
+                </div>
+                <button type="submit">Adicionar peça</button>
+            </form>
+
+            
+            <hr>
             <br><br>
 
-            <button type="submit">Adicionar peça</button>
 
-        </form>
+            <!-- ENCERRAR -->
+            <form action="/statusdeservico/encerrar" method="post">
+                <input type="hidden" name="idServico" th:value="${servico.idServico}">
+                <button type="submit">Encerrar serviço</button>
+            </form>
 
+            <script>
+            document.addEventListener("DOMContentLoaded", function () {
+
+                const tipoSelect = document.getElementById("tipo");
+                const selectPeca = document.getElementById("peca");
+                const container = document.getElementById("containerPeca");
+
+                if (!container) return; // 🔥 evita erro silencioso
+
+                function filtrarPecas() {
+
+                    const tipoSelecionado = tipoSelect.value;
+                    const opcoes = selectPeca.options;
+
+                    if (!tipoSelecionado) {
+                        container.style.display = "none";
+                    } else {
+                        container.style.display = "block";
+                    }
+
+                    for (let i = 0; i < opcoes.length; i++) {
+
+                        const tipoOpcao = opcoes[i].getAttribute("data-tipo");
+
+                        opcoes[i].hidden = tipoOpcao !== tipoSelecionado;
+                    }
+
+                    selectPeca.selectedIndex = -1;
+                }
+
+                tipoSelect.addEventListener("change", filtrarPecas);
+
+                filtrarPecas();
+            });
+            </script>
+        </div>    
     </div>
-
-    <br>
-
-    <!-- ENCERRAR -->
-    <form action="/statusdeservico/encerrar" method="post">
-        <input type="hidden" name="idServico" th:value="${servico.idServico}">
-        <button type="submit">Encerrar serviço</button>
-    </form>
-
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-
-        const tipoSelect = document.getElementById("tipo");
-        const selectPeca = document.getElementById("peca");
-        const container = document.getElementById("containerPeca");
-
-        if (!container) return; // 🔥 evita erro silencioso
-
-        function filtrarPecas() {
-
-            const tipoSelecionado = tipoSelect.value;
-            const opcoes = selectPeca.options;
-
-            if (!tipoSelecionado) {
-                container.style.display = "none";
-            } else {
-                container.style.display = "block";
-            }
-
-            for (let i = 0; i < opcoes.length; i++) {
-
-                const tipoOpcao = opcoes[i].getAttribute("data-tipo");
-
-                opcoes[i].hidden = tipoOpcao !== tipoSelecionado;
-            }
-
-            selectPeca.selectedIndex = -1;
-        }
-
-        tipoSelect.addEventListener("change", filtrarPecas);
-
-        filtrarPecas();
-    });
-    </script>
-
 </div>
 
 

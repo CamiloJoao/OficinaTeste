@@ -6,40 +6,50 @@
 
     <h1>Cadastrar Novo Cliente</h1>
 
-    <!--MENSAGEM DE SUCESSO -->
-    <div th:if="${mensagem}">
-        <p th:text="${mensagem}" style="color: green;"></p>
-    </div>
+    <div class="conteudo centralizado">
+        <div class="descricaoBox">
+            <!--MENSAGEM DE SUCESSO -->
+            <div th:if="${mensagem}">
+                <p th:text="${mensagem}" style="color: green;"></p>
+            </div>
 
-    <!-- ERRO -->
-    <div th:if="${erro}" style="color: red;">
-        <p th:text="${erro}"></p>
-    </div>
+            <!-- ERRO -->
+            <div th:if="${erro}" style="color: red;">
+                <p th:text="${erro}"></p>
+            </div>
 
-    <form th:action="@{/gerenciarclientes/salvar}" method="post">
+            <form th:action="@{/gerenciarclientes/salvar}" method="post">
 
-        <label>Nome completo:</label>
-        <input type="text" name="nomeCliente" required>
+                <div class="form-group">
+                    <label>Nome completo:</label>
+                    <input type="text" name="nomeCliente" placeholder="Digite o nome completo" required>
+                </div>
+            
 
-        <br><br>
+           
 
-        <label>Telefone:</label>
-        <input type="text" name="telefone" required>
+                <div class="form-group">
+                    <label>Telefone:</label>
+                    <input type="text" name="telefone" placeholder="Digite o telefone" required>
+            </div>    
 
-        <br><br>
+               
 
-        <label>Email:</label>
-        <input type="email" name="emailCliente" required>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" name="emailCliente" placeholder="digite o e-mail" required>
+                </div>
+               
 
-        <br><br>
+                <button type="submit">Cadastrar</button>
 
-        <button type="submit">Cadastrar</button>
+                <a href="/gerenciarclientes">
+                    <button type="button">Cancelar</button>
+                </a>
 
-        <a href="/gerenciarclientes">
-            <button type="button">Cancelar</button>
-        </a>
-
-    </form>
+            </form>
+        </div>    
+    </div>        
 
 </div>
 

@@ -2,12 +2,114 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<div th:fragment="conteudo">
+    <div th:fragment="conteudo">
 
-    <h1>Painel Geral</h1>
+        <h1>Painel Geral do Sistema</h1>
 
+        <!-- RESUMO -->
+        <div style="display:flex; gap:20px; margin-bottom:30px;">
 
-</div>
+            <div class="card">
+                <h3>Serviços em andamento</h3>
+                <h2 th:text="${emAndamento}">0</h2>
+            </div>
+
+            <div class="card">
+                <h3>Serviços prioritários</h3>
+                <h2 th:text="${prioritarios}">0</h2>
+            </div>
+
+            <div class="card">
+                <h3>Montagens</h3>
+                <h2 th:text="${montagens}">0</h2>
+            </div>
+
+            <div class="card">
+                <h3>Manutenções</h3>
+                <h2 th:text="${manutencoes}">0</h2>
+            </div>
+
+        </div>
+
+        <!-- LINHA 2 -->
+        <div style="display:flex; gap:20px; margin-bottom:30px;">
+
+            <!-- SERVIÇOS DA SEMANA -->
+            <div class="box">
+                <h3>Serviços da semana</h3>
+
+                <p>Segunda: <span th:text="${semana['Segunda']}"></span></p>
+                <p>Terça: <span th:text="${semana['Terça']}"></span></p>
+                <p>Quarta: <span th:text="${semana['Quarta']}"></span></p>
+                <p>Quinta: <span th:text="${semana['Quinta']}"></span></p>
+                <p>Sexta: <span th:text="${semana['Sexta']}"></span></p>
+
+            </div>
+
+            <!-- SERVIÇOS POR PRAZO -->
+            <div class="box">
+                <h3>Serviços por prazo</h3>
+
+                <div style="display:flex; gap:10px;">
+
+                    <a th:href="@{/painel/prazos(tipo='normal')}" class="badge verde">
+                        <h3>No prazo</h3>
+                        <h2 th:text="${noPrazo}">0</h2>
+                    </a>
+
+                    <a th:href="@{/painel/prazos(tipo='proximo')}" class="badge amarelo">
+                        <h3>Próximos</h3>
+                        <h2 th:text="${proximos}">0</h2>
+                    </a>
+
+                    <a th:href="@{/painel/prazos(tipo='prioritario')}" class="badge vermelho">
+                        <h3>Prioritários </h3>
+                        <h2 th:text="${prioritarios}">0</h2>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <h3>Últimos serviços cadastrados</h3>
+
+        <!-- ÚLTIMOS SERVIÇOS -->
+        <div class="boxtable" th:if="${ultimosServicos != null and !#lists.isEmpty(ultimosServicos)}">
+
+            <table>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Tipo</th>
+                    <th>Data</th>
+                    <th>Status</th>
+                    <th>Ação</th>
+                </tr>
+
+                <tr th:each="s : ${ultimosServicos}">
+                    <td th:text="${s.cliente.nomeCliente}"></td>
+                    <td th:text="${s.tipoServico}"></td>
+                    <td th:text="${s.dataPrevistaConclusao}"></td>
+                    <td th:text="${s.status}"></td>
+                    <td>
+                        <a th:href="@{'/statusdeservico/detalhes/' + ${s.idServico}}">
+                            Ver detalhes
+                        </a>
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+
+         <!--SEM CLIENTES CADASTRADOS -->
+        <div th:if="${ultimosServicos != null 
+                and #lists.isEmpty(ultimosServicos)}">
+            <p>Nenhum serviço cadastrado.</p>
+        </div>
+
+    </div>
 
 </body>
 </html>
