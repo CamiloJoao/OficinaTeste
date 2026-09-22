@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="conteudo">
+
+    <h1 th:text="'Serviços do dia ' + ${#temporals.format(dataSelecionada, 'dd/MM/yyyy')}">
+        Serviços do dia
+    </h1>
+
+    <div class="conteudo centralizado">
+        <div class="descricaoBox descricaoBox-tabela">
+
+            <div class="acao-topo">
+                <a href="/">
+                    <button type="button" class="btn-secundario">Voltar ao painel</button>
+                </a>
+            </div>
+
+            <!-- TABELA -->
+            <div class="boxtable">
+
+                <table>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Tipo</th>
+                        <th>Status</th>
+                        <th>Ação</th>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(servicos)}">
+                        <td colspan="4">Nenhum serviço encontrado para este dia</td>
+                    </tr>
+
+                    <tr th:each="s : ${servicos}">
+                        <td th:text="${s.cliente.nomeCliente}"></td>
+                        <td th:text="${s.tipoServico}"></td>
+                        <td th:text="${s.status}"></td>
+
+                        <td class="nowrap">
+                            <a th:href="@{'/statusdeservico/detalhes/' + ${s.idServico}}">
+                                Ver detalhes
+                            </a>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>    
+    </div>    
+
+</div>
+
+</body>
+</html>

@@ -4,13 +4,13 @@ package com.projeto.oficina.compatibilidade;
 import java.util.List;
 
 public class CompatibilidadeData {
-    
 
     private List<PlacaMae> placa_mae;
     private List<Processador> processador;
     private List<MemoriaRam> memoria_ram;
     private List<Armazenamento> armazenamento;
-
+    private List<PlacadeVideo> placa_devideo;
+    private List<Fonte> fonte;
 
     public List<Armazenamento> getArmazenamento() {
         return armazenamento;
@@ -42,6 +42,22 @@ public class CompatibilidadeData {
 
     public void setMemoria_ram(List<MemoriaRam> memoria_ram) {
         this.memoria_ram = memoria_ram;
+    }
+
+    public List<PlacadeVideo> getPlaca_devideo() {
+        return placa_devideo;
+    }
+
+    public void setPlaca_devideo(List<PlacadeVideo> placa_devideo) {
+        this.placa_devideo = placa_devideo;
+    }
+
+    public List<Fonte> getFonte() {
+        return fonte;
+    }
+
+    public void setFonte(List<Fonte> fonte) {
+        this.fonte = fonte;
     }
 }
 

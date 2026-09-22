@@ -13,6 +13,7 @@ public class PlacaMae {
     private Map<String, Integer> interfaces_armazenamento;
     private Boolean video_integrado;
     private Double preco;
+    private String interfacePcie;
 
     public Boolean getVideo_integrado() {
         return video_integrado;
@@ -89,6 +90,15 @@ public class PlacaMae {
 
     public void setPreco(Double preco) {
         this.preco = preco;
+    }
+
+
+    public String getInterfacePcie() {
+        return interfacePcie;
+    }
+
+    public void setInterfacePcie(String interfacePcie) {
+        this.interfacePcie = interfacePcie;
     }
 
 }

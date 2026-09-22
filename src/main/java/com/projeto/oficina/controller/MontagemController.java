@@ -1,5 +1,6 @@
 package com.projeto.oficina.controller;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +45,9 @@ public class MontagemController {
         model.addAttribute("processador", data.getProcessador());
         model.addAttribute("memoriaRam", data.getMemoria_ram());
         model.addAttribute("armazenamento", data.getArmazenamento());
+        model.addAttribute("placaDeVideo", data.getPlaca_devideo());
+        model.addAttribute("fonte", data.getFonte());
 
-        // 🔽 NOVO: buscar montagens
         List<Servico> montagens = servicoService.listarPorTipo(TipoServico.MONTAGEM);
         model.addAttribute("montagens", montagens);
 
@@ -63,6 +65,8 @@ public class MontagemController {
                 @RequestParam("processador") int idProcessador,
                 @RequestParam("memoriaRam") int idRam,
                 @RequestParam("armazenamento") int idArmazenamento,
+                @RequestParam(value = "placaDeVideo", required = false) Integer idPlacaDeVideo,
+                @RequestParam("fonte") int idFonte,
                 @RequestParam String dataPrevista,
                 @RequestParam Double orcamento,
                 Model model) {
@@ -73,6 +77,8 @@ public class MontagemController {
                 model.addAttribute("processador", data.getProcessador());
                 model.addAttribute("memoriaRam", data.getMemoria_ram());
                 model.addAttribute("armazenamento", data.getArmazenamento());
+                model.addAttribute("placaDeVideo", data.getPlaca_devideo());
+                model.addAttribute("fonte", data.getFonte());
 
                 // VALIDAR EMAIL
                 if (emailCliente == null || emailCliente.trim().isEmpty()) {
@@ -90,10 +96,18 @@ public class MontagemController {
                 }
 
                 // VALIDAR DATA
+                java.time.LocalDate dataConvertida;
                 try {
-                        java.time.LocalDate.parse(dataPrevista);
+                        dataConvertida = java.time.LocalDate.parse(dataPrevista);
                 } catch (Exception e) {
                         model.addAttribute("erro", "Data inválida.");
+                        model.addAttribute("pagina", "montagem");
+                        return "layout";
+                }
+
+                // 🔥 BLOQUEAR DOMINGO (oficina fechada)
+                if (dataConvertida.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                        model.addAttribute("erro", "A oficina não funciona aos domingos. Escolha outra data.");
                         model.addAttribute("pagina", "montagem");
                         return "layout";
                 }
@@ -111,17 +125,27 @@ public class MontagemController {
                 Armazenamento armazenamento = compatibilidadeService.buscarPorId(
                         data.getArmazenamento(), a -> a.getId_armazenamento() == idArmazenamento);
 
-                if (placaMae == null || processador == null || memoriaRam == null || armazenamento == null) {
+                Fonte fonte = compatibilidadeService.buscarPorId(
+                        data.getFonte(), f -> f.getId_fonte() == idFonte);
+
+                PlacadeVideo placaDeVideo = null;
+                if (idPlacaDeVideo != null) {
+                        placaDeVideo = compatibilidadeService.buscarPorId(
+                                data.getPlaca_devideo(), v -> v.getId_placadevideo() == idPlacaDeVideo);
+                }
+
+                if (placaMae == null || processador == null || memoriaRam == null
+                        || armazenamento == null || fonte == null) {
                         model.addAttribute("erro", "Selecione todas as peças corretamente.");
                         model.addAttribute("pagina", "montagem");
                         return "layout";
                 }
 
-                boolean compativel = compatibilidadeRegras.isCompativel(
-                        placaMae, processador, memoriaRam, armazenamento);
+                ResultadoCompatibilidade resultado = compatibilidadeService.verificarMontagemCompleta(
+                        placaMae, processador, memoriaRam, armazenamento, placaDeVideo, fonte);
 
-                if (!compativel) {
-                        model.addAttribute("erroCompatibilidade", "Peças incompatíveis ❌");
+                if (!resultado.isCompativel()) {
+                        model.addAttribute("erroCompatibilidade", resultado.getErros());
                         model.addAttribute("pagina", "montagem");
                         return "layout";
                 }
@@ -132,11 +156,12 @@ public class MontagemController {
                 model.addAttribute("dataPrevista", dataPrevista);
                 model.addAttribute("orcamento", orcamento);
 
-                
                 model.addAttribute("idPlacaMae", idPlacaMae);
                 model.addAttribute("idProcessador", idProcessador);
                 model.addAttribute("idRam", idRam);
                 model.addAttribute("idArmazenamento", idArmazenamento);
+                model.addAttribute("idPlacaDeVideo", idPlacaDeVideo);
+                model.addAttribute("idFonte", idFonte);
 
                 model.addAttribute("pagina", "montagem");
                 return "layout";
@@ -153,7 +178,9 @@ public class MontagemController {
                 @RequestParam Integer idPlacaMae,
                 @RequestParam Integer idProcessador,
                 @RequestParam Integer idRam,
-                @RequestParam Integer idArmazenamento) {
+                @RequestParam Integer idArmazenamento,
+                @RequestParam(required = false) Integer idPlacaDeVideo,
+                @RequestParam Integer idFonte) {
 
                 Cliente cliente = clienteService.buscarPorEmail(emailCliente);
 
@@ -161,7 +188,6 @@ public class MontagemController {
                         return "redirect:/montagem?erro=cliente";
                 }
 
-                // 🔥 CARREGAR DADOS
                 CompatibilidadeData data = compatibilidadeService.carregarCompatibilidade();
 
                 PlacaMae placaMae = compatibilidadeService.buscarPorId(
@@ -176,6 +202,14 @@ public class MontagemController {
                 Armazenamento armazenamento = compatibilidadeService.buscarPorId(
                         data.getArmazenamento(), a -> a.getId_armazenamento() == idArmazenamento);
 
+                Fonte fonte = compatibilidadeService.buscarPorId(
+                        data.getFonte(), f -> f.getId_fonte() == idFonte);
+
+                PlacadeVideo placaDeVideo = null;
+                if (idPlacaDeVideo != null) {
+                        placaDeVideo = compatibilidadeService.buscarPorId(
+                                data.getPlaca_devideo(), v -> v.getId_placadevideo() == idPlacaDeVideo);
+                }
 
                 Servico servico = new Servico();
                 servico.setCliente(cliente);
@@ -191,7 +225,6 @@ public class MontagemController {
                 p1.setServico(servico);
                 p1.setTipo("placa_mae");
                 p1.setIdReferencia(idPlacaMae);
-                
 
                 ServicoPeca p2 = new ServicoPeca();
                 p2.setNomePeca("CPU: " + processador.getModelo());
@@ -214,10 +247,28 @@ public class MontagemController {
                 p4.setTipo("armazenamento");
                 p4.setIdReferencia(idArmazenamento);
 
+                ServicoPeca p5 = new ServicoPeca();
+                p5.setNomePeca("Fonte: " + fonte.getModelo());
+                p5.setValor(0.0);
+                p5.setServico(servico);
+                p5.setTipo("fonte");
+                p5.setIdReferencia(idFonte);
+
                 lista.add(p1);
                 lista.add(p2);
                 lista.add(p3);
                 lista.add(p4);
+                lista.add(p5);
+
+                if (placaDeVideo != null) {
+                        ServicoPeca p6 = new ServicoPeca();
+                        p6.setNomePeca("GPU: " + placaDeVideo.getModelo());
+                        p6.setValor(0.0);
+                        p6.setServico(servico);
+                        p6.setTipo("placa_devideo");
+                        p6.setIdReferencia(idPlacaDeVideo);
+                        lista.add(p6);
+                }
 
                 servico.setPecas(lista);
 
@@ -231,4 +282,3 @@ public class MontagemController {
                 return "redirect:/montagem?sucesso=true";
         }
 }
-

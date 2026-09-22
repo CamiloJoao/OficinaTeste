@@ -22,6 +22,11 @@ public class ServicoPeca {
     @Column(name = "tipo")
     private String tipo;
 
+    // Usado apenas para peças EXTRAS (tipo == null): guarda a categoria
+    // (placa_mae, processador, memoria_ram, armazenamento, placa_devideo, fonte)
+    @Column(name = "categoria_extra")
+    private String categoriaExtra;
+
     @ManyToOne
     @JoinColumn(name = "id_servico", nullable = false)
     private Servico servico;
@@ -66,6 +71,14 @@ public class ServicoPeca {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public String getCategoriaExtra() {
+        return categoriaExtra;
+    }
+
+    public void setCategoriaExtra(String categoriaExtra) {
+        this.categoriaExtra = categoriaExtra;
     }
 
     public Servico getServico() {

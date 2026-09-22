@@ -1,5 +1,4 @@
 {
-
     "placa_mae": [
         {
             "id_placamae": 1,
@@ -7,6 +6,7 @@
             "soquetePlacaMae": "AM4",
             "ram_suportada": "DDR4",
             "interfaces_armazenamento": {"SATA": 4, "M.2": 1},
+            "interfacePcie": "PCIe 3.0 x16",
             "processadores_compativeis": ["Ryzen 5 3600", "Ryzen 7 3700X"],
             "video_integrado": false,
             "preco": 1500.00
@@ -17,6 +17,7 @@
             "soquetePlacaMae": "LGA1700",
             "ram_suportada": "DDR5",
             "interfaces_armazenamento": {"SATA": 4},
+            "interfacePcie": "PCIe 4.0 x16",
             "processadores_compativeis": ["i5-12600K", "i7-12700K"],
             "video_integrado": true,
             "preco": 2000.00
@@ -29,6 +30,7 @@
             "modelo": "Ryzen 5 3600",
             "soqueteProcessador": "AM4",
             "video_integrado": false,
+            "consumoWatts": 65,
             "preco": 2000.00
         },
         {
@@ -36,6 +38,7 @@
             "modelo": "i5-12600K",
             "soqueteProcessador": "LGA1700",
             "video_integrado": true,
+            "consumoWatts": 125,
             "preco": 2500.00
         }
     ],
@@ -44,13 +47,11 @@
         {
             "id_memoriaRam": 1,
             "modelo": "HyperX Fury Memoria DDR4 8GB",
-
             "tipo": "DDR4",
             "frequencia_mhz": 3200,
             "preco": 500.00
         },
         {
-
             "id_memoriaRam": 2,
             "modelo": "Kingston FURY Beast DDR5 16GB",
             "tipo": "DDR5",
@@ -68,8 +69,7 @@
             "capacidadeGB": 1000,
             "preco": 350.00
         },
-
-        { 
+        {
             "id_armazenamento": 2,
             "modelo": "SSD Samsung 980 PRO 2TB",
             "tipo": "SSD",
@@ -77,6 +77,39 @@
             "capacidadeGB": "2000",
             "preco": 500.00
         }
+    ],
 
+    "placa_devideo": [
+        {
+            "id_placadevideo": 1,
+            "modelo": "GTX 1660 Super",
+            "interfacePcie": "PCIe 3.0 x16",
+            "consumoWatts": 125,
+            "memoriaGB": 6,
+            "preco": 1200.00
+        },
+        {
+            "id_placadevideo": 2,
+            "modelo": "RTX 3060",
+            "interfacePcie": "PCIe 4.0 x16",
+            "consumoWatts": 170,
+            "memoriaGB": 12,
+            "preco": 2200.00
+        }
+    ],
+
+    "fonte": [
+        {
+            "id_fonte": 1,
+            "modelo": "Corsair CV450",
+            "potenciaWatts": 450,
+            "preco": 300.00
+        },
+        {
+            "id_fonte": 2,
+            "modelo": "Corsair RM750x",
+            "potenciaWatts": 750,
+            "preco": 700.00
+        }
     ]
 }

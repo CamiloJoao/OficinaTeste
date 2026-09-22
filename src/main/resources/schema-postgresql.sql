@@ -42,9 +42,8 @@ CREATE TABLE servico_peca (
     id SERIAL PRIMARY KEY,
     id_servico INT REFERENCES servico(id_servico),
     nome_peca VARCHAR(100),
-    valor DECIMAL(10,2)
+    valor DECIMAL(10,2),
     id_referencia INT,
-    tipo VARCHAR(50)
+    tipo VARCHAR(50),
+    categoria_extra VARCHAR(50)
 );
-
-

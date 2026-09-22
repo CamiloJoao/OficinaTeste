@@ -1,6 +1,7 @@
 package com.projeto.oficina.compatibilidade;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
 
@@ -12,6 +13,9 @@ import java.util.function.Predicate;
 public class CompatibilidadeService {
 
     private CompatibilidadeData data;
+
+    @Autowired
+    private CompatibilidadeRegras regras;
 
     // =========================
     // CARREGAR JSON UMA VEZ
@@ -48,5 +52,55 @@ public class CompatibilidadeService {
                 .filter(filtro)
                 .findFirst()
                 .orElse(null);
+    }
+
+    // =========================
+    // VERIFICAÇÃO DE MONTAGEM COMPLETA
+    // =========================
+    public ResultadoCompatibilidade verificarMontagemCompleta(
+            PlacaMae placaMae,
+            Processador processador,
+            MemoriaRam ram,
+            Armazenamento armazenamento,
+            PlacadeVideo placaDeVideo, // pode ser null (vídeo integrado)
+            Fonte fonte) {
+
+        ResultadoCompatibilidade resultado = new ResultadoCompatibilidade();
+
+        // 1. Núcleo: placa mãe + processador + ram + armazenamento
+        if (!regras.isCompativelSocket(placaMae, processador)) {
+            resultado.adicionarErro("Soquete do processador (" + processador.getSoqueteProcessador()
+                    + ") incompatível com a placa mãe (" + placaMae.getSoquetePlacaMae() + ").");
+        }
+
+        if (!regras.isCompativelMemoria(placaMae, ram)) {
+            resultado.adicionarErro("Tipo de memória RAM (" + ram.getTipo()
+                    + ") incompatível com a placa mãe (" + placaMae.getRam_suportada() + ").");
+        }
+
+        if (!regras.isCompativelArmazenamento(placaMae, armazenamento)) {
+            resultado.adicionarErro("Interface de armazenamento (" + armazenamento.getInterfaceConexao()
+                    + ") não suportada pela placa mãe.");
+        }
+
+        // 2. Placa de vídeo (se houver) ou vídeo integrado
+        if (placaDeVideo != null) {
+            if (!regras.isCompativelGPU(placaMae, placaDeVideo)) {
+                resultado.adicionarErro("Interface da placa de vídeo (" + placaDeVideo.getInterfacePcie()
+                        + ") incompatível com o slot da placa mãe (" + placaMae.getInterfacePcie() + ").");
+            }
+        } else {
+            if (!regras.temVideoIntegrado(placaMae, processador)) {
+                resultado.adicionarErro("Nenhuma placa de vídeo informada e nem processador/placa mãe possuem vídeo integrado.");
+            }
+        }
+
+        // 3. Fonte: precisa suportar o consumo total
+        if (!regras.isFonteSuficiente(fonte, processador, placaDeVideo)) {
+            resultado.adicionarErro("Potência da fonte (" + fonte.getPotenciaWatts()
+                    + "W) insuficiente para o consumo estimado do sistema (com margem de segurança de 20%).");
+        }
+
+        return resultado;
     }
 }

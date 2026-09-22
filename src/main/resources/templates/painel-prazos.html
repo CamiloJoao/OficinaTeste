@@ -3,17 +3,30 @@
 <body>
     <div th:fragment="conteudo">
 
-    <h2 style="margin-bottom:20px;">
-        Serviços -
-        <span th:text="${tipoSelecionado}"></span>
-    </h2>
-    <div class="conteud centralizado">
-        <div class="descricaoBox">
+    <h1 th:text="'Serviços - ' + (${tipoSelecionado == 'prioritario'} ? 'Prioritários' : (${tipoSelecionado == 'proximo'} ? 'Próximos' : 'No prazo'))">
+        Serviços
+    </h1>
+
+    <div class="conteudo centralizado">
+        <div class="descricaoBox descricaoBox-tabela">
+
             <!-- BOTÕES DE FILTRO -->
-            <div style="margin-bottom:20px;">
-                <a href="/painel/prazos?tipo=prioritario" class="badge vermelho">Prioritários</a>
-                <a href="/painel/prazos?tipo=proximo" class="badge amarelo">Próximos</a>
-                <a href="/painel/prazos?tipo=normal" class="badge verde">No prazo</a>
+            <div class="grid-badges" style="margin-bottom: 24px;">
+                <a href="/painel/prazos?tipo=prioritario"
+                   class="badge vermelho"
+                   th:classappend="${tipoSelecionado == 'prioritario'} ? 'badge-ativo' : ''">
+                    Prioritários
+                </a>
+                <a href="/painel/prazos?tipo=proximo"
+                   class="badge amarelo"
+                   th:classappend="${tipoSelecionado == 'proximo'} ? 'badge-ativo' : ''">
+                    Próximos
+                </a>
+                <a href="/painel/prazos?tipo=normal"
+                   class="badge verde"
+                   th:classappend="${tipoSelecionado == 'normal'} ? 'badge-ativo' : ''">
+                    No prazo
+                </a>
             </div>
 
             <!-- TABELA -->
@@ -41,7 +54,7 @@
 
                         <td th:text="${s.status}"></td>
 
-                        <td>
+                        <td class="nowrap">
                             <a th:href="@{'/statusdeservico/detalhes/' + ${s.idServico}}">
                                 Ver detalhes
                             </a>
@@ -56,4 +69,4 @@
 </div>
 
 </body>
-</html>    
+</html>

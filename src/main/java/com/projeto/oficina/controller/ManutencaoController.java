@@ -1,6 +1,6 @@
 package com.projeto.oficina.controller;
 
-
+import java.time.DayOfWeek;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -80,6 +80,13 @@ public class ManutencaoController {
             data = java.time.LocalDate.parse(dataPrevista);
         } catch (Exception e) {
             model.addAttribute("erro", "Data inválida.");
+            model.addAttribute("pagina", "manutencao");
+            return "layout";
+        }
+
+        // 🔥 BLOQUEAR DOMINGO (oficina fechada)
+        if (data.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            model.addAttribute("erro", "A oficina não funciona aos domingos. Escolha outra data.");
             model.addAttribute("pagina", "manutencao");
             return "layout";
         }

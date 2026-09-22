@@ -5,14 +5,23 @@
 <div th:fragment="conteudo">
 
     <h1>Detalhes do serviço</h1>
+
     <div class="conteudo centralizado">
-        <div class="descricaoBox" >
+        <div class="descricaoBox descricaoBox-tabela">
 
             <p><b>Cliente:</b> 
                 <span th:text="${servico.cliente.nomeCliente}"></span>
             </p>
 
+            <p><b>Telefone:</b>
+                <span th:text="${servico.cliente.telefone}"></span>
+            </p>
+
             <p><b>Tipo de serviço:</b> Manutenção</p>
+
+            <p><b>Data prevista:</b>
+                <span th:text="${servico.dataPrevistaConclusao != null} ? ${#temporals.format(servico.dataPrevistaConclusao, 'dd/MM/yyyy')} : '-'"></span>
+            </p>
 
             <p><b>Descrição do problema:</b>
                 <span th:text="${servico.descricaoProblema}"></span>
@@ -25,6 +34,11 @@
             <!--PEÇAS EXTRAS -->
             <p><b>Peças acrescentadas:</b></p>
 
+            <!-- MENSAGEM DE ERRO/SUCESSO DA PEÇA EXTRA (independente da lista) -->
+            <div th:if="${msgErroExtra != null and !#lists.isEmpty(msgErroExtra)}" class="alerta-erro">
+                <p>Não foi possível salvar a peça: ela é incompatível com a configuração atual.</p>
+            </div>
+
             <!-- SE NÃO TEM -->
             <div th:if="${#lists.isEmpty(pecasExtras)}">
                 Nenhuma peça acrescentada - R$ 0.00
@@ -34,9 +48,55 @@
             <div th:if="${!#lists.isEmpty(pecasExtras)}">
 
                 <ul>
-                    <li th:each="p : ${pecasExtras}">
+                    <li th:each="p : ${pecasExtras}" style="margin-bottom: 14px;">
                         <span th:text="${p.nomePeca}"></span> - 
                         R$ <span th:text="${p.valor}"></span>
+
+                        <div th:if="${p.categoriaExtra != null}" class="acoes-peca-extra">
+
+                            <!-- EDITAR -->
+                            <form action="/statusdeservico/editar-peca-extra" method="post" style="display:inline;">
+                                <input type="hidden" name="idServico" th:value="${servico.idServico}">
+                                <input type="hidden" name="idPeca" th:value="${p.id}">
+
+                                <select name="idReferencia" class="select-inline">
+                                    <option th:each="x : ${placaMae}" th:if="${p.categoriaExtra == 'placa_mae'}"
+                                            th:value="${x.id_placamae}" th:text="${x.modelo}"
+                                            th:selected="${x.id_placamae == p.idReferencia}"></option>
+
+                                    <option th:each="x : ${processador}" th:if="${p.categoriaExtra == 'processador'}"
+                                            th:value="${x.id_processador}" th:text="${x.modelo}"
+                                            th:selected="${x.id_processador == p.idReferencia}"></option>
+
+                                    <option th:each="x : ${memoriaRam}" th:if="${p.categoriaExtra == 'memoria_ram'}"
+                                            th:value="${x.id_memoriaRam}" th:text="${x.modelo}"
+                                            th:selected="${x.id_memoriaRam == p.idReferencia}"></option>
+
+                                    <option th:each="x : ${armazenamento}" th:if="${p.categoriaExtra == 'armazenamento'}"
+                                            th:value="${x.id_armazenamento}" th:text="${x.modelo}"
+                                            th:selected="${x.id_armazenamento == p.idReferencia}"></option>
+
+                                    <option th:each="x : ${placaDeVideo}" th:if="${p.categoriaExtra == 'placa_devideo'}"
+                                            th:value="${x.id_placadevideo}" th:text="${x.modelo}"
+                                            th:selected="${x.id_placadevideo == p.idReferencia}"></option>
+
+                                    <option th:each="x : ${fonte}" th:if="${p.categoriaExtra == 'fonte'}"
+                                            th:value="${x.id_fonte}" th:text="${x.modelo}"
+                                            th:selected="${x.id_fonte == p.idReferencia}"></option>
+                                </select>
+
+                                <button type="submit" class="btn-sm">Salvar</button>
+                            </form>
+
+                            <!-- EXCLUIR -->
+                            <form action="/statusdeservico/excluir-peca-extra" method="post" style="display:inline;"
+                                  onsubmit="return confirm('Tem certeza que deseja remover esta peça?')">
+                                <input type="hidden" name="idServico" th:value="${servico.idServico}">
+                                <input type="hidden" name="idPeca" th:value="${p.id}">
+                                <button type="submit" class="btn-perigo btn-sm">Excluir</button>
+                            </form>
+
+                        </div>
                     </li>
                 </ul>
 
@@ -48,77 +108,93 @@
 
             <hr>
 
-            <br>
+            <!--ADICIONAR PEÇA EXTRA -->
+            <details class="toggle-adicionar">
+                <summary>Adicionar peça extra</summary>
 
-             <!--ADICIONAR PEÇA EXTRA -->
-        
+                <p class="pergunta-confirmacao">
+                    Deseja acrescentar mais uma peça a esta manutenção?
+                </p>
 
-            <h3>Adicionar peça extra</h3>
+                <form action="/statusdeservico/adicionar-peca-json" method="post">
 
-            <form action="/statusdeservico/adicionar-peca-json" method="post">
+                    <input type="hidden" name="idServico" th:value="${servico.idServico}">
 
-                <input type="hidden" name="idServico" th:value="${servico.idServico}">
+                    <div class="form-group">
+                        <label>Tipo da peça:</label>
+                        <select id="tipo" name="tipo" required>
+                            <option value="">Selecione</option>
+                            <option value="placa_mae" th:disabled="${categoriasOcupadas.contains('placa_mae')}">
+                                Placa-mãe <span th:if="${categoriasOcupadas.contains('placa_mae')}">(já cadastrada)</span>
+                            </option>
+                            <option value="processador" th:disabled="${categoriasOcupadas.contains('processador')}">
+                                Processador <span th:if="${categoriasOcupadas.contains('processador')}">(já cadastrado)</span>
+                            </option>
+                            <option value="memoria_ram">Memória RAM</option>
+                            <option value="armazenamento">Armazenamento</option>
+                            <option value="placa_devideo" th:disabled="${categoriasOcupadas.contains('placa_devideo')}">
+                                Placa de Vídeo <span th:if="${categoriasOcupadas.contains('placa_devideo')}">(já cadastrada)</span>
+                            </option>
+                            <option value="fonte" th:disabled="${categoriasOcupadas.contains('fonte')}">
+                                Fonte <span th:if="${categoriasOcupadas.contains('fonte')}">(já cadastrada)</span>
+                            </option>
+                        </select>
+                    </div>
 
-                <!--TIPO DA PEÇA -->
-                <label>Tipo da peça:</label>
-                <select id="tipo" name="tipo" required>
-                    <option value="">Selecione</option>
-                    <option value="placa_mae">Placa-mãe</option>
-                    <option value="processador">Processador</option>
-                    <option value="memoria_ram">Memória RAM</option>
-                    <option value="armazenamento">Armazenamento</option>
-                </select>
+                    <div id="containerPeca" class="form-group" style="display: none;">
+                        <label>Escolher peça:</label>
+                        <select id="peca" name="idReferencia" required>
+                            
+                            <option value="">Selecione</option>
 
-                <br><br>
+                            <option th:each="p : ${placaMae}"
+                                    th:value="${p.id_placamae}"
+                                    th:text="${p.modelo}"
+                                    th:attr="data-tipo='placa_mae'">
+                            </option>
 
-                <div id="containerPeca" style="display: none";>
-                    <label>Escolher peça:</label>
-                    <select id="peca" name="idReferencia" required>
+                            <option th:each="p : ${processador}"
+                                    th:value="${p.id_processador}"
+                                    th:text="${p.modelo}"
+                                    th:attr="data-tipo='processador'">
+                            </option>
+
+                            <option th:each="m : ${memoriaRam}"
+                                    th:value="${m.id_memoriaRam}"
+                                    th:text="${m.modelo}"
+                                    th:attr="data-tipo='memoria_ram'">
+                            </option>
+
+                            <option th:each="a : ${armazenamento}"
+                                    th:value="${a.id_armazenamento}"
+                                    th:text="${a.modelo}"
+                                    th:attr="data-tipo='armazenamento'">
+                            </option>
+
+                            <option th:each="v : ${placaDeVideo}"
+                                    th:value="${v.id_placadevideo}"
+                                    th:text="${v.modelo}"
+                                    th:attr="data-tipo='placa_devideo'">
+                            </option>
+
+                            <option th:each="f : ${fonte}"
+                                    th:value="${f.id_fonte}"
+                                    th:text="${f.modelo}"
+                                    th:attr="data-tipo='fonte'">
+                            </option>
                         
-                        <option value="">Selecione</option>
+                        </select>
+                    </div>
+                    <button type="submit">Adicionar peça</button>
+                </form>
+            </details>
 
-                        <!-- PLACA MÃE -->
-                        <option th:each="p : ${placaMae}"
-                                th:value="${p.id_placamae}"
-                                th:text="${p.modelo}"
-                                th:attr="data-tipo='placa_mae'">
-                        </option>
-
-                        <!-- PROCESSADOR -->
-                        <option th:each="p : ${processador}"
-                                th:value="${p.id_processador}"
-                                th:text="${p.modelo}"
-                                th:attr="data-tipo='processador'">
-                        </option>
-
-                        <!-- RAM -->
-                        <option th:each="m : ${memoriaRam}"
-                                th:value="${m.id_memoriaRam}"
-                                th:text="${m.modelo}"
-                                th:attr="data-tipo='memoria_ram'">
-                        </option>
-
-                        <!-- ARMAZENAMENTO -->
-                        <option th:each="a : ${armazenamento}"
-                                th:value="${a.id_armazenamento}"
-                                th:text="${a.modelo}"
-                                th:attr="data-tipo='armazenamento'">
-                        </option>
-                    
-                    </select>
-                </div>
-                <button type="submit">Adicionar peça</button>
-            </form>
-
-            
             <hr>
-            <br><br>
-
 
             <!-- ENCERRAR -->
             <form action="/statusdeservico/encerrar" method="post">
                 <input type="hidden" name="idServico" th:value="${servico.idServico}">
-                <button type="submit">Encerrar serviço</button>
+                <button type="submit" class="btn-perigo">Encerrar serviço</button>
             </form>
 
             <script>
@@ -128,7 +204,7 @@
                 const selectPeca = document.getElementById("peca");
                 const container = document.getElementById("containerPeca");
 
-                if (!container) return; // 🔥 evita erro silencioso
+                if (!container) return;
 
                 function filtrarPecas() {
 

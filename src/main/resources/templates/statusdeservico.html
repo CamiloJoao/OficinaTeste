@@ -7,12 +7,14 @@
     <h1>Status de Serviço</h1>
 
     <div class="conteudo centralizado buscaBox">
-        <div class="descricaoBox">
+        <div class="descricaoBox descricaoBox-tabela">
             <form action="/statusdeservico/buscar" method="get">
                 <div class="form-group"> 
                     <label>Digite o E-mail do cliente:</label>  
-                    <input type="email" name="emailCliente" placeholder="Digite o e-mail do cliente" required>
-                    <button type="submit">Buscar</button>
+                    <div class="busca-linha">
+                        <input type="email" name="emailCliente" placeholder="Digite o e-mail do cliente" required>
+                        <button type="submit">Buscar</button>
+                    </div>
                 </div>
             </form>
 
@@ -23,6 +25,7 @@
                             <th>ID</th>
                             <th>Cliente</th>
                             <th>Tipo</th>
+                            <th>Data prevista</th>
                             <th>Status</th>
                             <th>Orçamento</th>
                             <th>Ação</th>
@@ -33,9 +36,10 @@
                             <td th:text="${s.idServico}"></td>
                             <td th:text="${s.cliente.nomeCliente}"></td>
                             <td th:text="${s.tipoServico}"></td>
+                            <td th:text="${s.dataPrevistaConclusao != null} ? ${#temporals.format(s.dataPrevistaConclusao, 'dd/MM/yyyy')} : '-'"></td>
                             <td th:text="${s.status}"></td>
                             <td th:text="${s.orcamentoFinal}"></td>
-                            <td>
+                            <td class="nowrap">
                                 <a th:href="@{'/statusdeservico/detalhes/' + ${s.idServico}}">
                                     Ver detalhes
                                 </a>

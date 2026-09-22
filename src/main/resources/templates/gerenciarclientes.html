@@ -6,39 +6,43 @@
 
     <h1>Gerenciar Clientes</h1>
 
-     <!-- BOTÃO CADASTRAR -->
-    <a href="/gerenciarclientes/cadastrar">
-        <button class="btn-cadastrarNovoCliente">Cadastrar Novo Cliente</button>
-    </a>
-    
     <!--BUSCA -->
     <div class="conteudo centralizado buscaBox">
-        <div class="descricaoBox">
+        <div class="descricaoBox descricaoBox-tabela">
 
-            <!-- FORM DE BUSCA -->
+            <!-- FORM DE BUSCA + BOTÃO CADASTRAR (mesma linha) -->
             <form th:action="@{/gerenciarclientes}" method="get">
-                <div class="form-group">
-                    <label>Digite o nome do cliente:</label>
-                    <input type="text" name="nome" placeholder="Digite o nome do cliente">
+                <div class="topo-card">
+                    <div class="form-group">
+                        <label>Digite o nome do cliente:</label>
+                        <div class="busca-linha">
+                            <input type="text" name="nome" placeholder="Digite o nome do cliente">
+                            <button type="submit">Buscar</button>
+                        </div>
+                    </div>
 
-                    <button type="submit">Buscar</button>
+                    <a href="/gerenciarclientes/cadastrar">
+                        <button type="button" class="btn-cadastrarNovoCliente">Cadastrar Novo Cliente</button>
+                    </a>
                 </div>
 
 
             <!--LIMPAR BUSCA-->    
-            <a th:if="${erroBusca == null 
+            <div class="acao-centralizada"
+                 th:if="${erroBusca == null 
                         and clientes != null 
                         and #lists.isEmpty(clientes) 
                         and param.nome != null 
-                        and param.nome != ''}"
-                    th:href="@{/gerenciarclientes}">
-                    <button type="button">Voltar</button>
+                        and param.nome != ''}">
+                <a th:href="@{/gerenciarclientes}">
+                    <button type="button" class="btn-secundario">Voltar</button>
                 </a>
+            </div>
                 
             </form>
 
             <!--USUÁRIO DIGITOU ALGO INESPERADO NO CAMPO BUSCA-->
-            <div th:if="${erroBusca != null}" style="color: rgb(0, 0, 0); margin-left: 5px;">
+            <div th:if="${erroBusca != null}" class="alerta-erro">
                 <p th:text="${erroBusca}"></p>
             </div>
 
@@ -66,17 +70,17 @@
 
                         <td th:text="${cliente.idCliente}"></td>
                         <td th:text="${cliente.nomeCliente}"></td>
-                        <td th:text="${cliente.telefone}"></td>
+                        <td th:text="${cliente.telefone}" class="nowrap"></td>
                         <td th:text="${cliente.emailCliente}"></td>
 
-                        <td>
-                            <a th:href="@{'/gerenciarclientes/editar/' + ${cliente.idCliente}}">
-                                <button>Editar</button>
+                        <td class="nowrap">
+                           <a th:href="@{'/gerenciarclientes/editar/' + ${cliente.idCliente}}">
+                                <button class="btn-sm">Editar</button>
                             </a>
 
                             <a th:href="@{'/gerenciarclientes/excluir/' + ${cliente.idCliente}}"
                             onclick="return confirm('Tem certeza que deseja excluir este cliente?')">
-                                <button>Excluir</button>
+                                <button class="btn-perigo btn-sm">Excluir</button>
                             </a>
                         </td>
                     </tr>
@@ -85,7 +89,7 @@
             </table>
 
             <!--BOTÕES VER MAIS / VER MENOS -->
-                <div style="margin-top: 15px;">
+                <div class="acao-centralizada">
 
                     <!-- VER MAIS -->
                     <div th:if="${clientes.size() > 5 
@@ -93,7 +97,7 @@
                                 and (param.nome == null or param.nome == '')}">
                         
                         <a th:href="@{/gerenciarclientes(mostrarTodos=true)}">
-                            <button>Ver mais</button>
+                            <button class="btn-secundario">Ver mais</button>
                         </a>
 
                     </div>
@@ -104,7 +108,7 @@
                                 and (param.nome == null or param.nome == '')}">
                         
                         <a th:href="@{/gerenciarclientes}">
-                            <button>Ver menos</button>
+                            <button class="btn-secundario">Ver menos</button>
                         </a>
 
                     </div>
