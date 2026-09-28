@@ -30,8 +30,8 @@ public class MontagemController {
     @Autowired
     private CompatibilidadeService compatibilidadeService;
 
-    @Autowired
-    private CompatibilidadeRegras compatibilidadeRegras;
+//     @Autowired
+//     private CompatibilidadeRegras compatibilidadeRegras;
 
     
     // TELA INICIAL

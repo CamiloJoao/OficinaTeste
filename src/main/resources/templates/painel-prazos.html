@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
     <div th:fragment="conteudo">
+        <a class="btn-voltar" th:href="@{/}">&larr; Voltar</a>
 
     <h1 th:text="'Serviços - ' + (${tipoSelecionado == 'prioritario'} ? 'Prioritários' : (${tipoSelecionado == 'proximo'} ? 'Próximos' : 'No prazo'))">
         Serviços

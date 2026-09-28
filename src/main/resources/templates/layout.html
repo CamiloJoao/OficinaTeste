@@ -11,9 +11,35 @@
     <div th:replace="fragments/menu :: menu"></div>
 
     <!-- CONTEÚDO -->
-    <div class="conteudo">
+    <div class="conteudo conteudo-principal">
+
+        <!-- DATA E HORA ATUAL (aparece em todas as páginas) -->
+        <div class="relogio">
+            <span class="relogio-data" id="relogio-data"></span>
+            <span class="relogio-hora" id="relogio-hora"></span>
+        </div>
+
         <div th:replace="~{${pagina} :: conteudo}"></div>
     </div>
+
+    <script>
+    (function () {
+        const dias = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+
+        function atualizarRelogio() {
+            const agora = new Date();
+
+            const data = dias[agora.getDay()] + ", " + agora.toLocaleDateString("pt-BR");
+            const hora = agora.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+
+            document.getElementById("relogio-data").textContent = data;
+            document.getElementById("relogio-hora").textContent = hora;
+        }
+
+        atualizarRelogio();
+        setInterval(atualizarRelogio, 1000);
+    })();
+    </script>
 
 </body>
 </html>

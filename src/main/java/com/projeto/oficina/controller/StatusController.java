@@ -32,8 +32,8 @@ public class StatusController {
     @Autowired
     private CompatibilidadeService compatibilidadeService;
 
-    @Autowired
-    private CompatibilidadeRegras compatibilidadeRegras;
+    // @Autowired
+    // private CompatibilidadeRegras compatibilidadeRegras;
 
     // Categorias que só podem existir uma vez no computador
     private static final Set<String> SINGULARES =

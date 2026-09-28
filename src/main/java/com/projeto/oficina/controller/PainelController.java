@@ -84,7 +84,7 @@ public class PainelController {
         }
 
         // =========================
-        // SERVIÇOS DA SEMANA ATUAL (segunda a sábado)
+        // SERVIÇOS DA SEMANA ATUAL (segunda a sabado)
         // =========================
         LocalDate inicioSemana = hoje.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         LocalDate fimSemana = hoje.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
@@ -105,7 +105,7 @@ public class PainelController {
 
             LocalDate data = s.getDataPrevistaConclusao();
 
-            // Só conta se a data cair dentro da semana atual
+            // So conta se a data cair dentro da semana atual
             if (data.isBefore(inicioSemana) || data.isAfter(fimSemana)) {
                 continue;
             }
@@ -131,7 +131,7 @@ public class PainelController {
         diasData.put("Sábado", inicioSemana.plusDays(5));
 
         // =========================
-        // ÚLTIMOS SERVIÇOS
+        // ULTIMOS SERVIÇOS
         // =========================
         List<Servico> ultimos = servicoService.buscarUltimos();
 
@@ -158,7 +158,7 @@ public class PainelController {
     }
 
     // =========================
-    // SUBPÁGINA DE PRAZOS
+    // SUBPAGINA DE PRAZOS
     // =========================
     @GetMapping("/painel/prazos")
     public String listarPorPrazo(@RequestParam String tipo, Model model) {
@@ -199,7 +199,7 @@ public class PainelController {
     }
 
     // =========================
-    // SUBPÁGINA DE UM DIA ESPECÍFICO
+    // SUBPAGINA DE UM DIA ESPECIFICO
     // =========================
     @GetMapping("/painel/dia")
     public String listarPorDia(

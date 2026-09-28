@@ -577,3 +577,66 @@ details.toggle-adicionar[open] summary {
     filter: brightness(0.96);
     border-color: #A9B4BF;
 }
+
+/* =========================
+   CABEÇALHO DA PÁGINA (relógio + botão voltar)
+========================= */
+.conteudo-principal {
+    position: relative;
+}
+
+.relogio {
+    position: absolute;
+    top: 32px;
+    right: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px;
+    background-color: #FFFFFF;
+    border: 1px solid #E1E6EA;
+    border-radius: 999px;
+    font-size: 13px;
+    color: #3C4A5A;
+    box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
+}
+
+.relogio-hora {
+    font-weight: 700;
+    color: #1B2530;
+}
+
+.btn-voltar {
+    position: absolute;
+    top: 32px;
+    left: 40px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background-color: #FFFFFF;
+    border: 1px solid #D3DAE1;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1B2530;
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+}
+
+.btn-voltar:hover {
+    background-color: #F2F4F6;
+}
+
+/* Em telas estreitas, relógio e botão voltam ao fluxo normal (evita sobrepor o título) */
+@media (max-width: 900px) {
+    .relogio,
+    .btn-voltar {
+        position: static;
+        margin-bottom: 12px;
+    }
+
+    .relogio {
+        display: inline-flex;
+    }
+}

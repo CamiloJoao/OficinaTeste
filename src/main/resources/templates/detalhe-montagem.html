@@ -4,6 +4,8 @@
 
 <div th:fragment="conteudo">
 
+    <a class="btn-voltar" th:href="@{/statusdeservico/buscar(emailCliente=${servico.cliente.emailCliente})}">&larr; Voltar</a>
+
     <h1>Detalhes do serviço</h1>
 
     <div class="conteudo centralizado">
