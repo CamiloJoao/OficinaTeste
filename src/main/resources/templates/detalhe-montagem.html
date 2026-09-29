@@ -185,7 +185,9 @@
                         </div>
                     </div>
 
-                    <button type="submit">Atualizar configuração</button>
+                    <div class="acao-centralizada">
+                        <button type="submit">Atualizar configuração</button>
+                    </div>
 
                 </form>
             </div>
@@ -288,10 +290,12 @@
             <hr>
 
             <!--ENCERRAR -->
-            <form action="/statusdeservico/encerrar" method="post">
-                <input type="hidden" name="idServico" th:value="${servico.idServico}">
-                <button type="submit" class="btn-perigo">Encerrar serviço</button>
-            </form>
+            <div class="acao-centralizada">
+                <form action="/statusdeservico/encerrar" method="post">
+                    <input type="hidden" name="idServico" th:value="${servico.idServico}">
+                    <button type="submit" class="btn-perigo">Encerrar serviço</button>
+                </form>
+            </div>
 
             <script>
             document.addEventListener("DOMContentLoaded", function () {

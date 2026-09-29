@@ -497,6 +497,15 @@ details.toggle-adicionar[open] summary {
     background-color: #3C4A5A;
 }
 
+details.toggle-adicionar {
+    text-align: center;
+}
+
+details.toggle-adicionar > p,
+details.toggle-adicionar form {
+    text-align: left;
+}
+
 .pergunta-confirmacao {
     font-size: 14px;
     color: #3C4A5A;

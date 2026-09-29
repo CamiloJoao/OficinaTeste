@@ -105,7 +105,7 @@
                 <tr th:each="s : ${ultimosServicos}">
                     <td th:text="${s.cliente.nomeCliente}"></td>
                     <td th:text="${s.tipoServico}"></td>
-                    <td th:text="${s.dataPrevistaConclusao}"></td>
+                    <td th:text="${s.dataPrevistaConclusao != null} ? ${#temporals.format(s.dataPrevistaConclusao, 'dd/MM/yyyy')} : '-'"></td>
                     <td th:text="${s.status}"></td>
                     <td>
                         <a th:href="@{'/statusdeservico/detalhes/' + ${s.idServico}}">
