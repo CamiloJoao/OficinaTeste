@@ -16,6 +16,10 @@
                 <p th:text="${erro}"></p>
             </div>
 
+            <!--MENSAGEM DE SUCESSO -->
+            <div th:if="${sucesso}" class="alerta-sucesso">
+                <p th:text="${sucesso}"></p>
+            </div>
 
             <form th:action="@{/manutencao/salvar}" method="post">
 
@@ -66,10 +70,6 @@
 
             </form>
 
-            <!--MENSAGEM DE SUCESSO -->
-            <div th:if="${sucesso}" class="alerta-sucesso">
-                <p th:text="${sucesso}"></p>
-            </div>
         </div>    
     </div>    
 </div>

@@ -38,7 +38,7 @@
                             <td th:text="${s.tipoServico}"></td>
                             <td th:text="${s.dataPrevistaConclusao != null} ? ${#temporals.format(s.dataPrevistaConclusao, 'dd/MM/yyyy')} : '-'"></td>
                             <td th:text="${s.status}"></td>
-                            <td th:text="${s.orcamentoFinal}"></td>
+                            <td th:text="'R$' + ${#numbers.formatDecimal(s.orcamentoFinal, 1, 'POINT', 2, 'COMMA')}"></td>
                             <td class="nowrap">
                                 <a th:href="@{'/statusdeservico/detalhes/' + ${s.idServico}}">
                                     Ver detalhes

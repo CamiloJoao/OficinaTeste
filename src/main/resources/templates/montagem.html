@@ -17,6 +17,16 @@
             <div th:if="${erro != null}" class="alerta-erro">
                 <p th:text="${erro}"></p>
             </div>
+
+            <!-- ERRO DE COMPATIBILIDADE -->
+            <div th:if="${erroCompatibilidade != null and !#lists.isEmpty(erroCompatibilidade)}" class="alerta-erro">
+                <p>As peças selecionadas não são compatíveis entre si. Revise a configuração e tente novamente.</p>
+            </div>
+
+            <!-- SUCESSO (montagem cadastrada) -->
+            <div th:if="${param.sucesso}" class="alerta-sucesso">
+                <p>Montagem cadastrada com sucesso!</p>
+            </div>
             
             <form action="/montagem/verificar" method="post">
 
@@ -130,19 +140,12 @@
 
             </form>
 
-            
-            <!-- ERRO DE COMPATIBILIDADE  -->
-            
-           <div th:if="${erroCompatibilidade != null and !#lists.isEmpty(erroCompatibilidade)}" class="alerta-erro">
-                <p>As peças selecionadas não são compatíveis entre si. Revise a configuração e tente novamente.</p>
-            </div>
+            <!--  COMPATÍVEL → CONFIRMAR (fica embaixo, perto do botão de confirmar) -->
+            <div th:if="${compativel}">
 
-            
-            <!--  COMPATÍVEL → CONFIRMAR -->
-            
-            <div th:if="${compativel}" class="alerta-sucesso">
-
-                <p>Peças compatíveis</p>
+                <div class="alerta-sucesso">
+                    <p>Peças compatíveis</p>
+                </div>
 
                 <form action="/montagem/salvar" method="post">
 
@@ -157,17 +160,12 @@
                     <input type="hidden" name="dataPrevista" th:value="${dataPrevista}">
                     <input type="hidden" name="orcamento" th:value="${orcamento}">
 
-                    <button type="submit">Confirmar Montagem</button>
+                    <div class="acao-centralizada">
+                        <button type="submit">Confirmar Montagem</button>
+                    </div>
 
                 </form>
 
-            </div>
-
-            
-            <!-- SUCESSO -->
-            
-            <div th:if="${param.sucesso}" class="alerta-sucesso">
-                <p>Montagem cadastrada com sucesso!</p>
             </div>
 
         </div>    

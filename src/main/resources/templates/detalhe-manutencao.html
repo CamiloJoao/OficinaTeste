@@ -9,6 +9,11 @@
     <div class="conteudo centralizado">
         <div class="descricaoBox descricaoBox-tabela">
 
+              <!--MENSAGEM DE "NADA ALTERADO"-->    
+            <div th:if="${msg}" class="alerta-sucesso">
+                <p th:text="${msg}"></p>
+            </div> 
+
             <p><b>Cliente:</b> 
                 <span th:text="${servico.cliente.nomeCliente}"></span>
             </p>
@@ -28,7 +33,7 @@
             </p>
 
             <p><b>Orçamento inicial:</b>
-                R$ <span th:text="${servico.orcamentoInicial}"></span>
+                <span th:text="'R$' + ${#numbers.formatDecimal(servico.orcamentoInicial, 1, 'POINT', 2, 'COMMA')}"></span>
             </p>
 
             <!--PEÇAS EXTRAS -->
@@ -41,7 +46,7 @@
 
             <!-- SE NÃO TEM -->
             <div th:if="${#lists.isEmpty(pecasExtras)}">
-                Nenhuma peça acrescentada - R$ 0.00
+                Nenhuma peça acrescentada
             </div>
 
             <!-- SE TEM -->
@@ -50,7 +55,7 @@
                 <ul>
                     <li th:each="p : ${pecasExtras}" style="margin-bottom: 14px;">
                         <span th:text="${p.nomePeca}"></span> - 
-                        R$ <span th:text="${p.valor}"></span>
+                        <span th:text="'R$' + ${#numbers.formatDecimal(p.valor, 1, 'POINT', 2, 'COMMA')}"></span>
 
                         <div th:if="${p.categoriaExtra != null}" class="acoes-peca-extra">
 
@@ -103,7 +108,7 @@
             </div>
 
             <p><b>Orçamento final:</b>
-                R$ <span th:text="${servico.orcamentoFinal}"></span>
+                <span th:text="'R$' + ${#numbers.formatDecimal(servico.orcamentoFinal, 1, 'POINT', 2, 'COMMA')}"></span>
             </p>
 
             <hr>
