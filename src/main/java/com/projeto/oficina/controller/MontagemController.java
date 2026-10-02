@@ -276,6 +276,7 @@ public class MontagemController {
                 servico.setOrcamentoInicial(orcamento);
                 servico.setOrcamentoFinal(orcamento); 
                 servico.setDataPrevistaConclusao(java.time.LocalDate.parse(dataPrevista));
+                servico.setDataCadastro(java.time.LocalDate.now());
 
                 servicoService.salvar(servico);
 

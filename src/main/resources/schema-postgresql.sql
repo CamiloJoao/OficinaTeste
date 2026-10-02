@@ -35,7 +35,8 @@ CREATE TABLE servico (
     orcamento_inicial DECIMAL(10,2),
     orcamento_final DECIMAL(10,2), 
     status status_enum NOT NULL,
-    data_prevista_conclusao DATE
+    data_prevista_conclusao DATE,
+    data_cadastro DATE
 );
 
 CREATE TABLE servico_peca (

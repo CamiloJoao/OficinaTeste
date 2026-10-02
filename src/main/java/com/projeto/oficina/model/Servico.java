@@ -42,6 +42,9 @@ public class Servico {
     @Column(name = "data_prevista_conclusao")
     private LocalDate dataPrevistaConclusao;
 
+    @Column(name = "data_cadastro")
+    private LocalDate dataCadastro;
+
     @OneToMany(mappedBy = "servico", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ServicoPeca> pecas = new ArrayList<>();
 
@@ -135,6 +138,8 @@ public class Servico {
         this.dataPrevistaConclusao = dataPrevistaConclusao;
     }
 
+    public LocalDate getDataCadastro() { return dataCadastro; }
+    public void setDataCadastro(LocalDate dataCadastro) { this.dataCadastro = dataCadastro; }
     
 }
 

@@ -100,6 +100,7 @@ public class ManutencaoController {
         servico.setOrcamentoInicial(orcamento);
         servico.setOrcamentoFinal(orcamento); 
         servico.setDataPrevistaConclusao(data);
+        servico.setDataCadastro(java.time.LocalDate.now());
 
         servicoService.salvar(servico);
 
