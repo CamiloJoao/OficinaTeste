@@ -42,9 +42,9 @@ public class ServicoService {
         return servicoRepository.findByCliente(cliente);
     }
 
-    //LISTAR POR PERIODO
+    //LISTAR POR PERIODO (ordenado por data de cadastro e depois por ID)
     public List<Servico> listarPorPeriodo(LocalDate inicio, LocalDate fim) {
-        return servicoRepository.findByDataCadastroBetween(inicio, fim);
+        return servicoRepository.findByDataCadastroBetweenOrderByDataCadastroAscIdServicoAsc(inicio, fim);
     }
 
     //BUSCAR POR ID

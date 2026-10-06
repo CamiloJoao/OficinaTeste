@@ -32,7 +32,7 @@ public class RelatorioController {
     @GetMapping("/relatorio")
     public String relatorio(
             @RequestParam(required = false) Integer mes,
-            @RequestParam(required = false) Integer ano,
+            @RequestParam(required = false) Long ano,
             Model model) {
 
         LocalDate hoje = LocalDate.now();
@@ -42,13 +42,14 @@ public class RelatorioController {
             mes = hoje.getMonthValue();
         }
 
-        // Sem ano, usa o ano atual
-        if (ano == null) {
-            ano = hoje.getYear();
+        // Sem ano (ou fora de 2000 a 2100), usa o ano atual
+        // Long porque um numero muito grande nao cabe em Integer
+        if (ano == null || ano < 2000 || ano > 2100) {
+            ano = (long) hoje.getYear();
         }
 
         // Primeiro e ultimo dia do mes escolhido
-        LocalDate inicio = LocalDate.of(ano, mes, 1);
+        LocalDate inicio = LocalDate.of(ano.intValue(), mes, 1);
         LocalDate fim = inicio.withDayOfMonth(inicio.lengthOfMonth());
 
         List<Servico> servicos = servicoService.listarPorPeriodo(inicio, fim);
@@ -60,7 +61,8 @@ public class RelatorioController {
         int montagens = 0;
         int encerrados = 0;
         int emAndamento = 0;
-        double valorTotal = 0;
+        double valorEncerrado = 0;
+        double valorEmAndamento = 0;
 
         for (Servico s : servicos) {
 
@@ -70,15 +72,17 @@ public class RelatorioController {
                 montagens++;
             }
 
+            // Soma o valor separado por status (ignora servicos sem orcamento final)
             if (s.getStatus() == StatusServico.ENCERRADO) {
                 encerrados++;
+                if (s.getOrcamentoFinal() != null) {
+                    valorEncerrado += s.getOrcamentoFinal();
+                }
             } else if (s.getStatus() == StatusServico.EM_ANDAMENTO) {
                 emAndamento++;
-            }
-
-            // Ignora servicos sem orcamento final
-            if (s.getOrcamentoFinal() != null) {
-                valorTotal += s.getOrcamentoFinal();
+                if (s.getOrcamentoFinal() != null) {
+                    valorEmAndamento += s.getOrcamentoFinal();
+                }
             }
         }
 
@@ -95,7 +99,8 @@ public class RelatorioController {
         model.addAttribute("montagens", montagens);
         model.addAttribute("encerrados", encerrados);
         model.addAttribute("emAndamento", emAndamento);
-        model.addAttribute("valorTotal", valorTotal);
+        model.addAttribute("valorEncerrado", valorEncerrado);
+        model.addAttribute("valorEmAndamento", valorEmAndamento);
 
         model.addAttribute("pagina", "relatorio");
 

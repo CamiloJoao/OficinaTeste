@@ -15,7 +15,7 @@ public interface ServicoRepository extends JpaRepository<Servico, Integer> {
 
     List<Servico> findByCliente(Cliente cliente);
 
-    List<Servico> findByDataCadastroBetween(LocalDate inicio, LocalDate fim);
+    List<Servico> findByDataCadastroBetweenOrderByDataCadastroAscIdServicoAsc(LocalDate inicio, LocalDate fim);
 
     long countByStatus(StatusServico status);
 

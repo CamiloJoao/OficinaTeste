@@ -13,6 +13,9 @@
 
     <h1 th:text="'Relatório Mensal - ' + ${nomeMes} + '/' + ${ano}">Relatório Mensal</h1>
 
+    <!-- CRITERIO DO MES -->
+    <p style="text-align: center;">Serviços cadastrados no mês selecionado.</p>
+
     <!-- FILTRO DE MES E ANO -->
     <div class="conteudo centralizado">
         <div class="descricaoBox">
@@ -38,7 +41,7 @@
 
                     <div class="form-group">
                         <label>Ano:</label>
-                        <input type="number" name="ano" th:value="${ano}" required>
+                        <input type="number" name="ano" th:value="${ano}" min="2000" max="2100" required>
                     </div>
                 </div>
 
@@ -77,8 +80,13 @@
         </div>
 
         <div class="card">
-            <h3>Valor total</h3>
-            <h2 th:text="'R$' + ${#numbers.formatDecimal(valorTotal, 1, 'POINT', 2, 'COMMA')}">R$0,00</h2>
+            <h3>Valor encerrado</h3>
+            <h2 th:text="'R$' + ${#numbers.formatDecimal(valorEncerrado, 1, 'POINT', 2, 'COMMA')}">R$0,00</h2>
+        </div>
+
+        <div class="card">
+            <h3>Valor em andamento</h3>
+            <h2 th:text="'R$' + ${#numbers.formatDecimal(valorEmAndamento, 1, 'POINT', 2, 'COMMA')}">R$0,00</h2>
         </div>
 
     </div>
