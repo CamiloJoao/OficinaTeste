@@ -1,5 +1,6 @@
 package com.projeto.oficina.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +14,8 @@ public interface ServicoRepository extends JpaRepository<Servico, Integer> {
     List<Servico> findByTipoServico(TipoServico tipoServico);
 
     List<Servico> findByCliente(Cliente cliente);
+
+    List<Servico> findByDataCadastroBetween(LocalDate inicio, LocalDate fim);
 
     long countByStatus(StatusServico status);
 

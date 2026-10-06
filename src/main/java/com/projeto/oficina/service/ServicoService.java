@@ -1,5 +1,6 @@
 package com.projeto.oficina.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,11 @@ public class ServicoService {
     //BUSCAR POR CLIENTE
     public List<Servico> buscarPorCliente(Cliente cliente) {
         return servicoRepository.findByCliente(cliente);
+    }
+
+    //LISTAR POR PERIODO
+    public List<Servico> listarPorPeriodo(LocalDate inicio, LocalDate fim) {
+        return servicoRepository.findByDataCadastroBetween(inicio, fim);
     }
 
     //BUSCAR POR ID
