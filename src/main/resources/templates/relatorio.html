@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="conteudo">
+
+    <!-- NA IMPRESSAO, ESCONDE O MENU, O RELOGIO E O FILTRO -->
+    <style>
+        @media print {
+            .menu, .relogio, .descricaoBox { display: none; }
+        }
+    </style>
+
+    <h1 th:text="'Relatório Mensal - ' + ${nomeMes} + '/' + ${ano}">Relatório Mensal</h1>
+
+    <!-- FILTRO DE MES E ANO -->
+    <div class="conteudo centralizado">
+        <div class="descricaoBox">
+            <form action="/relatorio" method="get">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Mês:</label>
+                        <select name="mes">
+                            <option value="1" th:selected="${mes == 1}">Janeiro</option>
+                            <option value="2" th:selected="${mes == 2}">Fevereiro</option>
+                            <option value="3" th:selected="${mes == 3}">Março</option>
+                            <option value="4" th:selected="${mes == 4}">Abril</option>
+                            <option value="5" th:selected="${mes == 5}">Maio</option>
+                            <option value="6" th:selected="${mes == 6}">Junho</option>
+                            <option value="7" th:selected="${mes == 7}">Julho</option>
+                            <option value="8" th:selected="${mes == 8}">Agosto</option>
+                            <option value="9" th:selected="${mes == 9}">Setembro</option>
+                            <option value="10" th:selected="${mes == 10}">Outubro</option>
+                            <option value="11" th:selected="${mes == 11}">Novembro</option>
+                            <option value="12" th:selected="${mes == 12}">Dezembro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ano:</label>
+                        <input type="number" name="ano" th:value="${ano}" required>
+                    </div>
+                </div>
+
+                <button type="submit">Gerar relatório</button>
+                <button type="button" class="btn-secundario" onclick="window.print()">Imprimir</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- RESUMO DO MES -->
+    <div class="grid-resumo">
+
+        <div class="card">
+            <h3>Total de serviços</h3>
+            <h2 th:text="${total}">0</h2>
+        </div>
+
+        <div class="card">
+            <h3>Manutenções</h3>
+            <h2 th:text="${manutencoes}">0</h2>
+        </div>
+
+        <div class="card">
+            <h3>Montagens</h3>
+            <h2 th:text="${montagens}">0</h2>
+        </div>
+
+        <div class="card">
+            <h3>Encerrados</h3>
+            <h2 th:text="${encerrados}">0</h2>
+        </div>
+
+        <div class="card">
+            <h3>Em andamento</h3>
+            <h2 th:text="${emAndamento}">0</h2>
+        </div>
+
+        <div class="card">
+            <h3>Valor total</h3>
+            <h2 th:text="'R$' + ${#numbers.formatDecimal(valorTotal, 1, 'POINT', 2, 'COMMA')}">R$0,00</h2>
+        </div>
+
+    </div>
+
+    <!-- SERVICOS DO MES -->
+    <div class="boxtable" th:if="${!#lists.isEmpty(servicos)}">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Tipo</th>
+                    <th>Data de cadastro</th>
+                    <th>Status</th>
+                    <th>Orçamento final</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="s : ${servicos}">
+                    <td th:text="${s.idServico}"></td>
+                    <td th:text="${s.cliente.nomeCliente}"></td>
+                    <td th:text="${s.tipoServico}"></td>
+                    <td th:text="${#temporals.format(s.dataCadastro, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${s.status}"></td>
+                    <td th:text="${s.orcamentoFinal != null} ? ('R$' + ${#numbers.formatDecimal(s.orcamentoFinal, 1, 'POINT', 2, 'COMMA')}) : '-'"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- MES SEM SERVICOS -->
+    <div th:if="${#lists.isEmpty(servicos)}">
+        <p>Nenhum serviço cadastrado neste mês.</p>
+    </div>
+
+</div>
+
+</body>
+</html>
