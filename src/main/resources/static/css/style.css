@@ -470,42 +470,6 @@ tr:hover td {
     font-weight: 600;
 }
 
-/* =========================
-   TOGGLE "ADICIONAR PEÇA EXTRA"
-========================= */
-details.toggle-adicionar summary {
-    cursor: pointer;
-    list-style: none;
-    display: inline-block;
-    padding: 11px 20px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    color: white;
-    background-color: #1178A6;
-}
-
-details.toggle-adicionar summary::-webkit-details-marker {
-    display: none;
-}
-
-details.toggle-adicionar summary:hover {
-    background-color: #0E6389;
-}
-
-details.toggle-adicionar[open] summary {
-    margin-bottom: 16px;
-    background-color: #3C4A5A;
-}
-
-details.toggle-adicionar {
-    text-align: center;
-}
-
-details.toggle-adicionar > p,
-details.toggle-adicionar form {
-    text-align: left;
-}
 
 .pergunta-confirmacao {
     font-size: 14px;

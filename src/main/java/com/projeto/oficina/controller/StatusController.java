@@ -35,7 +35,7 @@ public class StatusController {
     // @Autowired
     // private CompatibilidadeRegras compatibilidadeRegras;
 
-    // Categorias que só podem existir uma vez no computador
+    // Categorias que so podem existir uma vez no computador
     private static final Set<String> SINGULARES =
             Set.of("placa_mae", "processador", "placa_devideo", "fonte");
 
