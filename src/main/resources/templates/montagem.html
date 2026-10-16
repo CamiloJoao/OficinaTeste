@@ -44,7 +44,8 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Placa Mãe:</label>
-                        <select name="placaMae" required>
+                        <input type="text" class="busca-peca" data-alvo="placaMae" placeholder="Buscar placa-mãe...">
+                        <select name="placaMae" id="placaMae" required>
                             <option value="">Selecione</option>
                             <option th:each="p : ${placaMae}"
                                     th:value="${p.id_placamae}"
@@ -56,7 +57,8 @@
 
                     <div class="form-group">
                         <label>Processador:</label>
-                        <select name="processador" required>
+                        <input type="text" class="busca-peca" data-alvo="processador" placeholder="Buscar processador...">
+                        <select name="processador" id="processador" required>
                             <option value="">Selecione</option>
                             <option th:each="p : ${processador}"
                                     th:value="${p.id_processador}"
@@ -70,7 +72,8 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Memória RAM:</label>
-                        <select name="memoriaRam" required>
+                        <input type="text" class="busca-peca" data-alvo="memoriaRam" placeholder="Buscar memória RAM...">
+                        <select name="memoriaRam" id="memoriaRam" required>
                             <option value="">Selecione</option>
                             <option th:each="p : ${memoriaRam}"
                                     th:value="${p.id_memoriaRam}"
@@ -82,7 +85,8 @@
 
                     <div class="form-group">
                         <label>Armazenamento:</label>
-                        <select name="armazenamento" required>
+                        <input type="text" class="busca-peca" data-alvo="armazenamento" placeholder="Buscar armazenamento...">
+                        <select name="armazenamento" id="armazenamento" required>
                             <option value="">Selecione</option>
                             <option th:each="p : ${armazenamento}"
                                     th:value="${p.id_armazenamento}"
@@ -96,7 +100,8 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Placa de Vídeo (opcional):</label>
-                        <select name="placaDeVideo">
+                        <input type="text" class="busca-peca" data-alvo="placaDeVideo" placeholder="Buscar placa de vídeo...">
+                        <select name="placaDeVideo" id="placaDeVideo">
                             <option value="">Nenhuma (usar vídeo integrado)</option>
                             <option th:each="p : ${placaDeVideo}"
                                     th:value="${p.id_placadevideo}"
@@ -108,7 +113,8 @@
 
                     <div class="form-group">
                         <label>Fonte:</label>
-                        <select name="fonte" required>
+                        <input type="text" class="busca-peca" data-alvo="fonte" placeholder="Buscar fonte...">
+                        <select name="fonte" id="fonte" required>
                             <option value="">Selecione</option>
                             <option th:each="p : ${fonte}"
                                     th:value="${p.id_fonte}"
