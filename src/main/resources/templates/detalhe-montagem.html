@@ -120,10 +120,13 @@
 
                     <input type="hidden" name="idServico" th:value="${servico.idServico}">
 
+                    <!-- BUSCA: Enter no campo de busca não envia o formulário (evita salvar sem querer) -->
                     <div class="form-row">
                         <div class="form-group">
                             <label>Placa Mãe:</label>
-                            <select name="placaMae">
+                            <input type="text" class="busca-peca" data-alvo="placaMae" placeholder="Buscar placa-mãe..." onkeydown="return event.key !== 'Enter'">
+                            <select name="placaMae" id="placaMae" required>
+                                <option value="">Selecione</option>
                                 <option th:each="p : ${placaMae}"
                                         th:value="${p.id_placamae}"
                                         th:text="${p.modelo}"
@@ -134,7 +137,9 @@
 
                         <div class="form-group">
                             <label>Processador:</label>
-                            <select name="processador">
+                            <input type="text" class="busca-peca" data-alvo="processador" placeholder="Buscar processador..." onkeydown="return event.key !== 'Enter'">
+                            <select name="processador" id="processador" required>
+                                <option value="">Selecione</option>
                                 <option th:each="p : ${processador}"
                                         th:value="${p.id_processador}"
                                         th:text="${p.modelo}"
@@ -147,7 +152,9 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Memória RAM:</label>
-                            <select name="memoriaRam">
+                            <input type="text" class="busca-peca" data-alvo="memoriaRam" placeholder="Buscar memória RAM..." onkeydown="return event.key !== 'Enter'">
+                            <select name="memoriaRam" id="memoriaRam" required>
+                                <option value="">Selecione</option>
                                 <option th:each="m : ${memoriaRam}"
                                         th:value="${m.id_memoriaRam}"
                                         th:text="${m.modelo}"
@@ -158,7 +165,9 @@
 
                         <div class="form-group">
                             <label>Armazenamento:</label>
-                            <select name="armazenamento">
+                            <input type="text" class="busca-peca" data-alvo="armazenamento" placeholder="Buscar armazenamento..." onkeydown="return event.key !== 'Enter'">
+                            <select name="armazenamento" id="armazenamento" required>
+                                <option value="">Selecione</option>
                                 <option th:each="a : ${armazenamento}"
                                         th:value="${a.id_armazenamento}"
                                         th:text="${a.modelo}"
@@ -171,7 +180,8 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Placa de Vídeo:</label>
-                            <select name="placaDeVideo">
+                            <input type="text" class="busca-peca" data-alvo="placaDeVideo" placeholder="Buscar placa de vídeo..." onkeydown="return event.key !== 'Enter'">
+                            <select name="placaDeVideo" id="placaDeVideo">
                                 <option value="" th:selected="${placaDeVideoAtual == null}">
                                     Nenhuma (usar vídeo integrado)
                                 </option>
@@ -185,7 +195,9 @@
 
                         <div class="form-group">
                             <label>Fonte:</label>
-                            <select name="fonte">
+                            <input type="text" class="busca-peca" data-alvo="fonte" placeholder="Buscar fonte..." onkeydown="return event.key !== 'Enter'">
+                            <select name="fonte" id="fonte" required>
+                                <option value="">Selecione</option>
                                 <option th:each="f : ${fonte}"
                                         th:value="${f.id_fonte}"
                                         th:text="${f.modelo}"
