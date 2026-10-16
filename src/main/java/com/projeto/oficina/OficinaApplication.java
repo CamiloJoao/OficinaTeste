@@ -33,19 +33,7 @@ public class OficinaApplication {
 		MemoriaRam ram = compatibilidade.getMemoria_ram().get(1);
 		Armazenamento armazenamento = compatibilidade.getArmazenamento().get(1);
 
-		// Testa compatibilidade
-		boolean resultado = compatRegras.isCompativel(placa, processador, ram, armazenamento);
-
-
-		// Exibe o resultado
-		System.out.println("Compatibilidade entre peças:");
-		System.out.println("Placa-mãe: " + placa.getModelo());
-		System.out.println("Processador: " + processador.getModelo());
-		System.out.println("Memória RAM: " + ram.getTipo());
-
-		System.out.println("Armazenamento: " + armazenamento.getTipo() + " -- Modelo: " + armazenamento.getModelo());
-
-		System.out.println("Resultado: " + (resultado ? "Compatível " : "Incompatível "));
+		
 	}
 }
 

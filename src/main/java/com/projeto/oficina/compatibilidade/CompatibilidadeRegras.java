@@ -43,14 +43,4 @@ public class CompatibilidadeRegras {
 
         return fonte.getPotenciaWatts() != null && fonte.getPotenciaWatts() >= consumoTotalComMargem;
     }
-
-    // =========================
-    // REGRA COMPOSTA (núcleo original, mantida por compatibilidade)
-    // =========================
-
-    public boolean isCompativel(PlacaMae placamae, Processador processador, MemoriaRam ram, Armazenamento armazenamento) {
-        return isCompativelSocket(placamae, processador)
-                && isCompativelMemoria(placamae, ram)
-                && isCompativelArmazenamento(placamae, armazenamento);
-    }
 }

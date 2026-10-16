@@ -114,11 +114,11 @@
             <hr>
 
             <!--ADICIONAR PEÇA EXTRA -->
-            <details class="toggle-adicionar">
-                <summary>Adicionar peça extra</summary>
+            <div>
+                
 
                 <p class="pergunta-confirmacao">
-                    Deseja acrescentar mais uma peça a esta manutenção?
+                    Deseja acrescentar peça a esta manutenção?
                 </p>
 
                 <form action="/statusdeservico/adicionar-peca-json" method="post">
@@ -191,16 +191,17 @@
                         </select>
                     </div>
                     <div class="acao-centralizada">
-                        <button type="submit">Atualizar configuração</button>
+                        <button type="submit">Atualizar peça</button>
                     </div>
                 </form>
-            </details>
+            </div>
 
             <hr>
 
             <!-- ENCERRAR -->
             <div class="acao-centralizada">
-                <form action="/statusdeservico/encerrar" method="post">
+                <form action="/statusdeservico/encerrar" method="post"
+                     onsubmit="return confirm('Tem certeza que deseja encerrar este serviço?')">
                     <input type="hidden" name="idServico" th:value="${servico.idServico}">
                     <button type="submit" class="btn-perigo">Encerrar serviço</button>
                 </form>
