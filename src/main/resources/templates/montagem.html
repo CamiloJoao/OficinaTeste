@@ -44,7 +44,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Placa Mãe:</label>
-                        <input type="text" class="busca-peca" data-alvo="placaMae" placeholder="Buscar placa-mãe...">
+                        <input type="text" class="busca-peca" data-alvo="placaMae" placeholder="Buscar placa-mãe..." onkeydown="return event.key !== 'Enter'">
                         <select name="placaMae" id="placaMae" required>
                             <option value="">Selecione</option>
                             <option th:each="p : ${placaMae}"
@@ -57,7 +57,7 @@
 
                     <div class="form-group">
                         <label>Processador:</label>
-                        <input type="text" class="busca-peca" data-alvo="processador" placeholder="Buscar processador...">
+                        <input type="text" class="busca-peca" data-alvo="processador" placeholder="Buscar processador..." onkeydown="return event.key !== 'Enter'">
                         <select name="processador" id="processador" required>
                             <option value="">Selecione</option>
                             <option th:each="p : ${processador}"
@@ -72,7 +72,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Memória RAM:</label>
-                        <input type="text" class="busca-peca" data-alvo="memoriaRam" placeholder="Buscar memória RAM...">
+                        <input type="text" class="busca-peca" data-alvo="memoriaRam" placeholder="Buscar memória RAM..." onkeydown="return event.key !== 'Enter'">
                         <select name="memoriaRam" id="memoriaRam" required>
                             <option value="">Selecione</option>
                             <option th:each="p : ${memoriaRam}"
@@ -85,7 +85,7 @@
 
                     <div class="form-group">
                         <label>Armazenamento:</label>
-                        <input type="text" class="busca-peca" data-alvo="armazenamento" placeholder="Buscar armazenamento...">
+                        <input type="text" class="busca-peca" data-alvo="armazenamento" placeholder="Buscar armazenamento..." onkeydown="return event.key !== 'Enter'">
                         <select name="armazenamento" id="armazenamento" required>
                             <option value="">Selecione</option>
                             <option th:each="p : ${armazenamento}"
@@ -100,7 +100,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Placa de Vídeo (opcional):</label>
-                        <input type="text" class="busca-peca" data-alvo="placaDeVideo" placeholder="Buscar placa de vídeo...">
+                        <input type="text" class="busca-peca" data-alvo="placaDeVideo" placeholder="Buscar placa de vídeo..." onkeydown="return event.key !== 'Enter'">
                         <select name="placaDeVideo" id="placaDeVideo">
                             <option value="">Nenhuma (usar vídeo integrado)</option>
                             <option th:each="p : ${placaDeVideo}"
@@ -113,7 +113,7 @@
 
                     <div class="form-group">
                         <label>Fonte:</label>
-                        <input type="text" class="busca-peca" data-alvo="fonte" placeholder="Buscar fonte...">
+                        <input type="text" class="busca-peca" data-alvo="fonte" placeholder="Buscar fonte..." onkeydown="return event.key !== 'Enter'">
                         <select name="fonte" id="fonte" required>
                             <option value="">Selecione</option>
                             <option th:each="p : ${fonte}"
