@@ -2,38 +2,12 @@ package com.projeto.oficina;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import com.projeto.oficina.compatibilidade.CompatibilidadeService;
-import com.projeto.oficina.compatibilidade.CompatibilidadeRegras;
-import com.projeto.oficina.compatibilidade.PlacaMae;
-import com.projeto.oficina.compatibilidade.Processador;
-import com.projeto.oficina.compatibilidade.MemoriaRam;
-
-import com.projeto.oficina.compatibilidade.Armazenamento;
-
 
 @SpringBootApplication
 public class OficinaApplication {
 
 	public static void main(String[] args) {
-		// Inicia o Spring Boot e recupera o contexto
-		ApplicationContext context = SpringApplication.run(OficinaApplication.class, args);
-
-		// Obtém os beans de serviço
-		CompatibilidadeService compatService = context.getBean(CompatibilidadeService.class);
-		CompatibilidadeRegras compatRegras = context.getBean(CompatibilidadeRegras.class);
-
-		// Carrega as listas do JSON
-		var compatibilidade = compatService.carregarCompatibilidade();
-
-		// Pega uma peça de cada lista (apenas para teste)
-
-		PlacaMae placa = compatibilidade.getPlaca_mae().get(1);
-		Processador processador = compatibilidade.getProcessador().get(1);
-		MemoriaRam ram = compatibilidade.getMemoria_ram().get(1);
-		Armazenamento armazenamento = compatibilidade.getArmazenamento().get(1);
-
-		
+		SpringApplication.run(OficinaApplication.class, args);
 	}
 }
 
