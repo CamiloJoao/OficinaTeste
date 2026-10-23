@@ -9,55 +9,60 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_usuario;
+    @Column(name = "id_usuario")
+    private Integer idUsuario;
 
-    private String nome_usuario;
-    private String email_usuario;
-    private String senha_usuario;
+    @Column(name = "nome_usuario")
+    private String nomeUsuario;
+
+    @Column(name = "email_usuario", unique = true, nullable = false)
+    private String emailUsuario;
+
+    @Column(name = "senha_usuario")
+    private String senhaUsuario;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_usuario")
-    private TipoUsuario tipo_usuario;
+    private TipoUsuario tipoUsuario;
 
-    public int getId_usuario() {
-        return id_usuario;
+    public Integer getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setId_usuario(int id_usuario) {
-        this.id_usuario = id_usuario;
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
-    public String getNome_usuario() {
-        return nome_usuario;
+    public String getNomeUsuario() {
+        return nomeUsuario;
     }
 
-    public void setNome_usuario(String nome_usuario) {
-        this.nome_usuario = nome_usuario;
+    public void setNomeUsuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
     }
 
-    public String getEmail_usuario() {
-        return email_usuario;
+    public String getEmailUsuario() {
+        return emailUsuario;
     }
 
-    public void setEmail_usuario(String email_usuario) {
-        this.email_usuario = email_usuario;
+    public void setEmailUsuario(String emailUsuario) {
+        this.emailUsuario = emailUsuario;
     }
 
-    public String getSenha_usuario() {
-        return senha_usuario;
+    public String getSenhaUsuario() {
+        return senhaUsuario;
     }
 
-    public void setSenha_usuario(String senha_usuario) {
-        this.senha_usuario = senha_usuario;
+    public void setSenhaUsuario(String senhaUsuario) {
+        this.senhaUsuario = senhaUsuario;
     }
 
-    public TipoUsuario getTipo_usuario() {
-        return tipo_usuario;
+    public TipoUsuario getTipoUsuario() {
+        return tipoUsuario;
     }
 
-    public void setTipo_usuario(TipoUsuario tipo_usuario) {
-        this.tipo_usuario = tipo_usuario;
-    } 
-
+    public void setTipoUsuario(TipoUsuario tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
+    }
 
 }

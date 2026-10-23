@@ -1,4 +1,4 @@
-CREATE TYPE tipo_usuario_enum AS ENUM ('atendente', 'adm');
+CREATE TYPE tipo_usuario_enum AS ENUM ('ADM', 'FUNCIONARIO');
 CREATE TYPE tipo_servico_enum AS ENUM ('montagem', 'manutencao');
 CREATE TYPE status_enum AS ENUM ('em_andamento', 'encerrado');
 CREATE TYPE tipo_peca_enum AS ENUM ('placa_mae', 'cpu', 'memoria_ram', 'gpu', 'hd', 'ssd', 'fonte' );
@@ -14,7 +14,7 @@ CREATE TABLE usuario (
     id_usuario SERIAL PRIMARY KEY,
     nome_usuario VARCHAR(45) NOT NULL,
     email_usuario VARCHAR(45) NOT NULL UNIQUE,
-    senha VARCHAR(255) NOT NULL,
+    senha_usuario VARCHAR(255) NOT NULL,
     tipo_usuario tipo_usuario_enum NOT NULL
 );
 
