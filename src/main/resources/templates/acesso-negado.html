@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="conteudo">
+
+    <h1>Acesso negado</h1>
+
+    <div class="conteudo centralizado">
+        <div class="descricaoBox">
+
+            <div class="alerta-erro">
+                <p>Você não tem permissão para acessar esta página.</p>
+            </div>
+
+            <div class="acao-centralizada">
+                <a th:href="@{/}">Voltar para o Painel Geral</a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

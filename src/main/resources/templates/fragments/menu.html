@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,12 +40,19 @@
                 Relatório Mensal
             </a>
 
-        <hr>
+        <!--/* Só o administrador vê Gerenciar Usuários (comentário do Thymeleaf: não vai para o navegador) */-->
+        <div sec:authorize="hasRole('ADM')">
+            <hr>
 
-        <a href="/gerenciarusuarios"
+            <a href="/gerenciarusuarios"
                 th:classappend="${pagina == 'gerenciarusuarios'} ? 'ativo'">
                 Gerenciar Usuários
             </a>
+        </div>
+
+        <!-- E-mail de quem está logado -->
+        <div sec:authentication="name"
+             style="padding: 16px 12px 4px 12px; font-size: 13px; color: #8FA0B3; overflow-wrap: anywhere;"></div>
 
         <!-- Sair por POST: com o CSRF ativo, o logout não aceita GET -->
         <form th:action="@{/logout}" method="post">
