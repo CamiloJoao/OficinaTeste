@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="conteudo">
+    <a class="btn-voltar" href="/gerenciarusuarios">&larr; Voltar</a>
+
+    <h1>Cadastrar Novo Usuário</h1>
+
+    <div class="conteudo centralizado">
+        <div class="descricaoBox">
+            <!--MENSAGEM DE SUCESSO -->
+            <div th:if="${mensagem}" class="alerta-sucesso">
+                <p th:text="${mensagem}"></p>
+            </div>
+
+            <!-- ERRO -->
+            <div th:if="${erro}" class="alerta-erro">
+                <p th:text="${erro}"></p>
+            </div>
+
+            <form th:action="@{/gerenciarusuarios/salvar}" method="post">
+
+                <div class="form-group">
+                    <label>Nome:</label>
+                    <input type="text" name="nomeUsuario" placeholder="Digite o nome" required th:value="${nomeUsuario}">
+                </div>
+
+                <div class="form-group">
+                    <label>E-mail:</label>
+                    <input type="email" name="emailUsuario" placeholder="Digite o e-mail" required th:value="${emailUsuario}">
+                </div>
+
+                <!-- A senha nunca volta preenchida -->
+                <div class="form-group">
+                    <label>Senha:</label>
+                    <input type="password" name="senhaUsuario" placeholder="Digite a senha" required>
+                </div>
+
+                <!-- Funcionário vem marcado: é o perfil com menos acesso -->
+                <div class="form-group">
+                    <label>Perfil:</label>
+                    <select name="tipoUsuario" required>
+                        <option value="FUNCIONARIO">Funcionário</option>
+                        <option value="ADM" th:selected="${tipoUsuario == 'ADM'}">Administrador</option>
+                    </select>
+                </div>
+
+                <div class="acao-centralizada">
+                    <button type="submit">Cadastrar</button>
+
+                    <a href="/gerenciarusuarios">
+                        <button type="button" class="btn-secundario">Cancelar</button>
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

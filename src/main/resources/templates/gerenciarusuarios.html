@@ -6,6 +6,52 @@
 
     <h1>Gerenciar Usuários</h1>
 
+    <div class="conteudo centralizado buscaBox">
+        <div class="descricaoBox descricaoBox-tabela">
+
+            <!-- BOTÃO CADASTRAR -->
+            <div class="acao-topo">
+                <a href="/gerenciarusuarios/cadastrar">
+                    <button type="button">Cadastrar Novo Usuário</button>
+                </a>
+            </div>
+
+            <!-- TABELA DE USUÁRIOS (a senha não aparece) -->
+            <div class="boxtable" th:if="${!#lists.isEmpty(usuarios)}">
+
+                <h3>Usuários cadastrados</h3>
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Perfil</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr th:each="usuario : ${usuarios}">
+                            <td th:text="${usuario.idUsuario}"></td>
+                            <td th:text="${usuario.nomeUsuario}"></td>
+                            <td th:text="${usuario.emailUsuario}"></td>
+                            <td th:text="${usuario.tipoUsuario.name() == 'ADM'} ? 'Administrador' : 'Funcionário'"></td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <!-- SEM USUÁRIOS CADASTRADOS -->
+            <div th:if="${#lists.isEmpty(usuarios)}">
+                <p>Nenhum usuário cadastrado.</p>
+            </div>
+
+        </div>
+    </div>
 
 </div>
 
