@@ -28,7 +28,7 @@
                 <p>Montagem cadastrada com sucesso!</p>
             </div>
             
-            <form action="/montagem/verificar" method="post">
+            <form th:action="@{/montagem/verificar}" method="post">
 
                 <!-- CLIENTE -->
                 <div class="form-group">
@@ -153,7 +153,7 @@
                     <p>Peças compatíveis</p>
                 </div>
 
-                <form action="/montagem/salvar" method="post">
+                <form th:action="@{/montagem/salvar}" method="post">
 
                     <input type="hidden" name="idPlacaMae" th:value="${idPlacaMae}">
                     <input type="hidden" name="idProcessador" th:value="${idProcessador}">

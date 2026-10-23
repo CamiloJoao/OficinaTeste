@@ -60,7 +60,7 @@
                         <div th:if="${p.categoriaExtra != null}" class="acoes-peca-extra">
 
                             <!-- EDITAR -->
-                            <form action="/statusdeservico/editar-peca-extra" method="post" style="display:inline;">
+                            <form th:action="@{/statusdeservico/editar-peca-extra}" method="post" style="display:inline;">
                                 <input type="hidden" name="idServico" th:value="${servico.idServico}">
                                 <input type="hidden" name="idPeca" th:value="${p.id}">
 
@@ -94,7 +94,7 @@
                             </form>
 
                             <!-- EXCLUIR -->
-                            <form action="/statusdeservico/excluir-peca-extra" method="post" style="display:inline;"
+                            <form th:action="@{/statusdeservico/excluir-peca-extra}" method="post" style="display:inline;"
                                   onsubmit="return confirm('Tem certeza que deseja remover esta peça?')">
                                 <input type="hidden" name="idServico" th:value="${servico.idServico}">
                                 <input type="hidden" name="idPeca" th:value="${p.id}">
@@ -121,7 +121,7 @@
                     Deseja acrescentar peça a esta manutenção?
                 </p>
 
-                <form action="/statusdeservico/adicionar-peca-json" method="post">
+                <form th:action="@{/statusdeservico/adicionar-peca-json}" method="post">
 
                     <input type="hidden" name="idServico" th:value="${servico.idServico}">
 
@@ -201,7 +201,7 @@
 
             <!-- ENCERRAR -->
             <div class="acao-centralizada">
-                <form action="/statusdeservico/encerrar" method="post"
+                <form th:action="@{/statusdeservico/encerrar}" method="post"
                      onsubmit="return confirm('Tem certeza que deseja encerrar este serviço?')">
                     <input type="hidden" name="idServico" th:value="${servico.idServico}">
                     <button type="submit" class="btn-perigo">Encerrar serviço</button>
