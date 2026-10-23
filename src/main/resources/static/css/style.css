@@ -614,3 +614,44 @@ tr:hover td {
         display: inline-flex;
     }
 }
+
+/* =========================
+   TELA DE LOGIN
+========================= */
+.pagina-login {
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 16px;
+}
+
+.descricaoBox-login {
+    max-width: 380px;
+}
+
+/* =========================
+   BOTÃO SAIR DO MENU (botão de form com cara de link)
+========================= */
+.menu .btn-sair {
+    display: block;
+    width: 100%;
+    margin: 2px 0;
+    padding: 10px 12px;
+    border-radius: 6px;
+    background: none;
+    color: #C7D1DB;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: normal;
+    text-align: left;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.menu .btn-sair:hover {
+    background: #2C3E52;
+    color: white;
+}
+
+.menu .btn-sair:active {
+    transform: none;
+}

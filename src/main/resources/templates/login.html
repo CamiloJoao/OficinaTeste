@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Oficina</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="pagina-login">
+
+    <div class="descricaoBox descricaoBox-login">
+
+        <h1>Oficina</h1>
+
+        <!-- ERRO DE LOGIN (o Spring Security volta para /login?error) -->
+        <div th:if="${param.error}" class="alerta-erro">
+            <p>E-mail ou senha inválidos.</p>
+        </div>
+
+        <!-- SAIU DO SISTEMA (o Sair volta para /login?logout) -->
+        <div th:if="${param.logout}" class="alerta-sucesso">
+            <p>Você saiu do sistema.</p>
+        </div>
+
+        <!-- username e password são os nomes que o Spring Security espera -->
+        <form th:action="@{/login}" method="post">
+
+            <div class="form-group">
+                <label>E-mail:</label>
+                <input type="email" name="username" placeholder="Digite seu e-mail" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label>Senha:</label>
+                <input type="password" name="password" placeholder="Digite sua senha" required>
+            </div>
+
+            <div class="acao-centralizada">
+                <button type="submit">Entrar</button>
+            </div>
+
+        </form>
+
+    </div>
+
+</body>
+</html>

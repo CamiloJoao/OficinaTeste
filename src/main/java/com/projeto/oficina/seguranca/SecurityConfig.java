@@ -18,7 +18,8 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // CSS, JS e página de erro ficam liberados; o resto exige login
+    // CSS, JS e página de erro ficam liberados; o resto exige login.
+    // A tela de login é a nossa (LoginController) e o Sair volta para ela com ?logout.
     @Bean
     public SecurityFilterChain filtroSeguranca(HttpSecurity http) throws Exception {
         http
@@ -26,7 +27,12 @@ public class SecurityConfig {
                 .requestMatchers("/css/**", "/js/**", "/error").permitAll()
                 .anyRequest().authenticated())
             .formLogin(login -> login
-                .defaultSuccessUrl("/", true));
+                .loginPage("/login")
+                .defaultSuccessUrl("/", true)
+                .permitAll())
+            .logout(logout -> logout
+                .logoutSuccessUrl("/login?logout")
+                .permitAll()); // libera o /login?logout para quem acabou de sair
 
         return http.build();
     }

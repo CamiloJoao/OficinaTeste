@@ -47,7 +47,10 @@
                 Gerenciar Usuários
             </a>
 
-        <a href="/logout">Sair</a>
+        <!-- Sair por POST: com o CSRF ativo, o logout não aceita GET -->
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn-sair">Sair</button>
+        </form>
     </div>
     
 </body>
