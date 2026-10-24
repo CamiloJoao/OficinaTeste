@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.projeto.oficina.enums.TipoUsuario;
 import com.projeto.oficina.model.Usuario;
 import com.projeto.oficina.repository.UsuarioRepository;
 
@@ -36,5 +37,33 @@ public class UsuarioService {
     public void salvar(Usuario usuario) {
         usuario.setSenhaUsuario(passwordEncoder.encode(usuario.getSenhaUsuario()));
         repository.save(usuario);
+    }
+
+    // Na edição a senha é opcional: em branco, o hash atual continua; preenchida, é criptografada
+    public void atualizar(Usuario usuario, String novaSenha) {
+        if (!novaSenha.trim().isEmpty()) {
+            usuario.setSenhaUsuario(passwordEncoder.encode(novaSenha));
+        }
+        repository.save(usuario);
+    }
+
+    public void excluir(Integer id) {
+        repository.deleteById(id);
+    }
+
+    // true se este usuário é o único administrador do sistema
+    // (usado para o sistema nunca ficar sem ninguém que gerencie usuários)
+    public boolean ehUltimoAdministrador(Usuario usuario) {
+        if (usuario.getTipoUsuario() != TipoUsuario.ADM) {
+            return false;
+        }
+
+        int administradores = 0;
+        for (Usuario u : repository.findAll()) {
+            if (u.getTipoUsuario() == TipoUsuario.ADM) {
+                administradores++;
+            }
+        }
+        return administradores == 1;
     }
 }

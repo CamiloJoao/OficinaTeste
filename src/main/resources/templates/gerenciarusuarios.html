@@ -9,6 +9,16 @@
     <div class="conteudo centralizado buscaBox">
         <div class="descricaoBox descricaoBox-tabela">
 
+            <!-- MENSAGEM DE SUCESSO (atualizar / excluir) -->
+            <div th:if="${mensagem}" class="alerta-sucesso">
+                <p th:text="${mensagem}"></p>
+            </div>
+
+            <!-- ERRO -->
+            <div th:if="${erro}" class="alerta-erro">
+                <p th:text="${erro}"></p>
+            </div>
+
             <!-- BOTÃO CADASTRAR -->
             <div class="acao-topo">
                 <a href="/gerenciarusuarios/cadastrar">
@@ -29,6 +39,7 @@
                             <th>Nome</th>
                             <th>E-mail</th>
                             <th>Perfil</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
 
@@ -38,6 +49,19 @@
                             <td th:text="${usuario.nomeUsuario}"></td>
                             <td th:text="${usuario.emailUsuario}"></td>
                             <td th:text="${usuario.tipoUsuario.name() == 'ADM'} ? 'Administrador' : 'Funcionário'"></td>
+
+                            <td class="nowrap">
+                                <a th:href="@{'/gerenciarusuarios/editar/' + ${usuario.idUsuario}}">
+                                    <button class="btn-sm">Editar</button>
+                                </a>
+
+                                <!-- EXCLUIR (POST com confirmação, igual à remoção de peça extra) -->
+                                <form th:action="@{/gerenciarusuarios/excluir}" method="post" style="display:inline;"
+                                      onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')">
+                                    <input type="hidden" name="idUsuario" th:value="${usuario.idUsuario}">
+                                    <button type="submit" class="btn-perigo btn-sm">Excluir</button>
+                                </form>
+                            </td>
                         </tr>
                     </tbody>
 

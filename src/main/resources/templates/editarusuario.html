@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="conteudo">
+    <a class="btn-voltar" href="/gerenciarusuarios">&larr; Voltar</a>
+
+    <h1>Editar Usuário</h1>
+
+    <div class="conteudo centralizado">
+        <div class="descricaoBox">
+
+            <!-- ERRO -->
+            <div th:if="${erro}" class="alerta-erro">
+                <p th:text="${erro}"></p>
+            </div>
+
+            <form th:action="@{/gerenciarusuarios/atualizar}" th:object="${usuario}" method="post">
+
+                <input type="hidden" th:field="*{idUsuario}">
+
+                <div class="form-group">
+                    <label>Nome:</label>
+                    <input type="text" th:field="*{nomeUsuario}" placeholder="Digite o nome" required>
+                </div>
+
+                <div class="form-group">
+                    <label>E-mail:</label>
+                    <input type="email" th:field="*{emailUsuario}" placeholder="Digite o e-mail" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Perfil:</label>
+                    <select th:field="*{tipoUsuario}">
+                        <option value="FUNCIONARIO">Funcionário</option>
+                        <option value="ADM">Administrador</option>
+                    </select>
+                </div>
+
+                <!-- Sem th:field de propósito: o hash da senha nunca vai para a página -->
+                <div class="form-group">
+                    <label>Senha:</label>
+                    <input type="password" name="senhaUsuario" placeholder="Deixe em branco para manter a senha atual">
+                </div>
+
+                <div class="acao-centralizada">
+                    <button type="submit">Atualizar</button>
+
+                    <a href="/gerenciarusuarios">
+                        <button type="button" class="btn-secundario">Cancelar</button>
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
