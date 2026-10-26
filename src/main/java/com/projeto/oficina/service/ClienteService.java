@@ -1,9 +1,10 @@
 package com.projeto.oficina.service;
 
+import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import java.text.Normalizer;
 import org.springframework.stereotype.Service;
 
 import com.projeto.oficina.model.Cliente;
@@ -16,24 +17,24 @@ public class ClienteService {
     private ClienteRepository repository;
 
     public Cliente buscarPorEmail(String email) {
-    return repository.findByEmailCliente(email);
+        return repository.findByEmailCliente(email);
     }
-    
 
     public List<Cliente> listarTodos() {
         return repository.findAll();
     }
 
-   public List<Cliente> buscarPorNome(String nome) {
-
+    public List<Cliente> buscarPorNome(String nome) {
         String nomeNormalizado = removerAcentos(nome).toLowerCase();
 
-        return repository.findAll().stream()
-                .filter(c -> {
-                    String nomeCliente = removerAcentos(c.getNomeCliente()).toLowerCase();
-                    return nomeCliente.contains(nomeNormalizado);
-                })
-                .toList();
+        List<Cliente> encontrados = new ArrayList<>();
+        for (Cliente cliente : repository.findAll()) {
+            String nomeCliente = removerAcentos(cliente.getNomeCliente()).toLowerCase();
+            if (nomeCliente.contains(nomeNormalizado)) {
+                encontrados.add(cliente);
+            }
+        }
+        return encontrados;
     }
 
     public void salvar(Cliente cliente) {
@@ -52,5 +53,4 @@ public class ClienteService {
         return Normalizer.normalize(texto, Normalizer.Form.NFD)
                 .replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
     }
-
 }

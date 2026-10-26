@@ -27,9 +27,6 @@ public class Servico {
     @Column(name = "descricao_problema")
     private String descricaoProblema;
 
-    @Column(name = "pecas_cadastradas")
-    private String pecasCadastradas;
-
     @Column(name = "orcamento_inicial")
     private Double orcamentoInicial;
 
@@ -98,14 +95,6 @@ public class Servico {
         this.descricaoProblema = descricaoProblema;
     }
 
-    public String getPecasCadastradas() {
-        return pecasCadastradas;
-    }
-
-    public void setPecasCadastradas(String pecasCadastradas) {
-        this.pecasCadastradas = pecasCadastradas;
-    }
-
     public Double getOrcamentoInicial() {
         return orcamentoInicial;
     }
@@ -114,7 +103,7 @@ public class Servico {
         this.orcamentoInicial = orcamentoInicial;
     }
 
-     public Double getOrcamentoFinal() {
+    public Double getOrcamentoFinal() {
         return orcamentoFinal;
     }
 
@@ -138,8 +127,11 @@ public class Servico {
         this.dataPrevistaConclusao = dataPrevistaConclusao;
     }
 
-    public LocalDate getDataCadastro() { return dataCadastro; }
-    public void setDataCadastro(LocalDate dataCadastro) { this.dataCadastro = dataCadastro; }
-    
-}
+    public LocalDate getDataCadastro() {
+        return dataCadastro;
+    }
 
+    public void setDataCadastro(LocalDate dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
+}

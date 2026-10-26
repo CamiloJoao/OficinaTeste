@@ -8,22 +8,21 @@ public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Integer idCliente;
 
     @Column(name = "nome_cliente")
     private String nomeCliente;
 
     private String telefone;
-    
-   @Column(name = "email_cliente", unique = true, nullable = false)
+
+    @Column(name = "email_cliente", unique = true, nullable = false)
     private String emailCliente;
 
-    public int getIdCliente() {
+    public Integer getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(int idCliente) {
+    public void setIdCliente(Integer idCliente) {
         this.idCliente = idCliente;
     }
 
@@ -35,8 +34,6 @@ public class Cliente {
         this.nomeCliente = nomeCliente;
     }
 
-   
-
     public String getTelefone() {
         return telefone;
     }
@@ -45,16 +42,11 @@ public class Cliente {
         this.telefone = telefone;
     }
 
-
     public String getEmailCliente() {
         return emailCliente;
     }
-    
+
     public void setEmailCliente(String emailCliente) {
         this.emailCliente = emailCliente;
-
     }
-
-    
-
 }

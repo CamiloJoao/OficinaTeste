@@ -31,8 +31,6 @@ public class ServicoPeca {
     @JoinColumn(name = "id_servico", nullable = false)
     private Servico servico;
 
-    // GETTERS E SETTERS
-
     public Integer getId() {
         return id;
     }
@@ -89,4 +87,3 @@ public class ServicoPeca {
         this.servico = servico;
     }
 }
-    
