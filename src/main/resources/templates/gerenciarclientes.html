@@ -9,6 +9,14 @@
     <div class="conteudo centralizado buscaBox">
         <div class="descricaoBox descricaoBox-tabela">
 
+            <div th:if="${mensagem}" class="alerta-sucesso">
+                <p th:text="${mensagem}"></p>
+            </div>
+
+            <div th:if="${erro}" class="alerta-erro">
+                <p th:text="${erro}"></p>
+            </div>
+
             <form th:action="@{/gerenciarclientes}" method="get">
                 <div class="topo-card">
                     <div class="form-group">
@@ -71,10 +79,11 @@
                                     <button class="btn-sm">Editar</button>
                                 </a>
 
-                                <a th:href="@{'/gerenciarclientes/excluir/' + ${cliente.idCliente}}"
-                                    onclick="return confirm('Tem certeza que deseja excluir este cliente?')">
-                                    <button class="btn-perigo btn-sm">Excluir</button>
-                                </a>
+                                <form th:action="@{/gerenciarclientes/excluir}" method="post" class="form-inline"
+                                      onsubmit="return confirm('Tem certeza que deseja excluir este cliente?')">
+                                    <input type="hidden" name="idCliente" th:value="${cliente.idCliente}">
+                                    <button type="submit" class="btn-perigo btn-sm">Excluir</button>
+                                </form>
                             </td>
                         </tr>
                     </tbody>

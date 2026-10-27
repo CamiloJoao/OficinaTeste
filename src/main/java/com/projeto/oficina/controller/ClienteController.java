@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.projeto.oficina.model.Cliente;
 import com.projeto.oficina.service.ClienteService;
+import com.projeto.oficina.service.ServicoService;
 
 @Controller
 @RequestMapping("/gerenciarclientes")
@@ -16,6 +18,9 @@ public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
+
+    @Autowired
+    private ServicoService servicoService;
 
     @GetMapping
     public String listarClientes(
@@ -65,9 +70,25 @@ public class ClienteController {
         return "layout";
     }
 
-    @GetMapping("/excluir/{id}")
-    public String excluir(@PathVariable int id) {
-        clienteService.excluir(id);
+    @PostMapping("/excluir")
+    public String excluir(@RequestParam Integer idCliente, RedirectAttributes redirect) {
+
+        Cliente cliente = clienteService.buscarPorId(idCliente);
+
+        if (cliente == null) {
+            redirect.addFlashAttribute("erro", "Cliente não encontrado.");
+            return "redirect:/gerenciarclientes";
+        }
+
+        // Cliente com serviços fica, para não perder o histórico da oficina (RF10)
+        if (!servicoService.buscarPorCliente(cliente).isEmpty()) {
+            redirect.addFlashAttribute("erro", "Este cliente tem serviços cadastrados e não pode ser excluído.");
+            return "redirect:/gerenciarclientes";
+        }
+
+        clienteService.excluir(idCliente);
+
+        redirect.addFlashAttribute("mensagem", "Cliente excluído com sucesso!");
         return "redirect:/gerenciarclientes";
     }
 
