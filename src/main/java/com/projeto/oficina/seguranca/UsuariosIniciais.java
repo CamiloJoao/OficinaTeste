@@ -10,7 +10,7 @@ import com.projeto.oficina.model.Usuario;
 import com.projeto.oficina.repository.UsuarioRepository;
 
 // Cria o administrador e o funcionário quando o sistema sobe com a tabela usuario vazia
-// (o ddl-auto create-drop apaga o banco a cada execução)
+// (primeira execução ou banco recriado)
 @Component
 public class UsuariosIniciais implements CommandLineRunner {
 
