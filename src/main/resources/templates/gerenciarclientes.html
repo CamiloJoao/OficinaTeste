@@ -6,11 +6,9 @@
 
     <h1>Gerenciar Clientes</h1>
 
-    <!--BUSCA -->
     <div class="conteudo centralizado buscaBox">
         <div class="descricaoBox descricaoBox-tabela">
 
-            <!-- FORM DE BUSCA + BOTÃO CADASTRAR (mesma linha) -->
             <form th:action="@{/gerenciarclientes}" method="get">
                 <div class="topo-card">
                     <div class="form-group">
@@ -26,114 +24,101 @@
                     </a>
                 </div>
 
-
-            <!--LIMPAR BUSCA-->    
-            <div class="acao-centralizada"
-                 th:if="${erroBusca == null 
-                        and clientes != null 
-                        and #lists.isEmpty(clientes) 
-                        and param.nome != null 
-                        and param.nome != ''}">
-                <a th:href="@{/gerenciarclientes}">
-                    <button type="button" class="btn-secundario">Voltar</button>
-                </a>
-            </div>
-                
+                <!-- Busca sem resultado: botão para voltar à lista -->
+                <div class="acao-centralizada"
+                     th:if="${erroBusca == null
+                            and clientes != null
+                            and #lists.isEmpty(clientes)
+                            and param.nome != null
+                            and param.nome != ''}">
+                    <a th:href="@{/gerenciarclientes}">
+                        <button type="button" class="btn-secundario">Voltar</button>
+                    </a>
+                </div>
             </form>
 
-            <!--USUÁRIO DIGITOU ALGO INESPERADO NO CAMPO BUSCA-->
             <div th:if="${erroBusca != null}" class="alerta-erro">
                 <p th:text="${erroBusca}"></p>
             </div>
 
-
-            <!--TABELA DE CLIENTES -->
             <div class="boxtable" th:if="${clientes != null and !#lists.isEmpty(clientes)}">
 
-            <h3>Clientes cadastrados</h3>
+                <h3>Clientes cadastrados</h3>
 
-            <table>
+                <table>
 
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Telefone</th>
-                        <th>Email</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Telefone</th>
+                            <th>Email</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
 
-                <tbody>
-                    <tr th:each="cliente, stat : ${clientes}"
-                        th:if="${stat.index < 5 or mostrarTodos}">
+                    <tbody>
+                        <tr th:each="cliente, stat : ${clientes}"
+                            th:if="${stat.index < 5 or mostrarTodos}">
 
-                        <td th:text="${cliente.idCliente}"></td>
-                        <td th:text="${cliente.nomeCliente}"></td>
-                        <td th:text="${cliente.telefone}" class="nowrap"></td>
-                        <td th:text="${cliente.emailCliente}"></td>
+                            <td th:text="${cliente.idCliente}"></td>
+                            <td th:text="${cliente.nomeCliente}"></td>
+                            <td th:text="${cliente.telefone}" class="nowrap"></td>
+                            <td th:text="${cliente.emailCliente}"></td>
 
-                        <td class="nowrap">
-                           <a th:href="@{'/gerenciarclientes/editar/' + ${cliente.idCliente}}">
-                                <button class="btn-sm">Editar</button>
-                            </a>
+                            <td class="nowrap">
+                                <a th:href="@{'/gerenciarclientes/editar/' + ${cliente.idCliente}}">
+                                    <button class="btn-sm">Editar</button>
+                                </a>
 
-                            <a th:href="@{'/gerenciarclientes/excluir/' + ${cliente.idCliente}}"
-                            onclick="return confirm('Tem certeza que deseja excluir este cliente?')">
-                                <button class="btn-perigo btn-sm">Excluir</button>
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
+                                <a th:href="@{'/gerenciarclientes/excluir/' + ${cliente.idCliente}}"
+                                    onclick="return confirm('Tem certeza que deseja excluir este cliente?')">
+                                    <button class="btn-perigo btn-sm">Excluir</button>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
 
-            </table>
+                </table>
 
-            <!--BOTÕES VER MAIS / VER MENOS -->
                 <div class="acao-centralizada">
-
-                    <!-- VER MAIS -->
-                    <div th:if="${clientes.size() > 5 
-                                and !mostrarTodos 
+                    <!-- Mais de 5 clientes, sem busca: botão Ver mais -->
+                    <div th:if="${clientes.size() > 5
+                                and !mostrarTodos
                                 and (param.nome == null or param.nome == '')}">
-                        
                         <a th:href="@{/gerenciarclientes(mostrarTodos=true)}">
                             <button class="btn-secundario">Ver mais</button>
                         </a>
-
                     </div>
 
-                    <!-- VER MENOS -->
-                    <div th:if="${mostrarTodos 
-                                and clientes.size() > 5 
+                    <!-- Lista completa aberta, sem busca: botão Ver menos -->
+                    <div th:if="${mostrarTodos
+                                and clientes.size() > 5
                                 and (param.nome == null or param.nome == '')}">
-                        
                         <a th:href="@{/gerenciarclientes}">
                             <button class="btn-secundario">Ver menos</button>
                         </a>
-
                     </div>
-
-                </div> 
-
+                </div>
             </div>
 
-            <!--SEM RESULTADO NA BUSCA -->
-            <div th:if="${erroBusca == null 
-                and clientes != null 
-                and #lists.isEmpty(clientes) 
-                and param.nome != null 
+            <!-- Busca sem resultado -->
+            <div th:if="${erroBusca == null
+                and clientes != null
+                and #lists.isEmpty(clientes)
+                and param.nome != null
                 and param.nome != ''}">
                 <p>Nenhum cliente cadastrado com este nome.</p>
             </div>
 
-            <!--SEM CLIENTES CADASTRADOS -->
-            <div th:if="${clientes != null 
-                    and #lists.isEmpty(clientes) 
+            <!-- Nenhum cliente cadastrado (sem busca) -->
+            <div th:if="${clientes != null
+                    and #lists.isEmpty(clientes)
                     and (param.nome == null or param.nome == '')}">
                 <p>Nenhum cliente cadastrado.</p>
             </div>
-        </div>    
-    </div>            
+        </div>
+    </div>
 </div>
 
 </body>

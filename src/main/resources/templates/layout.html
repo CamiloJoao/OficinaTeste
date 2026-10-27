@@ -2,18 +2,15 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Layout</title>
+    <title>Oficina</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
-    <!-- MENU -->
     <div th:replace="fragments/menu :: menu"></div>
 
-    <!-- CONTEÚDO -->
     <div class="conteudo conteudo-principal">
 
-        <!-- DATA E HORA ATUAL (aparece em todas as páginas) -->
         <div class="relogio">
             <span class="relogio-data" id="relogio-data"></span>
             <span class="relogio-hora" id="relogio-hora"></span>
@@ -41,7 +38,6 @@
     })();
     </script>
 
-    <!-- BUSCA NOS SELECTS DE PEÇAS -->
     <script th:src="@{/js/busca-peca.js}"></script>
 
 </body>

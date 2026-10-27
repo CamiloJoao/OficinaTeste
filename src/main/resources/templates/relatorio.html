@@ -4,7 +4,7 @@
 
 <div th:fragment="conteudo">
 
-    <!-- NA IMPRESSAO, ESCONDE O MENU, O RELOGIO E O FILTRO -->
+    <!-- Na impressão, esconde o menu, o relógio e o filtro -->
     <style>
         @media print {
             .menu, .relogio, .descricaoBox { display: none; }
@@ -13,10 +13,8 @@
 
     <h1 th:text="'Relatório Mensal - ' + ${nomeMes} + '/' + ${ano}">Relatório Mensal</h1>
 
-    <!-- CRITERIO DO MES -->
-    <p style="text-align: center;">Serviços cadastrados no mês selecionado.</p>
+    <p class="texto-centralizado">Serviços cadastrados no mês selecionado.</p>
 
-    <!-- FILTRO DE MES E ANO -->
     <div class="conteudo centralizado">
         <div class="descricaoBox">
             <form action="/relatorio" method="get">
@@ -51,7 +49,6 @@
         </div>
     </div>
 
-    <!-- RESUMO DO MES -->
     <div class="grid-resumo">
 
         <div class="card">
@@ -91,7 +88,6 @@
 
     </div>
 
-    <!-- SERVICOS DO MES -->
     <div class="boxtable" th:if="${!#lists.isEmpty(servicos)}">
         <table>
             <thead>
@@ -117,7 +113,6 @@
         </table>
     </div>
 
-    <!-- MES SEM SERVICOS -->
     <div th:if="${#lists.isEmpty(servicos)}">
         <p>Nenhum serviço cadastrado neste mês.</p>
     </div>

@@ -234,6 +234,14 @@ hr {
     white-space: nowrap;
 }
 
+.form-inline {
+    display: inline;
+}
+
+.texto-centralizado {
+    text-align: center;
+}
+
 /* =========================
    FORMULÁRIOS
 ========================= */
@@ -643,6 +651,13 @@ tr:hover td {
 
 .descricaoBox-login {
     max-width: 380px;
+}
+
+.menu .usuario-logado {
+    padding: 16px 12px 4px 12px;
+    font-size: 13px;
+    color: #8FA0B3;
+    overflow-wrap: anywhere;
 }
 
 /* =========================

@@ -1,44 +1,38 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body> 
+<body>
     <div th:fragment="menu" class="menu">
         <h2>Oficina</h2>
-        
-        
-           <a href="/"
-                th:classappend="${pagina == 'painelgeral'} ? 'ativo'">
-                Painel Geral
-            </a>
 
-            <a href="/gerenciarclientes"
-                th:classappend="${pagina == 'gerenciarclientes'} ? 'ativo'">
-                Gerenciar Cliente
-            </a>
+        <a href="/"
+            th:classappend="${pagina == 'painelgeral'} ? 'ativo'">
+            Painel Geral
+        </a>
 
-            <a href="/manutencao"
+        <a href="/gerenciarclientes"
+            th:classappend="${pagina == 'gerenciarclientes'} ? 'ativo'">
+            Gerenciar Cliente
+        </a>
+
+        <a href="/manutencao"
             th:classappend="${pagina == 'manutencao'} ? 'ativo'">
             Manutenção
-            </a>
+        </a>
 
-            <a href="/montagem"
-                th:classappend="${pagina == 'montagem'} ? 'ativo'">
-                Montagem
-            </a>
+        <a href="/montagem"
+            th:classappend="${pagina == 'montagem'} ? 'ativo'">
+            Montagem
+        </a>
 
-            <a href="/statusdeservico"
-                th:classappend="${pagina == 'statusdeservico'} ? 'ativo'">
-                Status de Serviço
-            </a>
+        <a href="/statusdeservico"
+            th:classappend="${pagina == 'statusdeservico'} ? 'ativo'">
+            Status de Serviço
+        </a>
 
-            <a href="/relatorio"
-                th:classappend="${pagina == 'relatorio'} ? 'ativo'">
-                Relatório Mensal
-            </a>
+        <a href="/relatorio"
+            th:classappend="${pagina == 'relatorio'} ? 'ativo'">
+            Relatório Mensal
+        </a>
 
         <!--/* Só o administrador vê Gerenciar Usuários (comentário do Thymeleaf: não vai para o navegador) */-->
         <div sec:authorize="hasRole('ADM')">
@@ -50,15 +44,13 @@
             </a>
         </div>
 
-        <!-- E-mail de quem está logado -->
-        <div sec:authentication="name"
-             style="padding: 16px 12px 4px 12px; font-size: 13px; color: #8FA0B3; overflow-wrap: anywhere;"></div>
+        <div sec:authentication="name" class="usuario-logado"></div>
 
         <!-- Sair por POST: com o CSRF ativo, o logout não aceita GET -->
         <form th:action="@{/logout}" method="post">
             <button type="submit" class="btn-sair">Sair</button>
         </form>
     </div>
-    
+
 </body>
 </html>

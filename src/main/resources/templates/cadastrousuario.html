@@ -9,12 +9,10 @@
 
     <div class="conteudo centralizado">
         <div class="descricaoBox">
-            <!--MENSAGEM DE SUCESSO -->
             <div th:if="${mensagem}" class="alerta-sucesso">
                 <p th:text="${mensagem}"></p>
             </div>
 
-            <!-- ERRO -->
             <div th:if="${erro}" class="alerta-erro">
                 <p th:text="${erro}"></p>
             </div>
