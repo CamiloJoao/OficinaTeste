@@ -19,7 +19,6 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    // Tela principal (lista de usuários)
     @GetMapping
     public String usuarios(Model model) {
         model.addAttribute("usuarios", usuarioService.listarTodos());
@@ -27,7 +26,6 @@ public class UsuarioController {
         return "layout";
     }
 
-    // Formulário de novo usuário
     @GetMapping("/cadastrar")
     public String novoUsuario(Model model) {
         model.addAttribute("pagina", "cadastrousuario");

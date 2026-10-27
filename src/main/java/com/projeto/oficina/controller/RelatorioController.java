@@ -20,15 +20,12 @@ public class RelatorioController {
     @Autowired
     private ServicoService servicoService;
 
-    // Nomes dos meses para o titulo do relatorio
+    // Nomes dos meses para o título do relatório
     private static final String[] NOMES_MESES = {
         "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
         "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
     };
 
-    // =========================
-    // RELATORIO MENSAL
-    // =========================
     @GetMapping("/relatorio")
     public String relatorio(
             @RequestParam(required = false) Integer mes,
@@ -37,26 +34,23 @@ public class RelatorioController {
 
         LocalDate hoje = LocalDate.now();
 
-        // Sem mes (ou mes invalido), usa o mes atual
+        // Sem mês (ou mês inválido), usa o mês atual
         if (mes == null || mes < 1 || mes > 12) {
             mes = hoje.getMonthValue();
         }
 
         // Sem ano (ou fora de 2000 a 2100), usa o ano atual
-        // Long porque um numero muito grande nao cabe em Integer
+        // Long porque um número muito grande não cabe em Integer
         if (ano == null || ano < 2000 || ano > 2100) {
             ano = (long) hoje.getYear();
         }
 
-        // Primeiro e ultimo dia do mes escolhido
+        // Primeiro e último dia do mês escolhido
         LocalDate inicio = LocalDate.of(ano.intValue(), mes, 1);
         LocalDate fim = inicio.withDayOfMonth(inicio.lengthOfMonth());
 
         List<Servico> servicos = servicoService.listarPorPeriodo(inicio, fim);
 
-        // =========================
-        // CONTADORES
-        // =========================
         int manutencoes = 0;
         int montagens = 0;
         int encerrados = 0;
@@ -72,7 +66,7 @@ public class RelatorioController {
                 montagens++;
             }
 
-            // Soma o valor separado por status (ignora servicos sem orcamento final)
+            // Soma o valor separado por status (ignora serviços sem orçamento final)
             if (s.getStatus() == StatusServico.ENCERRADO) {
                 encerrados++;
                 if (s.getOrcamentoFinal() != null) {
@@ -86,9 +80,6 @@ public class RelatorioController {
             }
         }
 
-        // =========================
-        // MANDAR PRO FRONT
-        // =========================
         model.addAttribute("mes", mes);
         model.addAttribute("ano", ano);
         model.addAttribute("nomeMes", NOMES_MESES[mes - 1]);

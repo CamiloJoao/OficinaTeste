@@ -1,6 +1,7 @@
 package com.projeto.oficina.controller;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +31,7 @@ public class ManutencaoController {
         return "layout";
     }
 
-   @PostMapping("/salvar")
+    @PostMapping("/salvar")
     public String salvar(
             @RequestParam String emailCliente,
             @RequestParam(required = false) String descricao,
@@ -39,10 +40,10 @@ public class ManutencaoController {
             @RequestParam Double orcamento,
             Model model) {
 
-        // VALIDAR EMAIL
-        if (emailCliente == null || emailCliente.trim().isEmpty()) {
+        model.addAttribute("pagina", "manutencao");
+
+        if (emailCliente.trim().isEmpty()) {
             model.addAttribute("erro", "Digite o email do cliente.");
-            model.addAttribute("pagina", "manutencao");
             return "layout";
         }
 
@@ -50,20 +51,16 @@ public class ManutencaoController {
 
         if (cliente == null) {
             model.addAttribute("erro", "E-mail não cadastrado.");
-            model.addAttribute("pagina", "manutencao");
             return "layout";
         }
 
-        // VALIDAR PROBLEMA
         if ((problemaSelecionado == null || problemaSelecionado.isEmpty()) &&
             (descricao == null || descricao.isEmpty())) {
 
             model.addAttribute("erro", "Informe ou selecione um problema.");
-            model.addAttribute("pagina", "manutencao");
             return "layout";
         }
 
-        // DESCRIÇÃO FINAL
         String descricaoFinal = "";
 
         if (problemaSelecionado != null && !problemaSelecionado.isEmpty()) {
@@ -74,24 +71,20 @@ public class ManutencaoController {
             descricaoFinal += " - " + descricao;
         }
 
-        // VALIDAR DATA
-        java.time.LocalDate data;
+        LocalDate data;
         try {
-            data = java.time.LocalDate.parse(dataPrevista);
+            data = LocalDate.parse(dataPrevista);
         } catch (Exception e) {
             model.addAttribute("erro", "Data inválida.");
-            model.addAttribute("pagina", "manutencao");
             return "layout";
         }
 
-        // 🔥 BLOQUEAR DOMINGO (oficina fechada)
+        // Oficina fechada no domingo
         if (data.getDayOfWeek() == DayOfWeek.SUNDAY) {
             model.addAttribute("erro", "A oficina não funciona aos domingos. Escolha outra data.");
-            model.addAttribute("pagina", "manutencao");
             return "layout";
         }
 
-        // SALVAR
         Servico servico = new Servico();
         servico.setCliente(cliente);
         servico.setTipoServico(TipoServico.MANUTENCAO);
@@ -100,12 +93,11 @@ public class ManutencaoController {
         servico.setOrcamentoInicial(orcamento);
         servico.setOrcamentoFinal(orcamento); 
         servico.setDataPrevistaConclusao(data);
-        servico.setDataCadastro(java.time.LocalDate.now());
+        servico.setDataCadastro(LocalDate.now());
 
         servicoService.salvar(servico);
 
         model.addAttribute("sucesso", "Manutenção cadastrada com sucesso!");
-        model.addAttribute("pagina", "manutencao");
 
         return "layout";
     }
