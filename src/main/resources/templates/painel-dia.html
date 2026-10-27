@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-    <div th:fragment="conteudo">
+<div th:fragment="conteudo">
 
     <h1 th:text="'Serviços do dia ' + ${#temporals.format(dataSelecionada, 'dd/MM/yyyy')}">
         Serviços do dia
@@ -12,7 +12,6 @@
 
             <a class="btn-voltar" th:href="@{/}">&larr; Voltar</a>
 
-            <!-- TABELA -->
             <div class="boxtable">
 
                 <table>

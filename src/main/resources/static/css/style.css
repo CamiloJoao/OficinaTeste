@@ -394,6 +394,18 @@ button:active {
     outline-offset: -3px;
 }
 
+.filtros-prazo {
+    margin-bottom: 24px;
+}
+
+.box-semana {
+    margin-bottom: 20px;
+}
+
+.box-prazos {
+    margin-bottom: 30px;
+}
+
 /* =========================
    TABELAS
 ========================= */

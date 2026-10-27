@@ -6,7 +6,6 @@
 
         <h1>Painel Geral do Sistema</h1>
 
-        <!-- RESUMO -->
         <div class="grid-resumo">
 
             <div class="card">
@@ -31,8 +30,7 @@
 
         </div>
 
-        <!-- SERVIÇOS DA SEMANA (agora cada dia é um link clicável) -->
-        <div class="box" style="margin-bottom: 20px;">
+        <div class="box box-semana">
             <h3>Serviços da semana</h3>
 
             <div class="grid-semana">
@@ -63,8 +61,7 @@
             </div>
         </div>
 
-        <!-- SERVIÇOS POR PRAZO -->
-        <div class="box" style="margin-bottom: 30px;">
+        <div class="box box-prazos">
             <h3>Serviços por prazo</h3>
 
             <div class="grid-badges">
@@ -90,8 +87,7 @@
 
         <h3>Últimos serviços cadastrados</h3>
 
-        <!-- ÚLTIMOS SERVIÇOS -->
-        <div class="boxtable" th:if="${ultimosServicos != null and !#lists.isEmpty(ultimosServicos)}">
+        <div class="boxtable" th:if="${!#lists.isEmpty(ultimosServicos)}">
 
             <table>
                 <tr>
@@ -118,13 +114,11 @@
 
         </div>
 
-         <!--SEM CLIENTES CADASTRADOS -->
-        <div th:if="${ultimosServicos != null 
-                and #lists.isEmpty(ultimosServicos)}">
+        <div th:if="${#lists.isEmpty(ultimosServicos)}">
             <p>Nenhum serviço cadastrado.</p>
         </div>
 
-        <!-- DESTACA O DIA ATUAL NO WIDGET DA SEMANA -->
+        <!-- Destaca o dia de hoje no quadro da semana -->
         <script>
         document.addEventListener("DOMContentLoaded", function () {
             const dias = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];

@@ -6,31 +6,25 @@
 
     <h1>Montagem</h1>
 
-   
-    <!-- FORM PRINCIPAL (VERIFICAR) -->
     <div class="conteudo centralizado">
         <div class="descricaoBox descricaoBox-larga">
 
             <h3>Cadastrar montagem:</h3>
 
-            <!-- ERRO CLIENTE -->
             <div th:if="${erro != null}" class="alerta-erro">
                 <p th:text="${erro}"></p>
             </div>
 
-            <!-- ERRO DE COMPATIBILIDADE -->
             <div th:if="${erroCompatibilidade != null and !#lists.isEmpty(erroCompatibilidade)}" class="alerta-erro">
                 <p>As peças selecionadas não são compatíveis entre si. Revise a configuração e tente novamente.</p>
             </div>
 
-            <!-- SUCESSO (montagem cadastrada) -->
             <div th:if="${param.sucesso}" class="alerta-sucesso">
                 <p>Montagem cadastrada com sucesso!</p>
             </div>
             
             <form th:action="@{/montagem/verificar}" method="post">
 
-                <!-- CLIENTE -->
                 <div class="form-group">
                     <label>E-mail do Cliente:</label>
                     <input type="email" name="emailCliente" placeholder="Digite o e-mail do cliente" required>
@@ -40,7 +34,6 @@
 
                 <h3>Lista de componentes:</h3>
 
-                <!-- PEÇAS -->
                 <div class="form-row">
                     <div class="form-group">
                         <label>Placa Mãe:</label>
@@ -127,7 +120,6 @@
 
                 <hr>
 
-                <!-- DATA E ORÇAMENTO -->
                 <div class="form-row">
                     <div class="form-group">
                         <label>Data de conclusão prevista:</label>
@@ -146,7 +138,7 @@
 
             </form>
 
-            <!--  COMPATÍVEL → CONFIRMAR (fica embaixo, perto do botão de confirmar) -->
+            <!-- Confirmar só aparece depois que a verificação deu compatível -->
             <div th:if="${compativel}">
 
                 <div class="alerta-sucesso">
@@ -174,11 +166,8 @@
 
             </div>
 
-        </div>    
-    </div>    
-        
-
-
+        </div>
+    </div>
 </div>
 
 </body>

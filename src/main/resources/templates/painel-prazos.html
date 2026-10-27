@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-    <div th:fragment="conteudo">
-        <a class="btn-voltar" th:href="@{/}">&larr; Voltar</a>
+<div th:fragment="conteudo">
+    <a class="btn-voltar" th:href="@{/}">&larr; Voltar</a>
 
     <h1 th:text="'Serviços - ' + (${tipoSelecionado == 'prioritario'} ? 'Prioritários' : (${tipoSelecionado == 'proximo'} ? 'Próximos' : 'No prazo'))">
         Serviços
@@ -11,26 +11,24 @@
     <div class="conteudo centralizado">
         <div class="descricaoBox descricaoBox-tabela">
 
-            <!-- BOTÕES DE FILTRO -->
-            <div class="grid-badges" style="margin-bottom: 24px;">
+            <div class="grid-badges filtros-prazo">
                 <a href="/painel/prazos?tipo=prioritario"
                    class="badge vermelho"
-                   th:classappend="${tipoSelecionado == 'prioritario'} ? 'badge-ativo' : ''">
+                   th:classappend="${tipoSelecionado == 'prioritario'} ? 'badge-ativo'">
                     Prioritários
                 </a>
                 <a href="/painel/prazos?tipo=proximo"
                    class="badge amarelo"
-                   th:classappend="${tipoSelecionado == 'proximo'} ? 'badge-ativo' : ''">
+                   th:classappend="${tipoSelecionado == 'proximo'} ? 'badge-ativo'">
                     Próximos
                 </a>
                 <a href="/painel/prazos?tipo=normal"
                    class="badge verde"
-                   th:classappend="${tipoSelecionado == 'normal'} ? 'badge-ativo' : ''">
+                   th:classappend="${tipoSelecionado == 'normal'} ? 'badge-ativo'">
                     No prazo
                 </a>
             </div>
 
-            <!-- TABELA -->
             <div class="boxtable">
 
                 <table>
@@ -50,7 +48,6 @@
                         <td th:text="${s.cliente.nomeCliente}"></td>
                         <td th:text="${s.tipoServico}"></td>
 
-                        <!-- FORMATAR DATA -->
                         <td th:text="${#temporals.format(s.dataPrevistaConclusao, 'dd/MM/yyyy')}"></td>
 
                         <td th:text="${s.status}"></td>
