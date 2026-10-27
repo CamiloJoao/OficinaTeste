@@ -1,7 +1,9 @@
 package com.projeto.oficina.controller;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,25 +34,16 @@ public class StatusController {
     @Autowired
     private CompatibilidadeService compatibilidadeService;
 
-    // @Autowired
-    // private CompatibilidadeRegras compatibilidadeRegras;
-
-    // Categorias que so podem existir uma vez no computador
+    // Categorias que só podem existir uma vez no computador
     private static final Set<String> SINGULARES =
             Set.of("placa_mae", "processador", "placa_devideo", "fonte");
 
-    // =========================
-    // TELA PRINCIPAL
-    // =========================
     @GetMapping
     public String status(Model model) {
         model.addAttribute("pagina", "statusdeservico");
         return "layout";
     }
 
-    // =========================
-    // BUSCAR POR EMAIL
-    // =========================
     @GetMapping("/buscar")
     public String buscarPorEmail(@RequestParam String emailCliente, Model model) {
 
@@ -70,9 +63,6 @@ public class StatusController {
         return "layout";
     }
 
-    // =========================
-    // DETALHES
-    // =========================
     @GetMapping("/detalhes/{id}")
     public String detalhes(@PathVariable int id, Model model) {
 
@@ -81,17 +71,13 @@ public class StatusController {
 
         CompatibilidadeData data = compatibilidadeService.carregarCompatibilidade();
 
-        List<ServicoPeca> extras = servico.getPecas()
-            .stream()
-            .filter(p -> p.getTipo() == null)
-            .toList();
-
-        double totalExtras = extras.stream()
-            .mapToDouble(p -> p.getValor() != null ? p.getValor() : 0)
-            .sum();
-
+        List<ServicoPeca> extras = new ArrayList<>();
+        for (ServicoPeca p : servico.getPecas()) {
+            if (p.getTipo() == null) {
+                extras.add(p);
+            }
+        }
         model.addAttribute("pecasExtras", extras);
-        model.addAttribute("totalExtras", totalExtras);
 
         model.addAttribute("placaMae", data.getPlaca_mae());
         model.addAttribute("processador", data.getProcessador());
@@ -100,46 +86,14 @@ public class StatusController {
         model.addAttribute("placaDeVideo", data.getPlaca_devideo());
         model.addAttribute("fonte", data.getFonte());
 
-        Integer placaAtual = null;
-        Integer processadorAtual = null;
-        Integer ramAtual = null;
-        Integer armazenamentoAtual = null;
-        Integer placaDeVideoAtual = null;
-        Integer fonteAtual = null;
+        model.addAttribute("placaAtual", getAtual(servico, "placa_mae"));
+        model.addAttribute("processadorAtual", getAtual(servico, "processador"));
+        model.addAttribute("ramAtual", getAtual(servico, "memoria_ram"));
+        model.addAttribute("armazenamentoAtual", getAtual(servico, "armazenamento"));
+        model.addAttribute("placaDeVideoAtual", getAtual(servico, "placa_devideo"));
+        model.addAttribute("fonteAtual", getAtual(servico, "fonte"));
 
-        for (ServicoPeca p : servico.getPecas()) {
-            if (p.getTipo() == null) continue;
-
-            switch (p.getTipo()) {
-                case "placa_mae":
-                    placaAtual = p.getIdReferencia();
-                    break;
-                case "processador":
-                    processadorAtual = p.getIdReferencia();
-                    break;
-                case "memoria_ram":
-                    ramAtual = p.getIdReferencia();
-                    break;
-                case "armazenamento":
-                    armazenamentoAtual = p.getIdReferencia();
-                    break;
-                case "placa_devideo":
-                    placaDeVideoAtual = p.getIdReferencia();
-                    break;
-                case "fonte":
-                    fonteAtual = p.getIdReferencia();
-                    break;
-            }
-        }
-
-        model.addAttribute("placaAtual", placaAtual);
-        model.addAttribute("processadorAtual", processadorAtual);
-        model.addAttribute("ramAtual", ramAtual);
-        model.addAttribute("armazenamentoAtual", armazenamentoAtual);
-        model.addAttribute("placaDeVideoAtual", placaDeVideoAtual);
-        model.addAttribute("fonteAtual", fonteAtual);
-
-        // 🔥 CATEGORIAS SEM "ESPAÇO" (já ocupadas, base ou extra)
+        // Categorias únicas que já têm peça (base ou extra)
         Set<String> categoriasOcupadas = new HashSet<>();
         for (String categoria : SINGULARES) {
             if (existeCategoria(servico, categoria, null)) {
@@ -157,43 +111,6 @@ public class StatusController {
         return "layout";
     }
 
-    // =========================
-    // EDITAR PEÇA BASE (UMA LINHA)
-    // =========================
-    @PostMapping("/editar-peca-tipo")
-    public String editarPorTipo(
-            @RequestParam int idServico,
-            @RequestParam String tipo,
-            @RequestParam int idReferencia) {
-
-        Servico servico = servicoService.buscarPorId(idServico);
-        CompatibilidadeData data = compatibilidadeService.carregarCompatibilidade();
-
-        NomeValor nv = montarNomeValor(tipo, idReferencia, data, false);
-        if (nv == null) {
-            return "redirect:/statusdeservico/detalhes/" + idServico;
-        }
-
-        servico.getPecas().removeIf(p -> tipo.equals(p.getTipo()));
-
-        ServicoPeca nova = new ServicoPeca();
-        nova.setServico(servico);
-        nova.setNomePeca(nv.nome);
-        nova.setTipo(tipo);
-        nova.setIdReferencia(idReferencia);
-        nova.setValor(nv.valor);
-
-        servico.getPecas().add(nova);
-
-        recalcularOrcamento(servico);
-        servicoService.salvar(servico);
-
-        return "redirect:/statusdeservico/detalhes/" + idServico;
-    }
-
-    // =========================
-    // EDITAR TUDO (BOTÃO ÚNICO)
-    // =========================
     @PostMapping("/editar-lote")
     public String editarLote(
             @RequestParam int idServico,
@@ -215,12 +132,12 @@ public class StatusController {
         Integer fonteAtual = getAtual(servico, "fonte");
 
         boolean mudou =
-                !equalsNullable(placaAtual, placaMae) ||
-                !equalsNullable(procAtual, processador) ||
-                !equalsNullable(ramAtual, memoriaRam) ||
-                !equalsNullable(armAtual, armazenamento) ||
-                !equalsNullable(gpuAtual, placaDeVideo) ||
-                !equalsNullable(fonteAtual, fonte);
+                !Objects.equals(placaAtual, placaMae) ||
+                !Objects.equals(procAtual, processador) ||
+                !Objects.equals(ramAtual, memoriaRam) ||
+                !Objects.equals(armAtual, armazenamento) ||
+                !Objects.equals(gpuAtual, placaDeVideo) ||
+                !Objects.equals(fonteAtual, fonte);
 
         if (!mudou) {
             redirect.addFlashAttribute("msg", "Nenhuma alteração foi feita.");
@@ -258,13 +175,10 @@ public class StatusController {
             return "redirect:/statusdeservico/detalhes/" + idServico;
         }
 
-        List<ServicoPeca> paraRemover = servico.getPecas()
-                .stream()
-                .filter(p -> p.getTipo() != null)
-                .toList();
-
-        for (ServicoPeca p : paraRemover) {
-            servico.removerPeca(p);
+        for (ServicoPeca p : new ArrayList<>(servico.getPecas())) {
+            if (p.getTipo() != null) {
+                servico.removerPeca(p);
+            }
         }
 
         adicionarPeca(servico, "placa_mae", placaMae, data);
@@ -285,9 +199,6 @@ public class StatusController {
         return "redirect:/statusdeservico/detalhes/" + idServico;
     }
 
-    // =========================
-    // ADICIONAR PEÇA EXTRA
-    // =========================
     @PostMapping("/adicionar-peca-json")
     public String adicionarPecaJson(
             @RequestParam int idServico,
@@ -319,14 +230,12 @@ public class StatusController {
         }
 
         ServicoPeca nova = new ServicoPeca();
-        nova.setServico(servico);
         nova.setNomePeca(nv.nome);
         nova.setValor(nv.valor);
-        nova.setTipo(null); // continua sendo extra
         nova.setCategoriaExtra(tipo);
         nova.setIdReferencia(idReferencia);
 
-        servico.getPecas().add(nova);
+        servico.adicionarPeca(nova);
 
         recalcularOrcamento(servico);
         servicoService.salvar(servico);
@@ -335,9 +244,6 @@ public class StatusController {
         return "redirect:/statusdeservico/detalhes/" + idServico;
     }
 
-    // =========================
-    // EDITAR PEÇA EXTRA (TROCAR MODELO)
-    // =========================
     @PostMapping("/editar-peca-extra")
     public String editarPecaExtra(
             @RequestParam int idServico,
@@ -348,10 +254,7 @@ public class StatusController {
         Servico servico = servicoService.buscarPorId(idServico);
         CompatibilidadeData data = compatibilidadeService.carregarCompatibilidade();
 
-        ServicoPeca peca = servico.getPecas().stream()
-                .filter(p -> p.getTipo() == null && idPeca == p.getId())
-                .findFirst()
-                .orElse(null);
+        ServicoPeca peca = buscarPecaExtra(servico, idPeca);
 
         if (peca == null) {
             redirect.addFlashAttribute("msgErroExtra", List.of("Peça extra não encontrada."));
@@ -359,12 +262,6 @@ public class StatusController {
         }
 
         String categoria = peca.getCategoriaExtra();
-
-        if (categoria == null) {
-            redirect.addFlashAttribute("msgErroExtra",
-                    List.of("Essa peça foi cadastrada antes dessa atualização e não pode ser editada por aqui."));
-            return "redirect:/statusdeservico/detalhes/" + idServico;
-        }
 
         if (SINGULARES.contains(categoria) && existeCategoria(servico, categoria, idPeca)) {
             redirect.addFlashAttribute("msgErroExtra",
@@ -396,9 +293,6 @@ public class StatusController {
         return "redirect:/statusdeservico/detalhes/" + idServico;
     }
 
-    // =========================
-    // EXCLUIR PEÇA EXTRA
-    // =========================
     @PostMapping("/excluir-peca-extra")
     public String excluirPecaExtra(
             @RequestParam int idServico,
@@ -407,10 +301,7 @@ public class StatusController {
 
         Servico servico = servicoService.buscarPorId(idServico);
 
-        ServicoPeca peca = servico.getPecas().stream()
-                .filter(p -> p.getTipo() == null && idPeca == p.getId())
-                .findFirst()
-                .orElse(null);
+        ServicoPeca peca = buscarPecaExtra(servico, idPeca);
 
         if (peca == null) {
             redirect.addFlashAttribute("msgErroExtra", List.of("Peça extra não encontrada."));
@@ -426,9 +317,6 @@ public class StatusController {
         return "redirect:/statusdeservico/detalhes/" + idServico;
     }
 
-    // =========================
-    // ENCERRAR
-    // =========================
     @PostMapping("/encerrar")
     public String encerrar(@RequestParam int idServico) {
 
@@ -440,29 +328,37 @@ public class StatusController {
         return "redirect:/statusdeservico";
     }
 
-    // =========================
-    // MÉTODOS AUXILIARES
-    // =========================
     private Integer getAtual(Servico servico, String tipo) {
-        return servico.getPecas().stream()
-                .filter(p -> tipo.equals(p.getTipo()))
-                .map(ServicoPeca::getIdReferencia)
-                .findFirst()
-                .orElse(null);
+        for (ServicoPeca p : servico.getPecas()) {
+            if (tipo.equals(p.getTipo())) {
+                return p.getIdReferencia();
+            }
+        }
+        return null;
     }
 
-    private boolean equalsNullable(Integer a, Integer b) {
-        if (a == null && b == null) return true;
-        if (a == null || b == null) return false;
-        return a.equals(b);
+    private ServicoPeca buscarPecaExtra(Servico servico, int idPeca) {
+        for (ServicoPeca p : servico.getPecas()) {
+            if (p.getTipo() == null && p.getId() == idPeca) {
+                return p;
+            }
+        }
+        return null;
     }
 
     private boolean existeCategoria(Servico servico, String categoria, Integer idExcluir) {
-        return servico.getPecas().stream().anyMatch(p -> {
-            if (idExcluir != null && idExcluir.equals(p.getId())) return false;
-            if (categoria.equals(p.getTipo())) return true;
-            return p.getTipo() == null && categoria.equals(p.getCategoriaExtra());
-        });
+        for (ServicoPeca p : servico.getPecas()) {
+            if (idExcluir != null && idExcluir.equals(p.getId())) {
+                continue;
+            }
+            if (categoria.equals(p.getTipo())) {
+                return true;
+            }
+            if (p.getTipo() == null && categoria.equals(p.getCategoriaExtra())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private String nomeAmigavel(String tipo) {
