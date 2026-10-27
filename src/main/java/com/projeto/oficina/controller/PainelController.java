@@ -3,6 +3,7 @@ package com.projeto.oficina.controller;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.List;
@@ -28,22 +29,16 @@ public class PainelController {
     @GetMapping("/")
     public String painel(Model model) {
 
-
         List<Servico> todos = servicoService.listarTodos();
 
-        // =========================
-        // CONTADORES
-        // =========================
-        long emAndamento = todos.stream()
-                .filter(s -> s.getStatus() == StatusServico.EM_ANDAMENTO)
-                .count();
-
+        int emAndamento = 0;
         int manutencao = 0;
         int montagem = 0;
 
         for (Servico s : todos) {
-
             if (s.getStatus() == StatusServico.ENCERRADO) continue;
+
+            emAndamento++;
 
             if (s.getTipoServico() == TipoServico.MANUTENCAO) {
                 manutencao++;
@@ -52,9 +47,6 @@ public class PainelController {
             }
         }
 
-        // =========================
-        // PRAZOS
-        // =========================
         LocalDate hoje = LocalDate.now();
 
         long noPrazo = 0;
@@ -62,30 +54,20 @@ public class PainelController {
         long prioritarios = 0;
 
         for (Servico s : todos) {
-
-            //ignora os encerrados
-             if (s.getStatus() == StatusServico.ENCERRADO) {
-                continue;
-            }
-
+            if (s.getStatus() == StatusServico.ENCERRADO) continue;
             if (s.getDataPrevistaConclusao() == null) continue;
 
-            LocalDate data = s.getDataPrevistaConclusao();
-
-            if (!data.isAfter(hoje)) {
+            String prazo = classificarPrazo(s.getDataPrevistaConclusao(), hoje);
+            if (prazo.equals("prioritario")) {
                 prioritarios++;
-            } 
-            else if (!data.isAfter(hoje.plusDays(3))) {
+            } else if (prazo.equals("proximo")) {
                 proximos++;
-            } 
-            else {
+            } else {
                 noPrazo++;
             }
         }
 
-        // =========================
-        // SERVIÇOS DA SEMANA ATUAL (segunda a sabado)
-        // =========================
+        // Semana atual: de segunda a sábado
         LocalDate inicioSemana = hoje.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         LocalDate fimSemana = hoje.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
 
@@ -105,12 +87,12 @@ public class PainelController {
 
             LocalDate data = s.getDataPrevistaConclusao();
 
-            // So conta se a data cair dentro da semana atual
+            // Só conta se a data cair dentro da semana atual
             if (data.isBefore(inicioSemana) || data.isAfter(fimSemana)) {
                 continue;
             }
 
-           switch (data.getDayOfWeek()) {
+            switch (data.getDayOfWeek()) {
                 case MONDAY -> semana.put("Segunda", semana.get("Segunda") + 1);
                 case TUESDAY -> semana.put("Terça", semana.get("Terça") + 1);
                 case WEDNESDAY -> semana.put("Quarta", semana.get("Quarta") + 1);
@@ -121,7 +103,7 @@ public class PainelController {
             }
         }
 
-        // 🔥 DATA EXATA DE CADA DIA DA SEMANA ATUAL (para os links dos cards)
+        // Data de cada dia da semana, para os links dos cards
         Map<String, LocalDate> diasData = new LinkedHashMap<>();
         diasData.put("Segunda", inicioSemana);
         diasData.put("Terça", inicioSemana.plusDays(1));
@@ -130,14 +112,8 @@ public class PainelController {
         diasData.put("Sexta", inicioSemana.plusDays(4));
         diasData.put("Sábado", inicioSemana.plusDays(5));
 
-        // =========================
-        // ULTIMOS SERVIÇOS
-        // =========================
         List<Servico> ultimos = servicoService.buscarUltimos();
 
-        // =========================
-        // MANDAR PRO FRONT
-        // =========================
         model.addAttribute("emAndamento", emAndamento);
         model.addAttribute("montagens", montagem);
         model.addAttribute("manutencoes", manutencao);
@@ -153,42 +129,24 @@ public class PainelController {
 
         model.addAttribute("pagina", "painelgeral");
 
-
         return "layout";
     }
 
-    // =========================
-    // SUBPAGINA DE PRAZOS
-    // =========================
     @GetMapping("/painel/prazos")
     public String listarPorPrazo(@RequestParam String tipo, Model model) {
 
         List<Servico> todos = servicoService.listarTodos();
         LocalDate hoje = LocalDate.now();
 
-        List<Servico> filtrados = todos.stream()
-            .filter(s -> s.getStatus() != StatusServico.ENCERRADO)
-            .filter(s -> s.getDataPrevistaConclusao() != null)
-            .filter(s -> {
+        List<Servico> filtrados = new ArrayList<>();
+        for (Servico s : todos) {
+            if (s.getStatus() == StatusServico.ENCERRADO) continue;
+            if (s.getDataPrevistaConclusao() == null) continue;
 
-                LocalDate data = s.getDataPrevistaConclusao();
-
-                switch (tipo) {
-
-                    case "prioritario":
-                        return data.isBefore(hoje) || data.isEqual(hoje);
-
-                    case "proximo":
-                        return data.isAfter(hoje) && data.isBefore(hoje.plusDays(4));
-
-                    case "normal":
-                        return data.isAfter(hoje.plusDays(3));
-
-                    default:
-                        return false;
-                }
-            })
-            .toList();
+            if (classificarPrazo(s.getDataPrevistaConclusao(), hoje).equals(tipo)) {
+                filtrados.add(s);
+            }
+        }
 
         model.addAttribute("servicos", filtrados);
         model.addAttribute("tipoSelecionado", tipo);
@@ -198,9 +156,6 @@ public class PainelController {
         return "layout";
     }
 
-    // =========================
-    // SUBPAGINA DE UM DIA ESPECIFICO
-    // =========================
     @GetMapping("/painel/dia")
     public String listarPorDia(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data,
@@ -208,10 +163,12 @@ public class PainelController {
 
         List<Servico> todos = servicoService.listarTodos();
 
-        List<Servico> filtrados = todos.stream()
-                .filter(s -> s.getStatus() != StatusServico.ENCERRADO)
-                .filter(s -> data.equals(s.getDataPrevistaConclusao()))
-                .toList();
+        List<Servico> filtrados = new ArrayList<>();
+        for (Servico s : todos) {
+            if (s.getStatus() != StatusServico.ENCERRADO && data.equals(s.getDataPrevistaConclusao())) {
+                filtrados.add(s);
+            }
+        }
 
         model.addAttribute("servicos", filtrados);
         model.addAttribute("dataSelecionada", data);
@@ -219,5 +176,16 @@ public class PainelController {
         model.addAttribute("pagina", "painel-dia");
 
         return "layout";
+    }
+
+    // Prioritário: vence hoje ou já venceu; próximo: vence em até 3 dias; normal: depois disso
+    private String classificarPrazo(LocalDate data, LocalDate hoje) {
+        if (!data.isAfter(hoje)) {
+            return "prioritario";
+        }
+        if (!data.isAfter(hoje.plusDays(3))) {
+            return "proximo";
+        }
+        return "normal";
     }
 }
