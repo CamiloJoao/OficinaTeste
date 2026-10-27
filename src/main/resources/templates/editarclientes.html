@@ -9,6 +9,10 @@
     <div class="conteudo centralizado">
         <div class="descricaoBox">
 
+            <div th:if="${erro}" class="alerta-erro">
+                <p th:text="${erro}"></p>
+            </div>
+
             <form th:action="@{/gerenciarclientes/atualizar}" th:object="${cliente}" method="post">
 
                 <input type="hidden" th:field="*{idCliente}">

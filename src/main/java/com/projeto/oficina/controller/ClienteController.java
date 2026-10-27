@@ -60,11 +60,13 @@ public class ClienteController {
 
         model.addAttribute("pagina", "cadastrocliente");
 
-        try {
+        String erro = validarCliente(cliente);
+
+        if (erro != null) {
+            model.addAttribute("erro", erro);
+        } else {
             clienteService.salvar(cliente);
             model.addAttribute("mensagem", "Cliente cadastrado com sucesso!");
-        } catch (Exception e) {
-            model.addAttribute("erro", "Email já cadastrado.");
         }
 
         return "layout";
@@ -104,8 +106,43 @@ public class ClienteController {
     }
 
     @PostMapping("/atualizar")
-    public String atualizar(Cliente cliente) {
+    public String atualizar(Cliente cliente, Model model, RedirectAttributes redirect) {
+
+        String erro = validarCliente(cliente);
+
+        if (erro != null) {
+            // Volta para o formulário com o que foi digitado
+            model.addAttribute("cliente", cliente);
+            model.addAttribute("erro", erro);
+            model.addAttribute("pagina", "editarclientes");
+            return "layout";
+        }
+
         clienteService.salvar(cliente);
+
+        redirect.addFlashAttribute("mensagem", "Cliente atualizado com sucesso!");
         return "redirect:/gerenciarclientes";
+    }
+
+    // Devolve a mensagem de erro do formulário, ou null se estiver tudo certo
+    private String validarCliente(Cliente cliente) {
+
+        if (estaVazio(cliente.getNomeCliente()) || estaVazio(cliente.getTelefone())
+                || estaVazio(cliente.getEmailCliente())) {
+            return "Preencha nome, telefone e e-mail.";
+        }
+
+        // O e-mail só é recusado se for de OUTRO cliente (no cadastro o id ainda é null)
+        Cliente donoDoEmail = clienteService.buscarPorEmail(cliente.getEmailCliente());
+        if (donoDoEmail != null && !donoDoEmail.getIdCliente().equals(cliente.getIdCliente())) {
+            return "E-mail já cadastrado.";
+        }
+
+        return null;
+    }
+
+    // Campo ausente (null) ou só com espaços conta como vazio
+    private boolean estaVazio(String texto) {
+        return texto == null || texto.trim().isEmpty();
     }
 }
