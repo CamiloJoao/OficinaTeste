@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
 
 import java.io.InputStream;
-import java.util.List;
-import java.util.function.Predicate;
 
 @Service
 public class CompatibilidadeService {
@@ -37,13 +35,6 @@ public class CompatibilidadeService {
 
     public CompatibilidadeData carregarCompatibilidade() {
         return data;
-    }
-
-    public <T> T buscarPorId(List<T> lista, Predicate<T> filtro) {
-        return lista.stream()
-                .filter(filtro)
-                .findFirst()
-                .orElse(null);
     }
 
     // Devolve a peça com esse id, ou null (id null = peça não escolhida, como a placa de vídeo)

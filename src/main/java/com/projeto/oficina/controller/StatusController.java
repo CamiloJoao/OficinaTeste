@@ -144,28 +144,12 @@ public class StatusController {
             return "redirect:/statusdeservico/detalhes/" + idServico;
         }
 
-        CompatibilidadeData data = compatibilidadeService.carregarCompatibilidade();
-
-        PlacaMae placa = compatibilidadeService.buscarPorId(
-                data.getPlaca_mae(), p -> p.getId_placamae() == placaMae);
-
-        Processador proc = compatibilidadeService.buscarPorId(
-                data.getProcessador(), p -> p.getId_processador() == processador);
-
-        MemoriaRam ram = compatibilidadeService.buscarPorId(
-                data.getMemoria_ram(), m -> m.getId_memoriaRam() == memoriaRam);
-
-        Armazenamento arm = compatibilidadeService.buscarPorId(
-                data.getArmazenamento(), a -> a.getId_armazenamento() == armazenamento);
-
-        Fonte fnt = compatibilidadeService.buscarPorId(
-                data.getFonte(), f -> f.getId_fonte() == fonte);
-
-        PlacadeVideo gpu = null;
-        if (placaDeVideo != null) {
-            gpu = compatibilidadeService.buscarPorId(
-                    data.getPlaca_devideo(), v -> v.getId_placadevideo() == placaDeVideo);
-        }
+        PlacaMae placa = compatibilidadeService.buscarPlacaMae(placaMae);
+        Processador proc = compatibilidadeService.buscarProcessador(processador);
+        MemoriaRam ram = compatibilidadeService.buscarMemoriaRam(memoriaRam);
+        Armazenamento arm = compatibilidadeService.buscarArmazenamento(armazenamento);
+        Fonte fnt = compatibilidadeService.buscarFonte(fonte);
+        PlacadeVideo gpu = compatibilidadeService.buscarPlacaDeVideo(placaDeVideo);
 
         ResultadoCompatibilidade resultado = compatibilidadeService.verificarMontagemCompleta(
                 placa, proc, ram, arm, gpu, fnt);
@@ -181,14 +165,14 @@ public class StatusController {
             }
         }
 
-        adicionarPeca(servico, "placa_mae", placaMae, data);
-        adicionarPeca(servico, "processador", processador, data);
-        adicionarPeca(servico, "memoria_ram", memoriaRam, data);
-        adicionarPeca(servico, "armazenamento", armazenamento, data);
-        adicionarPeca(servico, "fonte", fonte, data);
+        adicionarPeca(servico, "placa_mae", placaMae);
+        adicionarPeca(servico, "processador", processador);
+        adicionarPeca(servico, "memoria_ram", memoriaRam);
+        adicionarPeca(servico, "armazenamento", armazenamento);
+        adicionarPeca(servico, "fonte", fonte);
 
         if (placaDeVideo != null) {
-            adicionarPeca(servico, "placa_devideo", placaDeVideo, data);
+            adicionarPeca(servico, "placa_devideo", placaDeVideo);
         }
 
         recalcularOrcamento(servico);
@@ -207,7 +191,6 @@ public class StatusController {
             RedirectAttributes redirect) {
 
         Servico servico = servicoService.buscarPorId(idServico);
-        CompatibilidadeData data = compatibilidadeService.carregarCompatibilidade();
 
         if (SINGULARES.contains(tipo) && existeCategoria(servico, tipo, null)) {
             redirect.addFlashAttribute("msgErroExtra",
@@ -216,25 +199,20 @@ public class StatusController {
             return "redirect:/statusdeservico/detalhes/" + idServico;
         }
 
-        ResultadoCompatibilidade compat = validarPecaExtra(servico, data, tipo, idReferencia);
+        ResultadoCompatibilidade compat = validarPecaExtra(servico, tipo, idReferencia);
         if (compat != null && !compat.isCompativel()) {
             redirect.addFlashAttribute("msgErroExtra", compat.getErros());
             return "redirect:/statusdeservico/detalhes/" + idServico;
         }
 
-        NomeValor nv = montarNomeValor(tipo, idReferencia, data, true);
+        ServicoPeca nova = montarPeca(tipo, idReferencia, true);
 
-        if (nv == null) {
+        if (nova == null) {
             redirect.addFlashAttribute("msgErroExtra", List.of("Peça inválida selecionada."));
             return "redirect:/statusdeservico/detalhes/" + idServico;
         }
 
-        ServicoPeca nova = new ServicoPeca();
-        nova.setNomePeca(nv.nome);
-        nova.setValor(nv.valor);
         nova.setCategoriaExtra(tipo);
-        nova.setIdReferencia(idReferencia);
-
         servico.adicionarPeca(nova);
 
         recalcularOrcamento(servico);
@@ -252,7 +230,6 @@ public class StatusController {
             RedirectAttributes redirect) {
 
         Servico servico = servicoService.buscarPorId(idServico);
-        CompatibilidadeData data = compatibilidadeService.carregarCompatibilidade();
 
         ServicoPeca peca = buscarPecaExtra(servico, idPeca);
 
@@ -269,21 +246,21 @@ public class StatusController {
             return "redirect:/statusdeservico/detalhes/" + idServico;
         }
 
-        ResultadoCompatibilidade compat = validarPecaExtra(servico, data, categoria, idReferencia);
+        ResultadoCompatibilidade compat = validarPecaExtra(servico, categoria, idReferencia);
         if (compat != null && !compat.isCompativel()) {
             redirect.addFlashAttribute("msgErroExtra", compat.getErros());
             return "redirect:/statusdeservico/detalhes/" + idServico;
         }
 
-        NomeValor nv = montarNomeValor(categoria, idReferencia, data, true);
+        ServicoPeca dadosNovos = montarPeca(categoria, idReferencia, true);
 
-        if (nv == null) {
+        if (dadosNovos == null) {
             redirect.addFlashAttribute("msgErroExtra", List.of("Peça inválida selecionada."));
             return "redirect:/statusdeservico/detalhes/" + idServico;
         }
 
-        peca.setNomePeca(nv.nome);
-        peca.setValor(nv.valor);
+        peca.setNomePeca(dadosNovos.getNomePeca());
+        peca.setValor(dadosNovos.getValor());
         peca.setIdReferencia(idReferencia);
 
         recalcularOrcamento(servico);
@@ -373,29 +350,22 @@ public class StatusController {
         };
     }
 
-    private ResultadoCompatibilidade validarPecaExtra(
-            Servico servico, CompatibilidadeData data, String categoria, int idReferencia) {
+    private ResultadoCompatibilidade validarPecaExtra(Servico servico, String categoria, int idReferencia) {
 
-        PlacaMae placaMae = buscarPecaBase(servico, data, "placa_mae", PlacaMae.class);
-        Processador processador = buscarPecaBase(servico, data, "processador", Processador.class);
-        MemoriaRam ram = buscarPecaBase(servico, data, "memoria_ram", MemoriaRam.class);
-        Armazenamento armazenamento = buscarPecaBase(servico, data, "armazenamento", Armazenamento.class);
-        PlacadeVideo gpu = buscarPecaBase(servico, data, "placa_devideo", PlacadeVideo.class);
-        Fonte fonte = buscarPecaBase(servico, data, "fonte", Fonte.class);
+        PlacaMae placaMae = compatibilidadeService.buscarPlacaMae(getAtual(servico, "placa_mae"));
+        Processador processador = compatibilidadeService.buscarProcessador(getAtual(servico, "processador"));
+        MemoriaRam ram = compatibilidadeService.buscarMemoriaRam(getAtual(servico, "memoria_ram"));
+        Armazenamento armazenamento = compatibilidadeService.buscarArmazenamento(getAtual(servico, "armazenamento"));
+        PlacadeVideo gpu = compatibilidadeService.buscarPlacaDeVideo(getAtual(servico, "placa_devideo"));
+        Fonte fonte = compatibilidadeService.buscarFonte(getAtual(servico, "fonte"));
 
         switch (categoria) {
-            case "placa_mae" -> placaMae = compatibilidadeService.buscarPorId(
-                    data.getPlaca_mae(), p -> p.getId_placamae() == idReferencia);
-            case "processador" -> processador = compatibilidadeService.buscarPorId(
-                    data.getProcessador(), p -> p.getId_processador() == idReferencia);
-            case "memoria_ram" -> ram = compatibilidadeService.buscarPorId(
-                    data.getMemoria_ram(), m -> m.getId_memoriaRam() == idReferencia);
-            case "armazenamento" -> armazenamento = compatibilidadeService.buscarPorId(
-                    data.getArmazenamento(), a -> a.getId_armazenamento() == idReferencia);
-            case "placa_devideo" -> gpu = compatibilidadeService.buscarPorId(
-                    data.getPlaca_devideo(), v -> v.getId_placadevideo() == idReferencia);
-            case "fonte" -> fonte = compatibilidadeService.buscarPorId(
-                    data.getFonte(), f -> f.getId_fonte() == idReferencia);
+            case "placa_mae" -> placaMae = compatibilidadeService.buscarPlacaMae(idReferencia);
+            case "processador" -> processador = compatibilidadeService.buscarProcessador(idReferencia);
+            case "memoria_ram" -> ram = compatibilidadeService.buscarMemoriaRam(idReferencia);
+            case "armazenamento" -> armazenamento = compatibilidadeService.buscarArmazenamento(idReferencia);
+            case "placa_devideo" -> gpu = compatibilidadeService.buscarPlacaDeVideo(idReferencia);
+            case "fonte" -> fonte = compatibilidadeService.buscarFonte(idReferencia);
             default -> {
                 return null;
             }
@@ -410,87 +380,84 @@ public class StatusController {
                 placaMae, processador, ram, armazenamento, gpu, fonte);
     }
 
-    @SuppressWarnings("unchecked")
-    private <T> T buscarPecaBase(Servico servico, CompatibilidadeData data, String categoria, Class<T> classe) {
-        Integer id = getAtual(servico, categoria);
-        if (id == null) return null;
-
-        return (T) switch (categoria) {
-            case "placa_mae" -> compatibilidadeService.buscarPorId(
-                    data.getPlaca_mae(), p -> p.getId_placamae() == id);
-            case "processador" -> compatibilidadeService.buscarPorId(
-                    data.getProcessador(), p -> p.getId_processador() == id);
-            case "memoria_ram" -> compatibilidadeService.buscarPorId(
-                    data.getMemoria_ram(), m -> m.getId_memoriaRam() == id);
-            case "armazenamento" -> compatibilidadeService.buscarPorId(
-                    data.getArmazenamento(), a -> a.getId_armazenamento() == id);
-            case "placa_devideo" -> compatibilidadeService.buscarPorId(
-                    data.getPlaca_devideo(), v -> v.getId_placadevideo() == id);
-            case "fonte" -> compatibilidadeService.buscarPorId(
-                    data.getFonte(), f -> f.getId_fonte() == id);
-            default -> null;
-        };
-    }
-
-    private void adicionarPeca(Servico servico, String tipo, int idReferencia, CompatibilidadeData data) {
-        NomeValor nv = montarNomeValor(tipo, idReferencia, data, false);
-        if (nv == null) return;
-
-        ServicoPeca nova = new ServicoPeca();
-        nova.setServico(servico);
-        nova.setNomePeca(nv.nome);
-        nova.setValor(nv.valor);
+    private void adicionarPeca(Servico servico, String tipo, int idReferencia) {
+        ServicoPeca nova = montarPeca(tipo, idReferencia, false);
+        if (nova == null) {
+            return;
+        }
         nova.setTipo(tipo);
-        nova.setIdReferencia(idReferencia);
-
         servico.adicionarPeca(nova);
     }
 
-    private NomeValor montarNomeValor(String tipo, int idReferencia, CompatibilidadeData data, boolean extra) {
-        String nome = null;
+    // Monta a peça com nome, valor e id do catálogo; null se o id não existir
+    private ServicoPeca montarPeca(String tipo, int idReferencia, boolean extra) {
+        String rotulo = null;
+        String modelo = null;
         Double valor = null;
 
         switch (tipo) {
             case "placa_mae" -> {
-                var p = compatibilidadeService.buscarPorId(data.getPlaca_mae(), x -> x.getId_placamae() == idReferencia);
-                if (p != null) { nome = "Placa" + (extra ? " (extra)" : "") + ": " + p.getModelo(); valor = p.getPreco(); }
+                PlacaMae placaMae = compatibilidadeService.buscarPlacaMae(idReferencia);
+                if (placaMae != null) {
+                    rotulo = "Placa";
+                    modelo = placaMae.getModelo();
+                    valor = placaMae.getPreco();
+                }
             }
             case "processador" -> {
-                var p = compatibilidadeService.buscarPorId(data.getProcessador(), x -> x.getId_processador() == idReferencia);
-                if (p != null) { nome = "CPU" + (extra ? " (extra)" : "") + ": " + p.getModelo(); valor = p.getPreco(); }
+                Processador processador = compatibilidadeService.buscarProcessador(idReferencia);
+                if (processador != null) {
+                    rotulo = "CPU";
+                    modelo = processador.getModelo();
+                    valor = processador.getPreco();
+                }
             }
             case "memoria_ram" -> {
-                var p = compatibilidadeService.buscarPorId(data.getMemoria_ram(), x -> x.getId_memoriaRam() == idReferencia);
-                if (p != null) { nome = "RAM" + (extra ? " (extra)" : "") + ": " + p.getModelo(); valor = p.getPreco(); }
+                MemoriaRam ram = compatibilidadeService.buscarMemoriaRam(idReferencia);
+                if (ram != null) {
+                    rotulo = "RAM";
+                    modelo = ram.getModelo();
+                    valor = ram.getPreco();
+                }
             }
             case "armazenamento" -> {
-                var p = compatibilidadeService.buscarPorId(data.getArmazenamento(), x -> x.getId_armazenamento() == idReferencia);
-                if (p != null) { nome = "Armazenamento" + (extra ? " (extra)" : "") + ": " + p.getModelo(); valor = p.getPreco(); }
+                Armazenamento armazenamento = compatibilidadeService.buscarArmazenamento(idReferencia);
+                if (armazenamento != null) {
+                    rotulo = "Armazenamento";
+                    modelo = armazenamento.getModelo();
+                    valor = armazenamento.getPreco();
+                }
             }
             case "placa_devideo" -> {
-                var p = compatibilidadeService.buscarPorId(data.getPlaca_devideo(), x -> x.getId_placadevideo() == idReferencia);
-                if (p != null) { nome = "GPU" + (extra ? " (extra)" : "") + ": " + p.getModelo(); valor = p.getPreco(); }
+                PlacadeVideo gpu = compatibilidadeService.buscarPlacaDeVideo(idReferencia);
+                if (gpu != null) {
+                    rotulo = "GPU";
+                    modelo = gpu.getModelo();
+                    valor = gpu.getPreco();
+                }
             }
             case "fonte" -> {
-                var p = compatibilidadeService.buscarPorId(data.getFonte(), x -> x.getId_fonte() == idReferencia);
-                if (p != null) { nome = "Fonte" + (extra ? " (extra)" : "") + ": " + p.getModelo(); valor = p.getPreco(); }
-            }
-            default -> {
-                return null;
+                Fonte fonte = compatibilidadeService.buscarFonte(idReferencia);
+                if (fonte != null) {
+                    rotulo = "Fonte";
+                    modelo = fonte.getModelo();
+                    valor = fonte.getPreco();
+                }
             }
         }
 
-        if (nome == null) return null;
-        return new NomeValor(nome, valor);
-    }
-
-    private static class NomeValor {
-        final String nome;
-        final Double valor;
-        NomeValor(String nome, Double valor) {
-            this.nome = nome;
-            this.valor = valor;
+        if (rotulo == null) {
+            return null;
         }
+        if (extra) {
+            rotulo += " (extra)";
+        }
+
+        ServicoPeca peca = new ServicoPeca();
+        peca.setNomePeca(rotulo + ": " + modelo);
+        peca.setValor(valor);
+        peca.setIdReferencia(idReferencia);
+        return peca;
     }
 
     private void recalcularOrcamento(Servico servico) {
