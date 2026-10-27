@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.projeto.oficina.enums.TipoServico;
 import com.projeto.oficina.model.Cliente;
 import com.projeto.oficina.model.Servico;
 import com.projeto.oficina.repository.ServicoRepository;
@@ -19,10 +18,6 @@ public class ServicoService {
 
     public void salvar(Servico servico) {
         servicoRepository.save(servico);
-    }
-
-    public List<Servico> listarPorTipo(TipoServico tipo) {
-        return servicoRepository.findByTipoServico(tipo);
     }
 
     public List<Servico> buscarPorCliente(Cliente cliente) {

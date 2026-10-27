@@ -49,10 +49,6 @@ public class Servico {
         return pecas;
     }
 
-    public void setPecas(List<ServicoPeca> pecas) {
-        this.pecas = pecas;
-    }
-
     public void adicionarPeca(ServicoPeca peca) {
         pecas.add(peca);
         peca.setServico(this);
