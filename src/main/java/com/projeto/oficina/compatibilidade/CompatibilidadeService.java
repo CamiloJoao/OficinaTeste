@@ -17,9 +17,7 @@ public class CompatibilidadeService {
     @Autowired
     private CompatibilidadeRegras regras;
 
-    // =========================
-    // CARREGAR JSON UMA VEZ
-    // =========================
+    // Lê o compatibilidade.json uma vez, quando o sistema sobe
     @PostConstruct
     public void init() {
         try (InputStream is = getClass().getClassLoader()
@@ -37,16 +35,10 @@ public class CompatibilidadeService {
         }
     }
 
-    // =========================
-    // RETORNAR DADOS
-    // =========================
     public CompatibilidadeData carregarCompatibilidade() {
         return data;
     }
 
-    // =========================
-    // MÉTODO GENÉRICO
-    // =========================
     public <T> T buscarPorId(List<T> lista, Predicate<T> filtro) {
         return lista.stream()
                 .filter(filtro)
@@ -54,9 +46,79 @@ public class CompatibilidadeService {
                 .orElse(null);
     }
 
-    // =========================
-    // VERIFICAÇÃO DE MONTAGEM COMPLETA
-    // =========================
+    // Devolve a peça com esse id, ou null (id null = peça não escolhida, como a placa de vídeo)
+    public PlacaMae buscarPlacaMae(Integer id) {
+        if (id == null) {
+            return null;
+        }
+        for (PlacaMae placaMae : data.getPlaca_mae()) {
+            if (placaMae.getId_placamae() == id) {
+                return placaMae;
+            }
+        }
+        return null;
+    }
+
+    public Processador buscarProcessador(Integer id) {
+        if (id == null) {
+            return null;
+        }
+        for (Processador processador : data.getProcessador()) {
+            if (processador.getId_processador() == id) {
+                return processador;
+            }
+        }
+        return null;
+    }
+
+    public MemoriaRam buscarMemoriaRam(Integer id) {
+        if (id == null) {
+            return null;
+        }
+        for (MemoriaRam memoriaRam : data.getMemoria_ram()) {
+            if (memoriaRam.getId_memoriaRam() == id) {
+                return memoriaRam;
+            }
+        }
+        return null;
+    }
+
+    public Armazenamento buscarArmazenamento(Integer id) {
+        if (id == null) {
+            return null;
+        }
+        for (Armazenamento armazenamento : data.getArmazenamento()) {
+            if (armazenamento.getId_armazenamento() == id) {
+                return armazenamento;
+            }
+        }
+        return null;
+    }
+
+    public PlacadeVideo buscarPlacaDeVideo(Integer id) {
+        if (id == null) {
+            return null;
+        }
+        for (PlacadeVideo placaDeVideo : data.getPlaca_devideo()) {
+            if (placaDeVideo.getId_placadevideo() == id) {
+                return placaDeVideo;
+            }
+        }
+        return null;
+    }
+
+    public Fonte buscarFonte(Integer id) {
+        if (id == null) {
+            return null;
+        }
+        for (Fonte fonte : data.getFonte()) {
+            if (fonte.getId_fonte() == id) {
+                return fonte;
+            }
+        }
+        return null;
+    }
+
     public ResultadoCompatibilidade verificarMontagemCompleta(
             PlacaMae placaMae,
             Processador processador,

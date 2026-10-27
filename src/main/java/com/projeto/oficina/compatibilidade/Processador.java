@@ -6,7 +6,7 @@ public class Processador {
     private String modelo;
     private String soqueteProcessador;
     private boolean video_integrado;
-    private Integer consumoWatts;
+    private int consumoWatts;
     private Double preco;
 
     public int getId_processador() {
@@ -33,19 +33,19 @@ public class Processador {
         this.soqueteProcessador = soqueteProcessador;
     }
 
-    public boolean isvideo_integrado() {
+    public boolean isVideo_integrado() {
         return video_integrado;
     }
 
-    public void setvideo_integrado(boolean video_integrado) {
+    public void setVideo_integrado(boolean video_integrado) {
         this.video_integrado = video_integrado;
     }
 
-    public Integer getConsumoWatts() {
+    public int getConsumoWatts() {
         return consumoWatts;
     }
 
-    public void setConsumoWatts(Integer consumoWatts) {
+    public void setConsumoWatts(int consumoWatts) {
         this.consumoWatts = consumoWatts;
     }
 

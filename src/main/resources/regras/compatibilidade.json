@@ -7,7 +7,6 @@
             "ram_suportada": "DDR4",
             "interfaces_armazenamento": {"SATA": 4, "M.2": 1},
             "interfacePcie": "PCIe 3.0 x16",
-            "processadores_compativeis": ["Ryzen 5 3600", "Ryzen 7 3700X"],
             "video_integrado": false,
             "preco": 1500.00
         },
@@ -18,7 +17,6 @@
             "ram_suportada": "DDR5",
             "interfaces_armazenamento": {"SATA": 4},
             "interfacePcie": "PCIe 4.0 x16",
-            "processadores_compativeis": ["i5-12600K", "i7-12700K"],
             "video_integrado": true,
             "preco": 2000.00
         }
@@ -74,7 +72,7 @@
             "modelo": "SSD Samsung 980 PRO 2TB",
             "tipo": "SSD",
             "interfaceConexao": "M.2",
-            "capacidadeGB": "2000",
+            "capacidadeGB": 2000,
             "preco": 500.00
         }
     ],

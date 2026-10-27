@@ -1,4 +1,3 @@
-
 package com.projeto.oficina.compatibilidade;
 
 import java.util.List;
@@ -60,4 +59,3 @@ public class CompatibilidadeData {
         this.fonte = fonte;
     }
 }
-

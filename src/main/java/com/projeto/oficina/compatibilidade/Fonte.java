@@ -4,7 +4,7 @@ public class Fonte {
 
     private int id_fonte;
     private String modelo;
-    private Integer potenciaWatts;
+    private int potenciaWatts;
     private Double preco;
 
     public int getId_fonte() {
@@ -23,11 +23,11 @@ public class Fonte {
         this.modelo = modelo;
     }
 
-    public Integer getPotenciaWatts() {
+    public int getPotenciaWatts() {
         return potenciaWatts;
     }
 
-    public void setPotenciaWatts(Integer potenciaWatts) {
+    public void setPotenciaWatts(int potenciaWatts) {
         this.potenciaWatts = potenciaWatts;
     }
 

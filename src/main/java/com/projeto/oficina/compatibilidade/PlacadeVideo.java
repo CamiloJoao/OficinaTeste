@@ -5,7 +5,7 @@ public class PlacadeVideo {
     private int id_placadevideo;
     private String modelo;
     private String interfacePcie;
-    private Integer consumoWatts;
+    private int consumoWatts;
     private Integer memoriaGB;
     private Double preco;
 
@@ -33,11 +33,11 @@ public class PlacadeVideo {
         this.interfacePcie = interfacePcie;
     }
 
-    public Integer getConsumoWatts() {
+    public int getConsumoWatts() {
         return consumoWatts;
     }
 
-    public void setConsumoWatts(Integer consumoWatts) {
+    public void setConsumoWatts(int consumoWatts) {
         this.consumoWatts = consumoWatts;
     }
 

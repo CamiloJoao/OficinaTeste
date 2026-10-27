@@ -7,10 +7,6 @@ public class CompatibilidadeRegras {
 
     private static final double MARGEM_SEGURANCA = 1.20; // 20% de folga
 
-    // =========================
-    // REGRAS INDIVIDUAIS
-    // =========================
-
     public boolean isCompativelSocket(PlacaMae placaMae, Processador processador) {
         return placaMae.getSoquetePlacaMae().equalsIgnoreCase(processador.getSoqueteProcessador());
     }
@@ -31,16 +27,14 @@ public class CompatibilidadeRegras {
     }
 
     public boolean temVideoIntegrado(PlacaMae placaMae, Processador processador) {
-        return processador.isvideo_integrado()
-                || (placaMae.getVideo_integrado() != null && placaMae.getVideo_integrado());
+        return processador.isVideo_integrado() || placaMae.isVideo_integrado();
     }
 
     public boolean isFonteSuficiente(Fonte fonte, Processador processador, PlacadeVideo placaDeVideo) {
-        int consumoProcessador = processador.getConsumoWatts() != null ? processador.getConsumoWatts() : 0;
-        int consumoGPU = (placaDeVideo != null && placaDeVideo.getConsumoWatts() != null) ? placaDeVideo.getConsumoWatts() : 0;
-
-        double consumoTotalComMargem = (consumoProcessador + consumoGPU) * MARGEM_SEGURANCA;
-
-        return fonte.getPotenciaWatts() != null && fonte.getPotenciaWatts() >= consumoTotalComMargem;
+        int consumoTotal = processador.getConsumoWatts();
+        if (placaDeVideo != null) {
+            consumoTotal += placaDeVideo.getConsumoWatts();
+        }
+        return fonte.getPotenciaWatts() >= consumoTotal * MARGEM_SEGURANCA;
     }
 }

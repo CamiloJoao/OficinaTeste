@@ -35,7 +35,7 @@ public class MemoriaRam {
     public int getFrequencia_mhz() {
         return frequencia_mhz;
     }
-    
+
     public void setFrequencia_mhz(int frequencia_mhz) {
         this.frequencia_mhz = frequencia_mhz;
     }
@@ -47,7 +47,4 @@ public class MemoriaRam {
     public void setPreco(Double preco) {
         this.preco = preco;
     }
-
-    
-
 }

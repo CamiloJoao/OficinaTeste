@@ -2,7 +2,6 @@ package com.projeto.oficina.compatibilidade;
 
 public class Armazenamento {
 
-
     private int id_armazenamento;
     private String modelo;
     private String tipo; //hd ou ssd
@@ -10,14 +9,13 @@ public class Armazenamento {
     private int capacidadeGB;
     private Double preco;
 
-
     public int getId_armazenamento() {
         return id_armazenamento;
     }
     public void setId_armazenamento(int id_armazenamento) {
         this.id_armazenamento = id_armazenamento;
     }
-    
+
     public String getModelo() {
         return modelo;
     }
@@ -50,5 +48,4 @@ public class Armazenamento {
     public void setPreco(Double preco) {
         this.preco = preco;
     }
-
 }
