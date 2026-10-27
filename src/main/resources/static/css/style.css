@@ -492,6 +492,10 @@ tr:hover td {
     gap: 8px;
 }
 
+.lista-pecas-extras li {
+    margin-bottom: 14px;
+}
+
 /* =========================
    WIDGET "SERVIÇOS DA SEMANA"
 ========================= */

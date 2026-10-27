@@ -9,7 +9,6 @@
     <div class="conteudo centralizado">
         <div class="descricaoBox descricaoBox-tabela">
 
-              <!--MENSAGEM DE "NADA ALTERADO"-->    
             <div th:if="${msg}" class="alerta-sucesso">
                 <p th:text="${msg}"></p>
             </div> 
@@ -36,31 +35,26 @@
                 <span th:text="'R$' + ${#numbers.formatDecimal(servico.orcamentoInicial, 1, 'POINT', 2, 'COMMA')}"></span>
             </p>
 
-            <!--PEÇAS EXTRAS -->
             <p><b>Peças acrescentadas:</b></p>
 
-            <!-- MENSAGEM DE ERRO/SUCESSO DA PEÇA EXTRA (independente da lista) -->
             <div th:if="${msgErroExtra != null and !#lists.isEmpty(msgErroExtra)}" class="alerta-erro">
                 <p>Não foi possível salvar a peça: ela é incompatível com a configuração atual.</p>
             </div>
 
-            <!-- SE NÃO TEM -->
             <div th:if="${#lists.isEmpty(pecasExtras)}">
                 Nenhuma peça acrescentada
             </div>
 
-            <!-- SE TEM -->
             <div th:if="${!#lists.isEmpty(pecasExtras)}">
 
-                <ul>
-                    <li th:each="p : ${pecasExtras}" style="margin-bottom: 14px;">
+                <ul class="lista-pecas-extras">
+                    <li th:each="p : ${pecasExtras}">
                         <span th:text="${p.nomePeca}"></span> - 
                         <span th:text="'R$' + ${#numbers.formatDecimal(p.valor, 1, 'POINT', 2, 'COMMA')}"></span>
 
-                        <div th:if="${p.categoriaExtra != null}" class="acoes-peca-extra">
+                        <div class="acoes-peca-extra">
 
-                            <!-- EDITAR -->
-                            <form th:action="@{/statusdeservico/editar-peca-extra}" method="post" style="display:inline;">
+                            <form th:action="@{/statusdeservico/editar-peca-extra}" method="post">
                                 <input type="hidden" name="idServico" th:value="${servico.idServico}">
                                 <input type="hidden" name="idPeca" th:value="${p.id}">
 
@@ -93,8 +87,7 @@
                                 <button type="submit" class="btn-sm">Salvar</button>
                             </form>
 
-                            <!-- EXCLUIR -->
-                            <form th:action="@{/statusdeservico/excluir-peca-extra}" method="post" style="display:inline;"
+                            <form th:action="@{/statusdeservico/excluir-peca-extra}" method="post"
                                   onsubmit="return confirm('Tem certeza que deseja remover esta peça?')">
                                 <input type="hidden" name="idServico" th:value="${servico.idServico}">
                                 <input type="hidden" name="idPeca" th:value="${p.id}">
@@ -113,10 +106,7 @@
 
             <hr>
 
-            <!--ADICIONAR PEÇA EXTRA -->
             <div>
-                
-
                 <p class="pergunta-confirmacao">
                     Deseja acrescentar peça a esta manutenção?
                 </p>
@@ -150,7 +140,6 @@
                         <label>Escolher peça:</label>
                         <input type="text" id="buscaPeca" placeholder="Buscar peça..." onkeydown="return event.key !== 'Enter'">
                         <select id="peca" name="idReferencia" required>
-                            
                             <option value="">Selecione</option>
 
                             <option th:each="p : ${placaMae}"
@@ -188,7 +177,6 @@
                                     th:text="${f.modelo}"
                                     th:attr="data-tipo='fonte'">
                             </option>
-                        
                         </select>
                     </div>
                     <div class="acao-centralizada">
@@ -199,7 +187,6 @@
 
             <hr>
 
-            <!-- ENCERRAR -->
             <div class="acao-centralizada">
                 <form th:action="@{/statusdeservico/encerrar}" method="post"
                      onsubmit="return confirm('Tem certeza que deseja encerrar este serviço?')">
@@ -208,71 +195,10 @@
                 </form>
             </div>
 
-            <script>
-            document.addEventListener("DOMContentLoaded", function () {
-
-                const tipoSelect = document.getElementById("tipo");
-                const selectPeca = document.getElementById("peca");
-                const container = document.getElementById("containerPeca");
-                const buscaPeca = document.getElementById("buscaPeca");
-
-                if (!container) return;
-
-                // Mostra só as peças do tipo escolhido que contêm o texto da busca
-                function aplicarFiltros() {
-
-                    const tipoSelecionado = tipoSelect.value;
-                    const termo = buscaPeca.value.trim().toLowerCase();
-                    const opcoes = selectPeca.options;
-
-                    for (let i = 0; i < opcoes.length; i++) {
-
-                        const tipoOpcao = opcoes[i].getAttribute("data-tipo");
-                        const texto = opcoes[i].text.toLowerCase();
-
-                        opcoes[i].hidden = tipoOpcao !== tipoSelecionado || !texto.includes(termo);
-                    }
-                }
-
-                function filtrarPecas() {
-
-                    const tipoSelecionado = tipoSelect.value;
-
-                    if (!tipoSelecionado) {
-                        container.style.display = "none";
-                    } else {
-                        container.style.display = "block";
-                    }
-
-                    // Trocou o tipo: a busca recomeça
-                    buscaPeca.value = "";
-                    aplicarFiltros();
-
-                    selectPeca.selectedIndex = 0;
-                }
-
-                // Ao digitar: se a peça escolhida sumiu da busca, desfaz a escolha
-                function filtrarPorTexto() {
-
-                    aplicarFiltros();
-
-                    if (selectPeca.selectedIndex > 0 && selectPeca.options[selectPeca.selectedIndex].hidden) {
-                        selectPeca.selectedIndex = 0;
-                    }
-                }
-
-                tipoSelect.addEventListener("change", filtrarPecas);
-                buscaPeca.addEventListener("input", filtrarPorTexto);
-
-                filtrarPecas();
-            });
-            </script>
-        </div>    
+            <script th:src="@{/js/peca-extra.js}"></script>
+        </div>
     </div>
 </div>
 
-
-
 </body>
-
 </html>
