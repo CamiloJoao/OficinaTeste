@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 public class CompatibilidadeRegras {
 
     private static final double MARGEM_SEGURANCA = 1.20; // 20% de folga
+    private static final int CONSUMO_DEMAIS_PECAS = 100; // estimativa em W para placa-mãe, memórias, armazenamento e ventoinhas
 
     public boolean isCompativelSocket(PlacaMae placaMae, Processador processador) {
         return placaMae.getSoquetePlacaMae().equalsIgnoreCase(processador.getSoqueteProcessador());
@@ -31,7 +32,7 @@ public class CompatibilidadeRegras {
     }
 
     public boolean isFonteSuficiente(Fonte fonte, Processador processador, PlacadeVideo placaDeVideo) {
-        int consumoTotal = processador.getConsumoWatts();
+        int consumoTotal = processador.getConsumoWatts() + CONSUMO_DEMAIS_PECAS;
         if (placaDeVideo != null) {
             consumoTotal += placaDeVideo.getConsumoWatts();
         }
