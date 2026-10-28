@@ -108,6 +108,12 @@
             "modelo": "Corsair RM750x",
             "potenciaWatts": 750,
             "preco": 700.00
+        },
+        {
+            "id_fonte": 3,
+            "modelo": "Fonte genérica 300W",
+            "potenciaWatts": 300,
+            "preco": 180.00
         }
     ]
 }
