@@ -117,6 +117,27 @@
             "tipo": "DDR5",
             "frequencia_mhz": 5600,
             "preco": 650.00
+        },
+        {
+            "id_memoriaRam": 3,
+            "modelo": "XPG Gammix D35 DDR4 8GB",
+            "tipo": "DDR4",
+            "frequencia_mhz": 3200,
+            "preco": 620.00
+        },
+        {
+            "id_memoriaRam": 4,
+            "modelo": "Kingston FURY Beast DDR4 16GB",
+            "tipo": "DDR4",
+            "frequencia_mhz": 3200,
+            "preco": 1400.00
+        },
+        {
+            "id_memoriaRam": 5,
+            "modelo": "XPG Lancer DDR5 16GB",
+            "tipo": "DDR5",
+            "frequencia_mhz": 5200,
+            "preco": 1800.00
         }
     ],
 
@@ -136,6 +157,30 @@
             "interfaceConexao": "M.2",
             "capacidadeGB": 2000,
             "preco": 500.00
+        },
+        {
+            "id_armazenamento": 3,
+            "modelo": "SSD Kingston A400 480GB",
+            "tipo": "SSD",
+            "interfaceConexao": "SATA",
+            "capacidadeGB": 480,
+            "preco": 300.00
+        },
+        {
+            "id_armazenamento": 4,
+            "modelo": "SSD Kingston NV3 1TB",
+            "tipo": "SSD",
+            "interfaceConexao": "M.2",
+            "capacidadeGB": 1000,
+            "preco": 650.00
+        },
+        {
+            "id_armazenamento": 5,
+            "modelo": "HD WD Blue 2TB",
+            "tipo": "HD",
+            "interfaceConexao": "SATA",
+            "capacidadeGB": 2000,
+            "preco": 550.00
         }
     ],
 
