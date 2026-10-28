@@ -19,6 +19,36 @@
             "interfacePcie": "PCIe x16",
             "video_integrado": false,
             "preco": 2000.00
+        },
+        {
+            "id_placamae": 3,
+            "modelo": "GIGABYTE B650M GAMING X AX",
+            "soquetePlacaMae": "AM5",
+            "ram_suportada": "DDR5",
+            "interfaces_armazenamento": {"SATA": 4, "M.2": 2},
+            "interfacePcie": "PCIe x16",
+            "video_integrado": false,
+            "preco": 1400.00
+        },
+        {
+            "id_placamae": 4,
+            "modelo": "GIGABYTE B760M DS3H DDR4",
+            "soquetePlacaMae": "LGA1700",
+            "ram_suportada": "DDR4",
+            "interfaces_armazenamento": {"SATA": 4, "M.2": 2},
+            "interfacePcie": "PCIe x16",
+            "video_integrado": false,
+            "preco": 900.00
+        },
+        {
+            "id_placamae": 5,
+            "modelo": "ASRock H510M-HDV R2.0",
+            "soquetePlacaMae": "LGA1200",
+            "ram_suportada": "DDR4",
+            "interfaces_armazenamento": {"SATA": 4},
+            "interfacePcie": "PCIe x16",
+            "video_integrado": false,
+            "preco": 500.00
         }
     ],
 
@@ -38,6 +68,38 @@
             "video_integrado": true,
             "consumoWatts": 125,
             "preco": 2500.00
+        },
+        {
+            "id_processador": 3,
+            "modelo": "i5-12400F",
+            "soqueteProcessador": "LGA1700",
+            "video_integrado": false,
+            "consumoWatts": 65,
+            "preco": 750.00
+        },
+        {
+            "id_processador": 4,
+            "modelo": "Ryzen 5 5600G",
+            "soqueteProcessador": "AM4",
+            "video_integrado": true,
+            "consumoWatts": 65,
+            "preco": 850.00
+        },
+        {
+            "id_processador": 5,
+            "modelo": "Ryzen 5 7600",
+            "soqueteProcessador": "AM5",
+            "video_integrado": true,
+            "consumoWatts": 65,
+            "preco": 1300.00
+        },
+        {
+            "id_processador": 6,
+            "modelo": "i5-10400",
+            "soqueteProcessador": "LGA1200",
+            "video_integrado": true,
+            "consumoWatts": 65,
+            "preco": 800.00
         }
     ],
 
