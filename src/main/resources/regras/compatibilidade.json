@@ -6,18 +6,18 @@
             "soquetePlacaMae": "AM4",
             "ram_suportada": "DDR4",
             "interfaces_armazenamento": {"SATA": 4, "M.2": 1},
-            "interfacePcie": "PCIe 3.0 x16",
+            "interfacePcie": "PCIe x16",
             "video_integrado": false,
             "preco": 1500.00
         },
         {
             "id_placamae": 2,
-            "modelo": "GIGABYTE Z690 AORUS",
+            "modelo": "GIGABYTE Z690 AORUS ELITE AX",
             "soquetePlacaMae": "LGA1700",
             "ram_suportada": "DDR5",
-            "interfaces_armazenamento": {"SATA": 4},
-            "interfacePcie": "PCIe 4.0 x16",
-            "video_integrado": true,
+            "interfaces_armazenamento": {"SATA": 6, "M.2": 4},
+            "interfacePcie": "PCIe x16",
+            "video_integrado": false,
             "preco": 2000.00
         }
     ],
@@ -81,7 +81,7 @@
         {
             "id_placadevideo": 1,
             "modelo": "GTX 1660 Super",
-            "interfacePcie": "PCIe 3.0 x16",
+            "interfacePcie": "PCIe x16",
             "consumoWatts": 125,
             "memoriaGB": 6,
             "preco": 1200.00
@@ -89,7 +89,7 @@
         {
             "id_placadevideo": 2,
             "modelo": "RTX 3060",
-            "interfacePcie": "PCIe 4.0 x16",
+            "interfacePcie": "PCIe x16",
             "consumoWatts": 170,
             "memoriaGB": 12,
             "preco": 2200.00
