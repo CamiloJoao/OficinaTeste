@@ -200,6 +200,38 @@
             "consumoWatts": 170,
             "memoriaGB": 12,
             "preco": 2200.00
+        },
+        {
+            "id_placadevideo": 3,
+            "modelo": "RTX 5060",
+            "interfacePcie": "PCIe x16",
+            "consumoWatts": 145,
+            "memoriaGB": 8,
+            "preco": 2600.00
+        },
+        {
+            "id_placadevideo": 4,
+            "modelo": "RX 9060 XT 16GB",
+            "interfacePcie": "PCIe x16",
+            "consumoWatts": 160,
+            "memoriaGB": 16,
+            "preco": 3600.00
+        },
+        {
+            "id_placadevideo": 5,
+            "modelo": "RTX 5070",
+            "interfacePcie": "PCIe x16",
+            "consumoWatts": 250,
+            "memoriaGB": 12,
+            "preco": 5000.00
+        },
+        {
+            "id_placadevideo": 6,
+            "modelo": "RX 9070 XT",
+            "interfacePcie": "PCIe x16",
+            "consumoWatts": 304,
+            "memoriaGB": 16,
+            "preco": 5400.00
         }
     ],
 
@@ -221,6 +253,24 @@
             "modelo": "Fonte genérica 300W",
             "potenciaWatts": 300,
             "preco": 180.00
+        },
+        {
+            "id_fonte": 4,
+            "modelo": "Corsair CV550",
+            "potenciaWatts": 550,
+            "preco": 380.00
+        },
+        {
+            "id_fonte": 5,
+            "modelo": "MSI MAG A650BN",
+            "potenciaWatts": 650,
+            "preco": 450.00
+        },
+        {
+            "id_fonte": 6,
+            "modelo": "XPG Core Reactor II 850W",
+            "potenciaWatts": 850,
+            "preco": 900.00
         }
     ]
 }
