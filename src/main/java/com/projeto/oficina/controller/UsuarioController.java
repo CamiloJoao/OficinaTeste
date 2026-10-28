@@ -2,6 +2,9 @@ package com.projeto.oficina.controller;
 
 import java.security.Principal;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -97,8 +100,10 @@ public class UsuarioController {
             @RequestParam String emailUsuario,
             @RequestParam String senhaUsuario,
             @RequestParam TipoUsuario tipoUsuario,
+            Principal principal,
+            HttpServletRequest request,
             Model model,
-            RedirectAttributes redirect) {
+            RedirectAttributes redirect) throws ServletException {
 
         Usuario usuario = usuarioService.buscarPorId(idUsuario);
 
@@ -138,10 +143,20 @@ public class UsuarioController {
             return "layout";
         }
 
+        // Conferido antes de mudar os campos, porque o e-mail pode mudar
+        boolean propriaConta = usuario.getEmailUsuario().equals(principal.getName());
+
         usuario.setNomeUsuario(nomeUsuario.trim());
         usuario.setEmailUsuario(emailUsuario.trim());
         usuario.setTipoUsuario(tipoUsuario);
         usuarioService.atualizar(usuario, senhaUsuario);
+
+        // A sessão guarda o e-mail e o perfil do login: quem altera a própria conta entra de novo
+        if (propriaConta) {
+            request.logout();
+            redirect.addFlashAttribute("mensagem", "Seus dados foram atualizados. Entre novamente.");
+            return "redirect:/login";
+        }
 
         redirect.addFlashAttribute("mensagem", "Usuário atualizado com sucesso!");
         return "redirect:/gerenciarusuarios";

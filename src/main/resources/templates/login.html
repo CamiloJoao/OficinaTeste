@@ -21,6 +21,11 @@
             <p>Você saiu do sistema.</p>
         </div>
 
+        <!-- Quem altera a própria conta volta para cá com esta mensagem (UsuarioController) -->
+        <div th:if="${mensagem}" class="alerta-sucesso">
+            <p th:text="${mensagem}"></p>
+        </div>
+
         <!-- username e password são os nomes que o Spring Security espera -->
         <form th:action="@{/login}" method="post">
 
