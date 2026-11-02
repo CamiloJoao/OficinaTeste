@@ -44,11 +44,17 @@ hr {
     width: 230px;
     background: #1F2C3D;
     color: white;
-    height: 100vh;
+    min-height: 100vh;
     padding: 24px 16px;
     flex-shrink: 0;
+}
+
+/* A coluna acompanha a altura da página; o conteúdo do menu fica preso no topo ao rolar.
+   O fundo igual ao do menu mantém a mesma suavização do texto ao rolar */
+.menu-fixo {
     position: sticky;
-    top: 0;
+    top: 24px;
+    background: #1F2C3D;
 }
 
 .menu h2 {
