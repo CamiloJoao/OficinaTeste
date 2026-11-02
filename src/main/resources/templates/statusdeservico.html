@@ -18,6 +18,10 @@
                 </div>
             </form>
 
+            <div th:if="${erro != null}" class="alerta-erro">
+                <p th:text="${erro}"></p>
+            </div>
+
             <div class="boxtable" th:if="${servicos != null and !#lists.isEmpty(servicos)}">
                 <table>
                     <thead>
