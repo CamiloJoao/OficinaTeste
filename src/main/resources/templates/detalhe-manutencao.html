@@ -23,6 +23,13 @@
 
             <p><b>Tipo de serviço:</b> Manutenção</p>
 
+            <p><b>Equipamento:</b>
+                <span th:if="${servico.equipamento == null and servico.marcaModelo == null}">Não informado</span>
+                <span th:if="${servico.equipamento != null}" th:text="${servico.equipamento}"></span>
+                <span th:if="${servico.equipamento != null and servico.marcaModelo != null}">—</span>
+                <span th:if="${servico.marcaModelo != null}" th:text="${servico.marcaModelo}"></span>
+            </p>
+
             <p><b>Data prevista:</b>
                 <span th:text="${servico.dataPrevistaConclusao != null} ? ${#temporals.format(servico.dataPrevistaConclusao, 'dd/MM/yyyy')} : '-'"></span>
             </p>

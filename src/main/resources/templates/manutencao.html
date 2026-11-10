@@ -26,6 +26,23 @@
                     <input type="email" name="emailCliente" placeholder="Digite o e-mail" required>
                 </div>
 
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Equipamento:</label>
+                        <select name="equipamento">
+                            <option value="">Selecione</option>
+                            <option>Desktop</option>
+                            <option>Notebook</option>
+                            <option>Outro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Marca e modelo:</label>
+                        <input type="text" name="marcaModelo" maxlength="100" placeholder="Ex.: Dell Inspiron 15 3520 (opcional)">
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label>Descrição pré-definida:</label>
                     <select name="problemaSelecionado" required>
@@ -36,12 +53,15 @@
                         <option>Sem sinal no monitor</option>
                         <option>Computador lento</option>
                         <option>Tela azul frequente</option>
+                        <option>Bateria não carrega</option>
+                        <option>Problema na tela</option>
+                        <option>Outro problema</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label>Descrição adicional:</label>
-                    <input type="text" name="descricao" maxlength="200" placeholder="Detalhes adicionais (opcional)">
+                    <input type="text" name="descricao" maxlength="200" placeholder="Detalhes adicionais, sem dados do cliente (opcional)">
                 </div>
 
                 <div class="form-row">

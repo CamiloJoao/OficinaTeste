@@ -34,6 +34,8 @@ public class ManutencaoController {
     @PostMapping("/salvar")
     public String salvar(
             @RequestParam String emailCliente,
+            @RequestParam(required = false) String equipamento,
+            @RequestParam(required = false) String marcaModelo,
             @RequestParam(required = false) String descricao,
             @RequestParam(required = false) String problemaSelecionado,
             @RequestParam String dataPrevista,
@@ -51,6 +53,27 @@ public class ManutencaoController {
 
         if (cliente == null) {
             model.addAttribute("erro", "E-mail não cadastrado.");
+            return "layout";
+        }
+
+        // Equipamento só aceita as opções do select
+        if (equipamento != null) {
+            equipamento = equipamento.trim();
+        }
+        if (!"Desktop".equals(equipamento) && !"Notebook".equals(equipamento) && !"Outro".equals(equipamento)) {
+            equipamento = null;
+        }
+
+        if (marcaModelo != null) {
+            marcaModelo = marcaModelo.trim();
+            if (marcaModelo.isEmpty()) {
+                marcaModelo = null;
+            }
+        }
+
+        // Mesmo limite da coluna marca_modelo
+        if (marcaModelo != null && marcaModelo.length() > 100) {
+            model.addAttribute("erro", "A marca e o modelo podem ter no máximo 100 caracteres.");
             return "layout";
         }
 
@@ -88,6 +111,8 @@ public class ManutencaoController {
         Servico servico = new Servico();
         servico.setCliente(cliente);
         servico.setTipoServico(TipoServico.MANUTENCAO);
+        servico.setEquipamento(equipamento);
+        servico.setMarcaModelo(marcaModelo);
         servico.setDescricaoProblema(descricaoFinal);
         servico.setStatus(StatusServico.EM_ANDAMENTO);
         servico.setOrcamentoInicial(orcamento);

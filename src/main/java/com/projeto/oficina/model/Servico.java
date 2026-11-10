@@ -42,6 +42,15 @@ public class Servico {
     @Column(name = "data_cadastro")
     private LocalDate dataCadastro;
 
+    @Column(name = "equipamento", length = 20)
+    private String equipamento;
+
+    @Column(name = "marca_modelo", length = 100)
+    private String marcaModelo;
+
+    @Column(name = "testes_realizados", length = 200)
+    private String testesRealizados;
+
     @OneToMany(mappedBy = "servico", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ServicoPeca> pecas = new ArrayList<>();
 
@@ -129,5 +138,29 @@ public class Servico {
 
     public void setDataCadastro(LocalDate dataCadastro) {
         this.dataCadastro = dataCadastro;
+    }
+
+    public String getEquipamento() {
+        return equipamento;
+    }
+
+    public void setEquipamento(String equipamento) {
+        this.equipamento = equipamento;
+    }
+
+    public String getMarcaModelo() {
+        return marcaModelo;
+    }
+
+    public void setMarcaModelo(String marcaModelo) {
+        this.marcaModelo = marcaModelo;
+    }
+
+    public String getTestesRealizados() {
+        return testesRealizados;
+    }
+
+    public void setTestesRealizados(String testesRealizados) {
+        this.testesRealizados = testesRealizados;
     }
 }
