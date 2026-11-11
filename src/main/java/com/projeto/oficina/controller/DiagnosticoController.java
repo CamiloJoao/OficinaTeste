@@ -18,6 +18,8 @@ import com.projeto.oficina.service.SugestaoDiagnostico;
 @RequestMapping("/statusdeservico")
 public class DiagnosticoController {
 
+    private static final String SO_EM_ANDAMENTO = "O apoio ao diagnóstico está disponível só para manutenções em andamento.";
+
     @Autowired
     private ServicoService servicoService;
 
@@ -37,8 +39,8 @@ public class DiagnosticoController {
 
         Servico servico = servicoService.buscarPorId(idServico);
 
-        if (servico.getTipoServico() != TipoServico.MANUTENCAO || servico.getStatus() == StatusServico.ENCERRADO) {
-            redirect.addFlashAttribute("erroIa", "O apoio ao diagnóstico está disponível só para manutenções em andamento.");
+        if (!manutencaoEmAndamento(servico)) {
+            redirect.addFlashAttribute("erroIa", SO_EM_ANDAMENTO);
             return destino;
         }
 
@@ -77,6 +79,46 @@ public class DiagnosticoController {
         }
 
         return destino;
+    }
+
+    @PostMapping("/diagnostico-confirmado")
+    public String salvarDiagnosticoConfirmado(
+            @RequestParam int idServico,
+            @RequestParam(required = false) String diagnosticoConfirmado,
+            RedirectAttributes redirect) {
+
+        String destino = "redirect:/statusdeservico/detalhes/" + idServico + "#diagnostico";
+
+        Servico servico = servicoService.buscarPorId(idServico);
+
+        if (!manutencaoEmAndamento(servico)) {
+            redirect.addFlashAttribute("erroIa", SO_EM_ANDAMENTO);
+            return destino;
+        }
+
+        diagnosticoConfirmado = limparTexto(diagnosticoConfirmado);
+
+        // O navegador envia cada Enter como \r\n, mas o maxlength do campo conta só 1 caractere
+        if (diagnosticoConfirmado != null) {
+            diagnosticoConfirmado = diagnosticoConfirmado.replace("\r\n", "\n");
+        }
+
+        // Mesmo limite da coluna diagnostico_confirmado
+        if (diagnosticoConfirmado != null && diagnosticoConfirmado.length() > 500) {
+            redirect.addFlashAttribute("erroIa", "O diagnóstico pode ter no máximo 500 caracteres.");
+            return destino;
+        }
+
+        servico.setDiagnosticoConfirmado(diagnosticoConfirmado);
+        servicoService.salvar(servico);
+
+        redirect.addFlashAttribute("sucessoIa", "Diagnóstico salvo com sucesso!");
+        return destino;
+    }
+
+    // Só manutenção em andamento usa a área de diagnóstico
+    private boolean manutencaoEmAndamento(Servico servico) {
+        return servico.getTipoServico() == TipoServico.MANUTENCAO && servico.getStatus() != StatusServico.ENCERRADO;
     }
 
     // Tira os espaços das pontas; texto vazio vira null

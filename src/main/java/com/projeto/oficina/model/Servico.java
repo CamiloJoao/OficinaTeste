@@ -51,6 +51,9 @@ public class Servico {
     @Column(name = "testes_realizados", length = 200)
     private String testesRealizados;
 
+    @Column(name = "diagnostico_confirmado", length = 500)
+    private String diagnosticoConfirmado;
+
     @OneToMany(mappedBy = "servico", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ServicoPeca> pecas = new ArrayList<>();
 
@@ -162,5 +165,13 @@ public class Servico {
 
     public void setTestesRealizados(String testesRealizados) {
         this.testesRealizados = testesRealizados;
+    }
+
+    public String getDiagnosticoConfirmado() {
+        return diagnosticoConfirmado;
+    }
+
+    public void setDiagnosticoConfirmado(String diagnosticoConfirmado) {
+        this.diagnosticoConfirmado = diagnosticoConfirmado;
     }
 }

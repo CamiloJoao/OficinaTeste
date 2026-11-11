@@ -120,6 +120,10 @@
                     <p th:text="${erroIa}"></p>
                 </div>
 
+                <div th:if="${sucessoIa != null}" class="alerta-sucesso">
+                    <p th:text="${sucessoIa}"></p>
+                </div>
+
                 <form th:if="${servico.status.name() == 'EM_ANDAMENTO'}" id="form-diagnostico"
                       th:action="@{/statusdeservico/diagnostico}" method="post">
 
@@ -184,6 +188,30 @@
 
                     <p><small th:text="'Gerada em ' + ${sugestaoIa.segundos} + ' s. A sugestão não fica gravada no serviço e some ao recarregar a página.'"></small></p>
                 </div>
+
+                <hr>
+
+                <!-- Escrito pelo técnico: a resposta da IA nunca é copiada para este campo -->
+                <form th:if="${servico.status.name() == 'EM_ANDAMENTO'}"
+                      th:action="@{/statusdeservico/diagnostico-confirmado}" method="post">
+
+                    <input type="hidden" name="idServico" th:value="${servico.idServico}">
+
+                    <div class="form-group">
+                        <label>Diagnóstico confirmado pelo técnico:</label>
+                        <textarea name="diagnosticoConfirmado" maxlength="500" rows="3"
+                                  placeholder="Escreva com suas palavras o que foi confirmado"
+                                  th:text="${servico.diagnosticoConfirmado}"></textarea>
+                    </div>
+
+                    <div class="acao-centralizada">
+                        <button type="submit">Salvar diagnóstico</button>
+                    </div>
+                </form>
+
+                <p th:if="${servico.status.name() == 'ENCERRADO'}"><b>Diagnóstico confirmado pelo técnico:</b>
+                    <span class="texto-confirmado" th:text="${servico.diagnosticoConfirmado != null} ? ${servico.diagnosticoConfirmado} : 'Não informado'"></span>
+                </p>
             </div>
 
             <hr>
