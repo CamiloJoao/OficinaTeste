@@ -420,7 +420,8 @@ tr:hover td {
    MENSAGENS DE FEEDBACK
 ========================= */
 .alerta-erro,
-.alerta-sucesso {
+.alerta-sucesso,
+.alerta-aviso {
     padding: 12px 16px;
     border-radius: 8px;
     margin-top: 20px;
@@ -441,8 +442,15 @@ tr:hover td {
     border: 1px solid #BEE6CC;
 }
 
+.alerta-aviso {
+    background-color: #FDF0D5;
+    color: #7A5A12;
+    border: 1px solid #F2D9A6;
+}
+
 .alerta-erro p,
-.alerta-sucesso p {
+.alerta-sucesso p,
+.alerta-aviso p {
     margin: 0;
 }
 
@@ -469,6 +477,16 @@ tr:hover td {
 
 .lista-pecas-extras li {
     margin-bottom: 14px;
+}
+
+/* Texto da IA: o pre-line mantém as quebras de linha da resposta */
+.texto-sugestao {
+    white-space: pre-line;
+    text-align: left;
+    background-color: #F7F9FB;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
 }
 
 /* =========================

@@ -113,6 +113,81 @@
 
             <hr>
 
+            <div id="diagnostico">
+                <h3>Apoio ao diagnóstico (IA)</h3>
+
+                <div th:if="${erroIa != null}" class="alerta-erro">
+                    <p th:text="${erroIa}"></p>
+                </div>
+
+                <form th:if="${servico.status.name() == 'EM_ANDAMENTO'}" id="form-diagnostico"
+                      th:action="@{/statusdeservico/diagnostico}" method="post">
+
+                    <input type="hidden" name="idServico" th:value="${servico.idServico}">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Equipamento:</label>
+                            <select name="equipamento">
+                                <option value="">Selecione</option>
+                                <option th:selected="${servico.equipamento == 'Desktop'}">Desktop</option>
+                                <option th:selected="${servico.equipamento == 'Notebook'}">Notebook</option>
+                                <option th:selected="${servico.equipamento == 'Outro'}">Outro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Marca e modelo:</label>
+                            <input type="text" name="marcaModelo" maxlength="100" th:value="${servico.marcaModelo}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>O que já foi testado:</label>
+                        <input type="text" name="testesRealizados" maxlength="200" th:value="${servico.testesRealizados}"
+                               placeholder="Ex.: outro carregador original (opcional)">
+                    </div>
+
+                    <p>São enviados à IA só o equipamento, a marca/modelo, a descrição do problema e o que já foi testado. Nenhum dado do cliente é enviado.</p>
+
+                    <div class="acao-centralizada">
+                        <button type="submit">Gerar sugestão de diagnóstico</button>
+                        <div id="aguarde" hidden>Gerando a sugestão. Isso pode levar até 1 minuto; não feche a página.</div>
+                    </div>
+                </form>
+
+                <p th:if="${servico.status.name() == 'ENCERRADO'}">Serviço encerrado: o apoio ao diagnóstico não está disponível.</p>
+
+                <div th:if="${sugestaoIa != null}">
+                    <div class="alerta-aviso">
+                        <p>Sugestão gerada por inteligência artificial para apoio ao técnico. Confirme o diagnóstico antes de executar o serviço.</p>
+                    </div>
+
+                    <!-- th:text mostra o texto exatamente como veio da IA, sem interpretar HTML -->
+                    <div class="texto-sugestao" th:text="${sugestaoIa.texto}"></div>
+
+                    <div th:if="${#lists.isEmpty(sugestaoIa.fontes)}" class="alerta-aviso">
+                        <p>Esta sugestão foi gerada sem pesquisa na internet e não tem fontes. Confira com mais atenção.</p>
+                    </div>
+
+                    <div th:if="${!#lists.isEmpty(sugestaoIa.fontes)}">
+                        <p><b>Fontes consultadas:</b></p>
+                        <ul>
+                            <li th:each="f : ${sugestaoIa.fontes}">
+                                <a th:href="${f.url}" th:text="${f.titulo}" target="_blank" rel="noopener noreferrer"></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Sugestões de pesquisa do Google: os termos obrigam a exibir esse HTML sem alteração -->
+                    <div th:if="${sugestaoIa.sugestoesPesquisa != null}" th:utext="${sugestaoIa.sugestoesPesquisa}"></div>
+
+                    <p><small th:text="'Gerada em ' + ${sugestaoIa.segundos} + ' s. A sugestão não fica gravada no serviço e some ao recarregar a página.'"></small></p>
+                </div>
+            </div>
+
+            <hr>
+
             <div>
                 <p class="pergunta-confirmacao">
                     Deseja acrescentar peça a esta manutenção?
@@ -203,6 +278,7 @@
             </div>
 
             <script th:src="@{/js/peca-extra.js}"></script>
+            <script th:src="@{/js/diagnostico.js}"></script>
         </div>
     </div>
 </div>
