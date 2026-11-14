@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
@@ -60,6 +61,12 @@ public class DiagnosticoService {
     @Value("${oficina.ia.pesquisa}")
     private boolean pesquisa;
 
+    @Value("${oficina.ia.nivel-raciocinio}")
+    private String nivelRaciocinio;
+
+    @Value("${oficina.ia.tentativas}")
+    private int tentativas;
+
     private RestClient restClient;
 
     // Cria o cliente HTTP uma vez, depois que o Spring preencheu os @Value
@@ -100,6 +107,10 @@ public class DiagnosticoService {
         if (pesquisa) {
             corpo.put("tools", List.of(Map.of("google_search", Map.of())));
         }
+        // Raciocínio "low" responde mais rápido (o padrão do modelo é "medium")
+        if (!nivelRaciocinio.isBlank()) {
+            corpo.put("generationConfig", Map.of("thinkingConfig", Map.of("thinkingLevel", nivelRaciocinio)));
+        }
 
         long inicio = System.currentTimeMillis();
         JsonNode resposta = enviar(corpo);
@@ -125,41 +136,72 @@ public class DiagnosticoService {
     }
 
     // Envia o corpo à Gemini API e troca os erros técnicos por mensagens para o usuário.
+    // Só o erro 503 (serviço sobrecarregado) é repetido, como o Google recomenda.
     // O log não mostra a chave: ela vai no cabeçalho, e não na URL.
     private JsonNode enviar(Map<String, Object> corpo) {
-        try {
-            return restClient.post()
-                    .uri("/models/{modelo}:generateContent", modelo)
-                    .header("x-goog-api-key", chave)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(corpo)
-                    .retrieve()
-                    .body(JsonNode.class);
-        } catch (ResourceAccessException e) {
-            // Tempo limite ou sem internet
-            log.warn("A IA não respondeu: {}", e.getMessage());
-            throw new DiagnosticoException("O serviço de IA não respondeu a tempo. Tente novamente em alguns minutos.");
-        } catch (HttpClientErrorException e) {
-            log.warn("A IA recusou a consulta: {}", e.getMessage());
-            int status = e.getStatusCode().value();
-            if (status == 429) {
-                String mensagem = "O limite de uso da IA foi atingido. Tente mais tarde.";
-                if (pesquisa) {
-                    mensagem += " Se a chave for do plano gratuito, a pesquisa no Google não está liberada.";
-                }
-                throw new DiagnosticoException(mensagem);
+        for (int tentativa = 1; tentativa <= tentativas; tentativa++) {
+            if (tentativa > 1) {
+                log.warn("IA sobrecarregada (503). Tentativa {} de {}.", tentativa, tentativas);
+                esperarAntesDaTentativa(tentativa);
             }
-            if (status == 400 || status == 401 || status == 403) {
-                throw new DiagnosticoException("A chave da IA é inválida ou não tem permissão para a pesquisa.");
-            }
-            throw new DiagnosticoException("Não foi possível gerar a sugestão agora. Tente novamente.");
-        } catch (RestClientException e) {
-            log.warn("Erro ao consultar a IA: {}", e.getMessage());
-            // No POST, o tempo limite de leitura chega aqui (e não como ResourceAccessException)
-            if (e.contains(SocketTimeoutException.class)) {
+            try {
+                return restClient.post()
+                        .uri("/models/{modelo}:generateContent", modelo)
+                        .header("x-goog-api-key", chave)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(corpo)
+                        .retrieve()
+                        .body(JsonNode.class);
+            } catch (ResourceAccessException e) {
+                // Tempo limite ou sem internet
+                log.warn("A IA não respondeu: {}", e.getMessage());
                 throw new DiagnosticoException("O serviço de IA não respondeu a tempo. Tente novamente em alguns minutos.");
+            } catch (HttpClientErrorException e) {
+                log.warn("A IA recusou a consulta: {}", e.getMessage());
+                int status = e.getStatusCode().value();
+                if (status == 429) {
+                    String mensagem = "O limite de uso da IA foi atingido. Tente mais tarde.";
+                    if (pesquisa) {
+                        mensagem += " Se a chave for do plano gratuito, a pesquisa no Google não está liberada.";
+                    }
+                    throw new DiagnosticoException(mensagem);
+                }
+                if (status == 400 || status == 401 || status == 403) {
+                    throw new DiagnosticoException("A chave da IA é inválida ou não tem permissão para a pesquisa.");
+                }
+                throw new DiagnosticoException("Não foi possível gerar a sugestão agora. Tente novamente.");
+            } catch (HttpServerErrorException e) {
+                // No 503 o for continua e tenta de novo; os outros erros 5xx param aqui, como antes
+                if (e.getStatusCode().value() != 503) {
+                    log.warn("Erro ao consultar a IA: {}", e.getMessage());
+                    throw new DiagnosticoException("Não foi possível gerar a sugestão agora. Tente novamente.");
+                }
+            } catch (RestClientException e) {
+                log.warn("Erro ao consultar a IA: {}", e.getMessage());
+                // No POST, o tempo limite de leitura chega aqui (e não como ResourceAccessException)
+                if (e.contains(SocketTimeoutException.class)) {
+                    throw new DiagnosticoException("O serviço de IA não respondeu a tempo. Tente novamente em alguns minutos.");
+                }
+                throw new DiagnosticoException("Não foi possível gerar a sugestão agora. Tente novamente.");
             }
-            throw new DiagnosticoException("Não foi possível gerar a sugestão agora. Tente novamente.");
+        }
+        // Todas as tentativas deram 503
+        log.warn("IA sobrecarregada (503) em todas as tentativas.");
+        throw new DiagnosticoException("O serviço de IA está sobrecarregado no momento. Tente novamente em alguns minutos.");
+    }
+
+    // Espera 5 segundos antes da 2ª tentativa e 15 antes das seguintes
+    private void esperarAntesDaTentativa(int tentativa) {
+        int segundos = 15;
+        if (tentativa == 2) {
+            segundos = 5;
+        }
+        try {
+            Thread.sleep(segundos * 1000L);
+        } catch (InterruptedException e) {
+            // O sistema está sendo desligado: mantém o aviso de interrupção e para de tentar
+            Thread.currentThread().interrupt();
+            throw new DiagnosticoException("O serviço de IA está sobrecarregado no momento. Tente novamente em alguns minutos.");
         }
     }
 
